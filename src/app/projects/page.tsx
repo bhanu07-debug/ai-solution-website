@@ -1,34 +1,14 @@
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { projects as mockProjects } from "@/lib/mock-data";
 
 export default function ProjectsPage() {
-    const projects = [
-        {
-            title: "E-commerce Recommendation Engine",
-            description: "A recommendation engine that increased sales by 20% for a major e-commerce platform.",
-            technologies: ["React", "Next.js", "Python", "TensorFlow"],
-            imageUrl: "https://placehold.co/600x400.png",
-            imageHint: "e-commerce analysis",
-        },
-        {
-            title: "Healthcare Diagnostic Tool",
-            description: "An AI-powered tool that assists doctors in diagnosing diseases with higher accuracy.",
-            technologies: ["PyTorch", "Flask", "React", "Next.js"],
-            imageUrl: "https://placehold.co/600x400.png",
-            imageHint: "medical technology",
-        },
-        {
-            title: "Financial Fraud Detection",
-            description: "A system that detects and prevents fraudulent transactions in real-time.",
-            technologies: ["Java", "Spring Boot", "Kafka", "Scikit-learn"],
-            imageUrl: "https://placehold.co/600x400.png",
-            imageHint: "financial security",
-        },
-    ];
+    const projects = mockProjects;
 
   return (
     <div className="container mx-auto py-12 md:py-20 px-4 md:px-6">

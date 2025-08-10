@@ -7,23 +7,8 @@ import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Image from 'next/image';
 import { GalleryItemForm } from '@/components/admin/gallery-item-form';
+import { gallery as mockGallery, GalleryItem } from '@/lib/mock-data';
 
-
-type GalleryItem = {
-    id: string;
-    src: string;
-    alt: string;
-    hint: string;
-};
-
-const mockGallery: GalleryItem[] = [
-    { id: 'g1', src: "https://placehold.co/600x400.png", alt: "AI generated art 1", hint: "abstract art" },
-    { id: 'g2', src: "https://placehold.co/400x600.png", alt: "AI generated art 2", hint: "futuristic city" },
-    { id: 'g3', src: "https://placehold.co/600x400.png", alt: "AI generated art 3", hint: "robot human" },
-    { id: 'g4', src: "https://placehold.co/600x400.png", alt: "AI generated art 4", hint: "data visualization" },
-    { id: 'g5', src: "https://placehold.co/400x600.png", alt: "AI generated art 5", hint: "surreal landscape" },
-    { id: 'g6', src: "https://placehold.co/600x400.png", alt: "AI generated art 6", hint: "cybernetic organism" },
-];
 
 export default function AdminGalleryPage() {
     const [gallery, setGallery] = useState<GalleryItem[]>(mockGallery);

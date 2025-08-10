@@ -7,19 +7,7 @@ import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ServiceForm } from '@/components/admin/service-form';
-
-type Service = {
-    id: string;
-    title: string;
-    description: string;
-    icon: string; // For now, we'll use a string to represent the icon component name
-};
-
-const mockServices: Service[] = [
-    { id: 's1', title: 'AI Automation', description: 'Streamline your operations with our cutting-edge AI automation solutions.', icon: 'Bot' },
-    { id: 's2', title: 'Custom Models', description: 'Develop bespoke AI models tailored to your unique business challenges.', icon: 'Code' },
-    { id: 's3', title: 'Strategic Consulting', description: 'Leverage our expertise to craft and implement a winning AI strategy.', icon: 'Rocket' },
-];
+import { services as mockServices, Service } from '@/lib/mock-data';
 
 export default function AdminServicesPage() {
     const [services, setServices] = useState<Service[]>(mockServices);

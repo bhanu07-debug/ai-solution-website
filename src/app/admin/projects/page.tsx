@@ -9,20 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ProjectForm } from '@/components/admin/project-form';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-
-type Project = {
-    id: string;
-    title: string;
-    description: string;
-    technologies: string[];
-    imageUrl: string;
-};
-
-const mockProjects: Project[] = [
-    { id: 'p1', title: "E-commerce Recommendation Engine", description: "A recommendation engine that increased sales by 20% for a major e-commerce platform.", technologies: ["React", "Next.js", "Python", "TensorFlow"], imageUrl: "https://placehold.co/600x400.png" },
-    { id: 'p2', title: "Healthcare Diagnostic Tool", description: "An AI-powered tool that assists doctors in diagnosing diseases with higher accuracy.", technologies: ["PyTorch", "Flask", "React", "Next.js"], imageUrl: "https://placehold.co/600x400.png" },
-    { id: 'p3', title: "Financial Fraud Detection", description: "A system that detects and prevents fraudulent transactions in real-time.", technologies: ["Java", "Spring Boot", "Kafka", "Scikit-learn"], imageUrl: "https://placehold.co/600x400.png" },
-];
+import { projects as mockProjects, Project } from '@/lib/mock-data';
 
 export default function AdminProjectsPage() {
     const [projects, setProjects] = useState<Project[]>(mockProjects);

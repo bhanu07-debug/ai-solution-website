@@ -9,25 +9,21 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
+import { Project } from '@/lib/mock-data';
 
 const projectSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters.'),
   description: z.string().min(10, 'Description must be at least 10 characters.'),
   technologies: z.string().min(1, 'Please list at least one technology.'),
   imageUrl: z.string().url('Image URL must be a valid URL.'),
+  imageHint: z.string().min(1, 'Image hint is required.'),
 });
 
 type ProjectFormData = z.infer<typeof projectSchema>;
 
 interface ProjectFormProps {
   onSubmit: (data: Omit<Project, 'id' | 'technologies'> & { technologies: string[] }) => void;
-  defaultValues?: {
-      id: string;
-      title: string;
-      description: string;
-      technologies: string[];
-      imageUrl: string;
-  } | null;
+  defaultValues?: Project | null;
 }
 
 export function ProjectForm({ onSubmit, defaultValues }: ProjectFormProps) {
@@ -40,6 +36,7 @@ export function ProjectForm({ onSubmit, defaultValues }: ProjectFormProps) {
       description: defaultValues?.description || '',
       technologies: defaultValues?.technologies.join(', ') || '',
       imageUrl: defaultValues?.imageUrl || '',
+      imageHint: defaultValues?.imageHint || '',
     },
   });
 
@@ -103,6 +100,19 @@ export function ProjectForm({ onSubmit, defaultValues }: ProjectFormProps) {
               <FormLabel>Image URL</FormLabel>
               <FormControl>
                 <Input placeholder="https://placehold.co/600x400.png" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="imageHint"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Image Hint</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g., abstract technology" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

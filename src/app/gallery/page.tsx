@@ -1,14 +1,9 @@
+
 import Image from "next/image";
+import { gallery as mockGallery } from "@/lib/mock-data";
 
 export default function GalleryPage() {
-  const images = [
-    { src: "https://placehold.co/600x400.png", alt: "AI generated art 1", hint: "abstract art" },
-    { src: "https://placehold.co/400x600.png", alt: "AI generated art 2", hint: "futuristic city" },
-    { src: "https://placehold.co/600x400.png", alt: "AI generated art 3", hint: "robot human" },
-    { src: "https://placehold.co/600x400.png", alt: "AI generated art 4", hint: "data visualization" },
-    { src: "https://placehold.co/400x600.png", alt: "AI generated art 5", hint: "surreal landscape" },
-    { src: "https://placehold.co/600x400.png", alt: "AI generated art 6", hint: "cybernetic organism" },
-  ];
+  const images = mockGallery;
 
   return (
     <div className="container mx-auto py-12 md:py-20 px-4 md:px-6">

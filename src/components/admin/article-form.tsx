@@ -9,19 +9,21 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
+import { Article } from '@/lib/mock-data';
 
 const articleSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters.'),
   excerpt: z.string().min(10, 'Excerpt must be at least 10 characters.'),
   date: z.string().min(1, 'Date is required.'),
   imageUrl: z.string().url('Image URL must be a valid URL.'),
+  imageHint: z.string().min(1, 'Image hint is required.'),
 });
 
 type ArticleFormData = z.infer<typeof articleSchema>;
 
 interface ArticleFormProps {
-  onSubmit: (data: ArticleFormData) => void;
-  defaultValues?: ArticleFormData | null;
+  onSubmit: (data: Omit<Article, 'id'>) => void;
+  defaultValues?: Article | null;
 }
 
 export function ArticleForm({ onSubmit, defaultValues }: ArticleFormProps) {
@@ -34,6 +36,7 @@ export function ArticleForm({ onSubmit, defaultValues }: ArticleFormProps) {
       excerpt: '',
       date: new Date().toISOString().split('T')[0], // Today's date
       imageUrl: '',
+      imageHint: '',
     },
   });
 
@@ -100,6 +103,19 @@ export function ArticleForm({ onSubmit, defaultValues }: ArticleFormProps) {
             )}
             />
         </div>
+         <FormField
+            control={form.control}
+            name="imageHint"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Image Hint</FormLabel>
+                <FormControl>
+                    <Input placeholder="e.g., abstract technology" {...field} />
+                </FormControl>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
         <Button type="submit" className="w-full font-bold" disabled={isLoading}>
           {isLoading ? 'Saving...' : 'Save Article'}
         </Button>

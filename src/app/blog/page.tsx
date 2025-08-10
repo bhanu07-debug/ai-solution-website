@@ -1,33 +1,13 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { articles as mockArticles } from "@/lib/mock-data";
 
 export default function BlogPage() {
-    const posts = [
-        {
-            title: "The Future of AI in Business",
-            date: "October 26, 2023",
-            excerpt: "Discover how AI is reshaping industries and what it means for your business.",
-            imageUrl: "https://placehold.co/600x400.png",
-            imageHint: "future technology",
-        },
-        {
-            title: "Getting Started with Machine Learning",
-            date: "October 20, 2023",
-            excerpt: "A beginner-friendly guide to the core concepts of machine learning.",
-            imageUrl: "https://placehold.co/600x400.png",
-            imageHint: "machine learning",
-        },
-        {
-            title: "Ethical Considerations in AI",
-            date: "October 15, 2023",
-            excerpt: "Navigating the complex ethical landscape of artificial intelligence.",
-            imageUrl: "https://placehold.co/600x400.png",
-            imageHint: "ai ethics",
-        },
-    ];
+    const posts = mockArticles;
 
   return (
     <div className="container mx-auto py-12 md:py-20 px-4 md:px-6">

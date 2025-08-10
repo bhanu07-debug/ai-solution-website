@@ -1,97 +1,27 @@
+
 import { AnimatedHeading } from '@/components/animated-heading';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Bot, Code, Rocket, Calendar, MapPin } from 'lucide-react';
+import { ArrowRight, Calendar, MapPin, Bot, Code, Rocket } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
+import { services, projects, articles, gallery, events } from '@/lib/mock-data';
+
+const getIcon = (iconName: string): React.ReactNode => {
+    switch (iconName) {
+      case 'Bot':
+        return <Bot className="h-10 w-10 text-primary" />;
+      case 'Code':
+        return <Code className="h-10 w-10 text-primary" />;
+      case 'Rocket':
+        return <Rocket className="h-10 w-10 text-primary" />;
+      default:
+        return null;
+    }
+};
 
 export default function Home() {
-  const services = [
-    {
-      icon: <Bot className="h-10 w-10 text-primary" />,
-      title: 'AI Automation',
-      description: 'Streamline your operations with our cutting-edge AI automation solutions.',
-    },
-    {
-      icon: <Code className="h-10 w-10 text-primary" />,
-      title: 'Custom Models',
-      description: 'Develop bespoke AI models tailored to your unique business challenges.',
-    },
-    {
-      icon: <Rocket className="h-10 w-10 text-primary" />,
-      title: 'Strategic Consulting',
-      description: 'Leverage our expertise to craft and implement a winning AI strategy.',
-    },
-  ];
-
-  const projects = [
-    {
-        title: "E-commerce Recommendation Engine",
-        description: "A recommendation engine that increased sales by 20% for a major e-commerce platform.",
-        imageUrl: "https://placehold.co/600x400.png",
-        imageHint: "e-commerce analysis",
-    },
-    {
-        title: "Healthcare Diagnostic Tool",
-        description: "An AI-powered tool that assists doctors in diagnosing diseases with higher accuracy.",
-        imageUrl: "https://placehold.co/600x400.png",
-        imageHint: "medical technology",
-    },
-    {
-        title: "Financial Fraud Detection",
-        description: "A system that detects and prevents fraudulent transactions in real-time.",
-        imageUrl: "https://placehold.co/600x400.png",
-        imageHint: "financial security",
-    },
-  ];
-
-  const posts = [
-      {
-          title: "The Future of AI in Business",
-          date: "October 26, 2023",
-          excerpt: "Discover how AI is reshaping industries and what it means for your business.",
-          imageUrl: "https://placehold.co/600x400.png",
-          imageHint: "future technology",
-      },
-      {
-          title: "Getting Started with Machine Learning",
-          date: "October 20, 2023",
-          excerpt: "A beginner-friendly guide to the core concepts of machine learning.",
-          imageUrl: "https://placehold.co/600x400.png",
-          imageHint: "machine learning",
-      },
-      {
-          title: "Ethical Considerations in AI",
-          date: "October 15, 2023",
-          excerpt: "Navigating the complex ethical landscape of artificial intelligence.",
-          imageUrl: "https://placehold.co/600x400.png",
-          imageHint: "ai ethics",
-      },
-  ];
-
-  const images = [
-    { src: "https://placehold.co/600x400.png", alt: "AI generated art 1", hint: "abstract art" },
-    { src: "https://placehold.co/400x600.png", alt: "AI generated art 2", hint: "futuristic city" },
-    { src: "https://placehold.co/600x400.png", alt: "AI generated art 3", hint: "robot human" },
-  ];
-
-  const events = [
-    {
-        title: "AI & The Future of Work Summit",
-        date: "November 15, 2023",
-        location: "Virtual",
-        description: "Join industry leaders to discuss the impact of AI on the workforce and how to prepare for the future.",
-    },
-    {
-        title: "Advanced Machine Learning Workshop",
-        date: "December 5, 2023",
-        location: "San Francisco, CA",
-        description: "A hands-on workshop for developers looking to deepen their ML skills.",
-    },
-  ];
-
-
   return (
     <div className="flex flex-col">
       <section className="relative w-full py-20 md:py-32 lg:py-40 bg-background overflow-hidden">
@@ -119,10 +49,10 @@ export default function Home() {
             <p className="mt-2 text-muted-foreground">Comprehensive AI solutions for every need.</p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
-            {services.map((service, index) => (
+            {services.slice(0, 3).map((service, index) => (
               <Card key={index} className="flex flex-col items-center text-center p-6 transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
                 <CardHeader>
-                  {service.icon}
+                  {getIcon(service.icon)}
                   <CardTitle className="font-headline mt-4">{service.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -146,7 +76,7 @@ export default function Home() {
             <p className="mt-2 text-muted-foreground">See how we've helped businesses like yours.</p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
-            {projects.map((project, index) => (
+            {projects.slice(0, 3).map((project, index) => (
               <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
                 <Image 
                     src={project.imageUrl}
@@ -180,7 +110,7 @@ export default function Home() {
             <p className="mt-2 text-muted-foreground">Insights and news from the world of AI.</p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
-            {posts.map((post, index) => (
+            {articles.slice(0, 3).map((post, index) => (
                 <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
                     <Image 
                         src={post.imageUrl}
@@ -215,7 +145,7 @@ export default function Home() {
             <p className="mt-2 text-muted-foreground">A showcase of AI-generated imagery and concepts.</p>
           </div>
           <div className="columns-2 md:columns-3 gap-4 space-y-4">
-            {images.map((image, index) => (
+            {gallery.slice(0, 6).map((image, index) => (
               <div key={index} className="break-inside-avoid">
                 <Image
                   src={image.src}
@@ -243,7 +173,7 @@ export default function Home() {
                 <p className="mt-2 text-lg text-muted-foreground">Connect with us at these industry events.</p>
             </div>
             <div className="space-y-8 max-w-3xl mx-auto">
-                {events.map((event, index) => (
+                {events.slice(0, 2).map((event, index) => (
                     <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
                         <CardHeader>
                             <CardTitle className="font-headline">{event.title}</CardTitle>

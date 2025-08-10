@@ -7,20 +7,7 @@ import { PlusCircle, Edit, Trash2, Calendar, MapPin } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { EventForm } from '@/components/admin/event-form';
-
-type Event = {
-    id: string;
-    title: string;
-    date: string;
-    location: string;
-    description: string;
-};
-
-const mockEvents: Event[] = [
-    { id: 'e1', title: "AI & The Future of Work Summit", date: "November 15, 2023", location: "Virtual", description: "Join industry leaders to discuss the impact of AI on the workforce and how to prepare for the future." },
-    { id: 'e2', title: "Advanced Machine Learning Workshop", date: "December 5, 2023", location: "San Francisco, CA", description: "A hands-on workshop for developers looking to deepen their ML skills." },
-    { id: 'e3', title: "AI in Healthcare Conference", date: "January 20, 2024", location: "Boston, MA", description: "Exploring the latest innovations in AI for patient care, diagnostics, and research." },
-];
+import { events as mockEvents, Event } from '@/lib/mock-data';
 
 export default function AdminEventsPage() {
     const [events, setEvents] = useState<Event[]>(mockEvents);

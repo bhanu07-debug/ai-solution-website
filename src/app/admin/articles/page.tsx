@@ -8,20 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ArticleForm } from '@/components/admin/article-form';
 import Image from 'next/image';
-
-type Article = {
-    id: string;
-    title: string;
-    excerpt: string;
-    date: string;
-    imageUrl: string;
-};
-
-const mockArticles: Article[] = [
-    { id: 'a1', title: "The Future of AI in Business", date: "October 26, 2023", excerpt: "Discover how AI is reshaping industries and what it means for your business.", imageUrl: "https://placehold.co/600x400.png" },
-    { id: 'a2', title: "Getting Started with Machine Learning", date: "October 20, 2023", excerpt: "A beginner-friendly guide to the core concepts of machine learning.", imageUrl: "https://placehold.co/600x400.png" },
-    { id: 'a3', title: "Ethical Considerations in AI", date: "October 15, 2023", excerpt: "Navigating the complex ethical landscape of artificial intelligence.", imageUrl: "https://placehold.co/600x400.png" },
-];
+import { articles as mockArticles, Article } from '@/lib/mock-data';
 
 
 export default function AdminArticlesPage() {
