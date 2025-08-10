@@ -22,6 +22,7 @@ import {
   Calendar,
   Settings,
   ShieldCheck,
+  Building,
 } from "lucide-react";
 import { Logo } from "../icons/logo";
 import { Separator } from "../ui/separator";
@@ -80,8 +81,8 @@ export function AdminSidebar() {
                 </SidebarMenuSub>
               </SidebarMenuItem>
             ) : (
-              <SidebarMenuItem key={item.label}>
-                <SidebarMenuButton href={item.href} isActive={isActive(item.href)}>
+              <SidebarMenuItem key={item.href}>
+                <SidebarMenuButton href={item.href!} isActive={isActive(item.href!)}>
                   <item.icon />
                   <span>{item.label}</span>
                 </SidebarMenuButton>
