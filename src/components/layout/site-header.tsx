@@ -15,7 +15,7 @@ const navLinks = [
     { href: "/blog", label: "Blog" },
     { href: "/gallery", label: "Gallery" },
     { href: "/events", label: "Events" },
-    { href: "/feedback", label: "Feedback" },
+    { href: "/contact", label: "Contact" },
 ];
 
 export function SiteHeader() {
