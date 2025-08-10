@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Star } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const approvedTestimonials: Omit<Feedback, 'status' | 'id'>[] = [
   {
@@ -38,9 +39,41 @@ const approvedTestimonials: Omit<Feedback, 'status' | 'id'>[] = [
 
 export default function FeedbackPage() {
   const [pendingFeedback, setPendingFeedback] = useState<Omit<Feedback, 'status' | 'id'>[]>([]);
+  const { toast } = useToast();
 
-  const handleFeedbackSubmit = (data: Omit<Feedback, 'status' | 'id'>) => {
-    setPendingFeedback(prev => [data, ...prev]);
+
+  const handleFeedbackSubmit = async (data: Omit<Feedback, 'status' | 'id'>) => {
+    try {
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        setPendingFeedback(prev => [result.feedback, ...prev]);
+        toast({
+          title: "Feedback Submitted!",
+          description: "Thank you for your feedback. It is now pending review.",
+        });
+      } else {
+        throw new Error(result.message || 'Failed to submit feedback.');
+      }
+    } catch (error) {
+      console.error('Feedback submission error:', error);
+      toast({
+        variant: 'destructive',
+        title: "Submission Failed",
+        description: "There was a problem submitting your feedback. Please try again.",
+      });
+    }
   };
 
   const StarRating = ({ rating }: { rating: number }) => (

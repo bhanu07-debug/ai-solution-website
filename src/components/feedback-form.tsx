@@ -30,7 +30,8 @@ interface FeedbackFormProps {
 }
 
 export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
-  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  
   const form = useForm<FeedbackFormData>({
     resolver: zodResolver(feedbackSchema),
     defaultValues: {
@@ -43,12 +44,10 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
     },
   });
 
-  function handleFormSubmit(data: FeedbackFormData) {
-    onSubmit({ ...data, createdAt: new Date() });
-    toast({
-      title: "Feedback Submitted!",
-      description: "Thank you for your feedback. It is now pending review.",
-    });
+  async function handleFormSubmit(data: FeedbackFormData) {
+    setIsLoading(true);
+    await onSubmit({ ...data, createdAt: new Date() });
+    setIsLoading(false);
     form.reset();
   }
 
@@ -122,7 +121,9 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full font-bold">Submit Feedback</Button>
+        <Button type="submit" className="w-full font-bold" disabled={isLoading}>
+          {isLoading ? 'Submitting...' : 'Submit Feedback'}
+        </Button>
       </form>
     </Form>
   );
