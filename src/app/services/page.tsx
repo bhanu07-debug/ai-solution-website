@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { services as mockServices } from "@/lib/mock-data";
+import { getServices } from "@/lib/firestore";
 import { Bot, Code, Rocket } from "lucide-react";
 
 const getIcon = (iconName: string): React.ReactNode => {
@@ -16,8 +16,8 @@ const getIcon = (iconName: string): React.ReactNode => {
     }
 };
 
-export default function ServicesPage() {
-  const services = mockServices;
+export default async function ServicesPage() {
+  const services = await getServices();
 
   return (
     <div className="container mx-auto py-12 md:py-20 px-4 md:px-6">

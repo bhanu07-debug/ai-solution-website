@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FeedbackForm } from '@/components/feedback-form';
 import { type Feedback } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,38 +9,23 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Star } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-
-const approvedTestimonials: Omit<Feedback, 'status' | 'id'>[] = [
-  {
-    name: 'Jane Doe',
-    company: 'Tech Solutions Inc.',
-    role: 'CEO',
-    message: 'AISolutions Hub transformed our workflow. Their AI is years ahead of the competition!',
-    rating: 5,
-    createdAt: new Date('2023-10-15'),
-  },
-  {
-    name: 'John Smith',
-    company: 'Innovate LLC',
-    role: 'CTO',
-    message: 'The custom models they built for us have increased our efficiency by over 40%. Incredible team and technology.',
-    rating: 5,
-    createdAt: new Date('2023-09-01'),
-  },
-  {
-    name: 'Emily White',
-    company: 'Data Insights',
-    role: 'Data Scientist',
-    message: 'Working with AISolutions Hub has been a game-changer. Their platform is powerful yet intuitive.',
-    rating: 4,
-    createdAt: new Date('2023-11-20'),
-  },
-];
+import { getFeedback } from '@/lib/firestore';
 
 export default function FeedbackPage() {
   const [pendingFeedback, setPendingFeedback] = useState<Omit<Feedback, 'status' | 'id'>[]>([]);
+  const [approvedTestimonials, setApprovedTestimonials] = useState<Feedback[]>([]);
   const { toast } = useToast();
 
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+        const allFeedback = await getFeedback();
+        const approved = allFeedback
+            .filter(fb => fb.status === 'approved')
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        setApprovedTestimonials(approved);
+    };
+    fetchTestimonials();
+  }, []);
 
   const handleFeedbackSubmit = async (data: Omit<Feedback, 'status' | 'id'>) => {
     try {

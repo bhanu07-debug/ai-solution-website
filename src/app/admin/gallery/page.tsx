@@ -1,19 +1,33 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Image from 'next/image';
 import { GalleryItemForm } from '@/components/admin/gallery-item-form';
-import { gallery as mockGallery, GalleryItem } from '@/lib/mock-data';
+import { type GalleryItem } from '@/lib/mock-data';
+import { getGalleryItems, createGalleryItem, updateGalleryItem, deleteGalleryItem } from '@/lib/firestore';
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 export default function AdminGalleryPage() {
-    const [gallery, setGallery] = useState<GalleryItem[]>(mockGallery);
+    const [gallery, setGallery] = useState<GalleryItem[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
+
+    useEffect(() => {
+        fetchGalleryItems();
+    }, []);
+
+    const fetchGalleryItems = async () => {
+        setIsLoading(true);
+        const items = await getGalleryItems();
+        setGallery(items);
+        setIsLoading(false);
+    };
 
     const handleAddItem = () => {
         setEditingItem(null);
@@ -25,16 +39,18 @@ export default function AdminGalleryPage() {
         setIsDialogOpen(true);
     };
 
-    const handleDeleteItem = (id: string) => {
-        setGallery(prev => prev.filter(item => item.id !== id));
+    const handleDeleteItem = async (id: string) => {
+        await deleteGalleryItem(id);
+        fetchGalleryItems();
     };
 
-    const handleFormSubmit = (data: Omit<GalleryItem, 'id'>) => {
+    const handleFormSubmit = async (data: Omit<GalleryItem, 'id'>) => {
         if (editingItem) {
-            setGallery(prev => prev.map(s => s.id === editingItem.id ? { ...data, id: s.id } : s));
+            await updateGalleryItem(editingItem.id, data);
         } else {
-            setGallery(prev => [...prev, { ...data, id: `g${prev.length + 1}` }]);
+            await createGalleryItem(data);
         }
+        fetchGalleryItems();
         setIsDialogOpen(false);
     };
 
@@ -53,27 +69,33 @@ export default function AdminGalleryPage() {
                     <CardDescription>Add or remove gallery images.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {gallery.map(item => (
-                            <div key={item.id} className="relative group">
-                                <Image 
-                                    src={item.src}
-                                    alt={item.alt}
-                                    width={400}
-                                    height={400}
-                                    className="rounded-lg object-cover aspect-square"
-                                />
-                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                                     <Button variant="outline" size="icon" onClick={() => handleEditItem(item)}>
-                                        <Edit className="h-4 w-4" />
-                                    </Button>
-                                    <Button variant="destructive" size="icon" onClick={() => handleDeleteItem(item.id)}>
-                                        <Trash2 className="h-4 w-4" />
-                                    </Button>
+                    {isLoading ? (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {[...Array(4)].map((_, i) => <Skeleton key={i} className="rounded-lg aspect-square" />)}
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {gallery.map(item => (
+                                <div key={item.id} className="relative group">
+                                    <Image 
+                                        src={item.src}
+                                        alt={item.alt}
+                                        width={400}
+                                        height={400}
+                                        className="rounded-lg object-cover aspect-square"
+                                    />
+                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                        <Button variant="outline" size="icon" onClick={() => handleEditItem(item)}>
+                                            <Edit className="h-4 w-4" />
+                                        </Button>
+                                        <Button variant="destructive" size="icon" onClick={() => handleDeleteItem(item.id)}>
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                   </div>
+                            ))}
+                        </div>
+                    )}
                 </CardContent>
             </Card>
 

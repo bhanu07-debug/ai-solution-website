@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { PlusCircle, Edit, Trash2 } from 'lucide-react';
@@ -8,13 +8,26 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ArticleForm } from '@/components/admin/article-form';
 import Image from 'next/image';
-import { articles as mockArticles, Article } from '@/lib/mock-data';
-
+import { type Article } from '@/lib/mock-data';
+import { getArticles, createArticle, updateArticle, deleteArticle } from '@/lib/firestore';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AdminArticlesPage() {
-    const [articles, setArticles] = useState<Article[]>(mockArticles);
+    const [articles, setArticles] = useState<Article[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingArticle, setEditingArticle] = useState<Article | null>(null);
+
+     useEffect(() => {
+        fetchArticles();
+    }, []);
+
+    const fetchArticles = async () => {
+        setIsLoading(true);
+        const fetchedArticles = await getArticles();
+        setArticles(fetchedArticles);
+        setIsLoading(false);
+    };
 
     const handleAddArticle = () => {
         setEditingArticle(null);
@@ -26,16 +39,18 @@ export default function AdminArticlesPage() {
         setIsDialogOpen(true);
     };
 
-    const handleDeleteArticle = (id: string) => {
-        setArticles(prev => prev.filter(article => article.id !== id));
+    const handleDeleteArticle = async (id: string) => {
+        await deleteArticle(id);
+        fetchArticles();
     };
 
-    const handleFormSubmit = (data: Omit<Article, 'id'>) => {
+    const handleFormSubmit = async (data: Omit<Article, 'id'>) => {
         if (editingArticle) {
-            setArticles(prev => prev.map(s => s.id === editingArticle.id ? { ...data, id: s.id } : s));
+            await updateArticle(editingArticle.id, data);
         } else {
-            setArticles(prev => [...prev, { ...data, id: `a${prev.length + 1}` }]);
+            await createArticle(data);
         }
+        fetchArticles();
         setIsDialogOpen(false);
     };
 
@@ -54,6 +69,13 @@ export default function AdminArticlesPage() {
                     <CardDescription>Write, edit, or publish articles.</CardDescription>
                 </CardHeader>
                 <CardContent>
+                    {isLoading ? (
+                         <div className="space-y-4">
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                        </div>
+                    ) : (
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -85,6 +107,7 @@ export default function AdminArticlesPage() {
                             ))}
                         </TableBody>
                     </Table>
+                    )}
                 </CardContent>
             </Card>
 

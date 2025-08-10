@@ -4,10 +4,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { articles as mockArticles } from "@/lib/mock-data";
+import { getArticles } from "@/lib/firestore";
 
-export default function BlogPage() {
-    const posts = mockArticles;
+export default async function BlogPage() {
+    const posts = await getArticles();
 
   return (
     <div className="container mx-auto py-12 md:py-20 px-4 md:px-6">

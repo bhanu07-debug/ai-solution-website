@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { PlusCircle, Edit, Trash2 } from 'lucide-react';
@@ -9,12 +9,26 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ProjectForm } from '@/components/admin/project-form';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-import { projects as mockProjects, Project } from '@/lib/mock-data';
+import { type Project } from '@/lib/mock-data';
+import { getProjects, createProject, updateProject, deleteProject } from '@/lib/firestore';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AdminProjectsPage() {
-    const [projects, setProjects] = useState<Project[]>(mockProjects);
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingProject, setEditingProject] = useState<Project | null>(null);
+
+    useEffect(() => {
+        fetchProjects();
+    }, []);
+
+    const fetchProjects = async () => {
+        setIsLoading(true);
+        const fetchedProjects = await getProjects();
+        setProjects(fetchedProjects);
+        setIsLoading(false);
+    };
 
     const handleAddProject = () => {
         setEditingProject(null);
@@ -26,16 +40,18 @@ export default function AdminProjectsPage() {
         setIsDialogOpen(true);
     };
 
-    const handleDeleteProject = (id: string) => {
-        setProjects(prev => prev.filter(project => project.id !== id));
+    const handleDeleteProject = async (id: string) => {
+        await deleteProject(id);
+        fetchProjects();
     };
 
-    const handleFormSubmit = (data: Omit<Project, 'id'>) => {
+    const handleFormSubmit = async (data: Omit<Project, 'id'>) => {
         if (editingProject) {
-            setProjects(prev => prev.map(s => s.id === editingProject.id ? { ...data, id: s.id } : s));
+            await updateProject(editingProject.id, data);
         } else {
-            setProjects(prev => [...prev, { ...data, id: `p${prev.length + 1}` }]);
+            await createProject(data);
         }
+        fetchProjects();
         setIsDialogOpen(false);
     };
 
@@ -54,6 +70,13 @@ export default function AdminProjectsPage() {
                     <CardDescription>Add, edit, or remove projects.</CardDescription>
                 </CardHeader>
                 <CardContent>
+                     {isLoading ? (
+                         <div className="space-y-4">
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                        </div>
+                    ) : (
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -87,6 +110,7 @@ export default function AdminProjectsPage() {
                             ))}
                         </TableBody>
                     </Table>
+                    )}
                 </CardContent>
             </Card>
 

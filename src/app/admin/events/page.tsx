@@ -1,18 +1,32 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { PlusCircle, Edit, Trash2, Calendar, MapPin } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { EventForm } from '@/components/admin/event-form';
-import { events as mockEvents, Event } from '@/lib/mock-data';
+import { type Event } from '@/lib/mock-data';
+import { getEvents, createEvent, updateEvent, deleteEvent } from '@/lib/firestore';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AdminEventsPage() {
-    const [events, setEvents] = useState<Event[]>(mockEvents);
+    const [events, setEvents] = useState<Event[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+
+     useEffect(() => {
+        fetchEvents();
+    }, []);
+
+    const fetchEvents = async () => {
+        setIsLoading(true);
+        const fetchedEvents = await getEvents();
+        setEvents(fetchedEvents);
+        setIsLoading(false);
+    };
 
     const handleAddEvent = () => {
         setEditingEvent(null);
@@ -24,16 +38,18 @@ export default function AdminEventsPage() {
         setIsDialogOpen(true);
     };
 
-    const handleDeleteEvent = (id: string) => {
-        setEvents(prev => prev.filter(event => event.id !== id));
+    const handleDeleteEvent = async (id: string) => {
+        await deleteEvent(id);
+        fetchEvents();
     };
 
-    const handleFormSubmit = (data: Omit<Event, 'id'>) => {
+    const handleFormSubmit = async (data: Omit<Event, 'id'>) => {
         if (editingEvent) {
-            setEvents(prev => prev.map(s => s.id === editingEvent.id ? { ...data, id: s.id } : s));
+            await updateEvent(editingEvent.id, data);
         } else {
-            setEvents(prev => [...prev, { ...data, id: `e${prev.length + 1}` }]);
+            await createEvent(data);
         }
+        fetchEvents();
         setIsDialogOpen(false);
     };
 
@@ -52,6 +68,13 @@ export default function AdminEventsPage() {
                     <CardDescription>Add, edit, or remove events.</CardDescription>
                 </CardHeader>
                 <CardContent>
+                    {isLoading ? (
+                         <div className="space-y-4">
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                        </div>
+                    ) : (
                    <Table>
                         <TableHeader>
                             <TableRow>
@@ -89,6 +112,7 @@ export default function AdminEventsPage() {
                             ))}
                         </TableBody>
                     </Table>
+                    )}
                 </CardContent>
             </Card>
 

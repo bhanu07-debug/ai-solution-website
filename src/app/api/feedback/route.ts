@@ -1,6 +1,7 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { createFeedback } from '@/lib/firestore';
 
 const feedbackSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -11,20 +12,14 @@ const feedbackSchema = z.object({
   createdAt: z.string().datetime(),
 });
 
-// In a real application, you would save this to a database.
-// For now, we'll just log it to the console.
 export async function POST(request: Request) {
   try {
     const json = await request.json();
     const data = feedbackSchema.parse(json);
 
-    console.log('New feedback received:', data);
-
-    // Here you would typically save the data to a database.
-    // e.g., await db.collection('feedback').add(data);
+    const newFeedback = await createFeedback(data);
     
-    // We'll return a success response with the submitted data.
-    return NextResponse.json({ success: true, feedback: data }, { status: 201 });
+    return NextResponse.json({ success: true, feedback: newFeedback }, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ success: false, errors: error.errors }, { status: 400 });

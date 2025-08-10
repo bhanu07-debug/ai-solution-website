@@ -5,10 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { projects as mockProjects } from "@/lib/mock-data";
+import { getProjects } from "@/lib/firestore";
 
-export default function ProjectsPage() {
-    const projects = mockProjects;
+export default async function ProjectsPage() {
+    const projects = await getProjects();
 
   return (
     <div className="container mx-auto py-12 md:py-20 px-4 md:px-6">

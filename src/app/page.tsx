@@ -6,7 +6,7 @@ import { ArrowRight, Calendar, MapPin, Bot, Code, Rocket } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
-import { services, projects, articles, gallery, events } from '@/lib/mock-data';
+import { getServices, getProjects, getArticles, getGalleryItems, getEvents } from '@/lib/firestore';
 
 const getIcon = (iconName: string): React.ReactNode => {
     switch (iconName) {
@@ -21,7 +21,13 @@ const getIcon = (iconName: string): React.ReactNode => {
     }
 };
 
-export default function Home() {
+export default async function Home() {
+  const services = await getServices();
+  const projects = await getProjects();
+  const articles = await getArticles();
+  const gallery = await getGalleryItems();
+  const events = await getEvents();
+
   return (
     <div className="flex flex-col">
       <section className="relative w-full py-20 md:py-32 lg:py-40 bg-background overflow-hidden">

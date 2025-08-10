@@ -2,10 +2,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, MapPin } from "lucide-react";
-import { events as mockEvents } from "@/lib/mock-data";
+import { getEvents } from "@/lib/firestore";
 
-export default function EventsPage() {
-    const events = mockEvents;
+export default async function EventsPage() {
+    const events = await getEvents();
 
     return (
         <div className="container mx-auto py-12 md:py-20 px-4 md:px-6">

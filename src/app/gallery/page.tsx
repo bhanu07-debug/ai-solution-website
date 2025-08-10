@@ -1,9 +1,9 @@
 
 import Image from "next/image";
-import { gallery as mockGallery } from "@/lib/mock-data";
+import { getGalleryItems } from "@/lib/firestore";
 
-export default function GalleryPage() {
-  const images = mockGallery;
+export default async function GalleryPage() {
+  const images = await getGalleryItems();
 
   return (
     <div className="container mx-auto py-12 md:py-20 px-4 md:px-6">
