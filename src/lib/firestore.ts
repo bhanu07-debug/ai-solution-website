@@ -1,37 +1,46 @@
 import { db } from './firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, Timestamp, DocumentData } from 'firebase/firestore';
 import type { Service, Project, Article, GalleryItem, Event } from './mock-data';
 import type { Feedback } from './types';
 
 // Generic Firestore CRUD operations
 
 // CREATE
-export const createItem = async <T>(collectionPath: string, data: T) => {
+export const createItem = async <T extends DocumentData>(collectionPath: string, data: T) => {
     const docRef = await addDoc(collection(db, collectionPath), { ...data, createdAt: serverTimestamp() });
     return { ...data, id: docRef.id };
 };
 
 // READ all items
 export const getItems = async <T>(collectionPath: string): Promise<(T & { id: string })[]> => {
-    const snapshot = await getDocs(collection(db, collectionPath));
-    return snapshot.docs.map(doc => {
-        const data = doc.data();
-        // Convert Firestore Timestamps to JS Date objects, then to ISO strings
-        Object.keys(data).forEach(key => {
-            if (data[key] instanceof Timestamp) {
-                data[key] = data[key].toDate().toISOString();
-            } else if (data[key] instanceof Date) {
-                data[key] = data[key].toISOString();
-            }
+    try {
+        const snapshot = await getDocs(collection(db, collectionPath));
+        return snapshot.docs.map(doc => {
+            const data = doc.data();
+            // Convert Firestore Timestamps to JS Date objects, then to ISO strings
+            Object.keys(data).forEach(key => {
+                if (data[key] instanceof Timestamp) {
+                    data[key] = data[key].toDate().toISOString();
+                } else if (data[key] instanceof Date) { // Just in case
+                    data[key] = data[key].toISOString();
+                }
+            });
+            return { ...data, id: doc.id } as T & { id: string };
         });
-        return { ...data, id: doc.id } as T & { id: string };
-    });
+    } catch (error) {
+        console.error(`Error fetching items from ${collectionPath}:`, error);
+        if ((error as any).message.includes('closed')) {
+            console.error("Firestore connection was closed. This might be due to an initialization issue.");
+        }
+        // In case of an error, return an empty array to prevent the app from crashing.
+        return [];
+    }
 };
 
 // UPDATE
 export const updateItem = async <T>(collectionPath: string, id: string, data: Partial<T>) => {
     const docRef = doc(db, collectionPath, id);
-    await updateDoc(docRef, data);
+    await updateDoc(docRef, data as DocumentData);
 };
 
 // DELETE
@@ -69,11 +78,11 @@ export const deleteEvent = (id: string) => deleteItem('events', id);
 
 export const getFeedback = () => getItems<Feedback>('feedback');
 export const createFeedback = (data: Omit<Feedback, 'id' | 'status' | 'createdAt'>) => {
-    const feedbackData: Omit<Feedback, 'id'> = {
+    const feedbackData: Omit<Feedback, 'id' | 'createdAt'> & {createdAt: Date} = {
         ...data,
         status: 'pending',
         createdAt: new Date(),
     };
-    return createItem<Omit<Feedback, 'id'>>('feedback', feedbackData);
+    return createItem('feedback', feedbackData);
 };
 export const updateFeedbackStatus = (id: string, status: 'approved' | 'rejected') => updateItem('feedback', id, { status });
