@@ -12,39 +12,53 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarMenuSubButton,
+  SidebarMenuBadge,
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboard,
   MessageSquare,
-  Briefcase,
   FileText,
-  GalleryHorizontal,
-  Calendar,
   Settings,
-  ShieldCheck,
-  Building,
 } from "lucide-react";
 import { Logo } from "../icons/logo";
 import { Separator } from "../ui/separator";
-
-const menuItems = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  {
-    label: "Content",
-    icon: FileText,
-    items: [
-      { href: "/admin/services", label: "Services" },
-      { href: "/admin/projects", label: "Projects" },
-      { href: "/admin/articles", label: "Articles" },
-      { href: "/admin/gallery", label: "Gallery" },
-      { href: "/admin/events", label: "Events" },
-    ],
-  },
-  { href: "/admin/feedback", label: "Feedback", icon: MessageSquare },
-];
+import { useEffect, useState } from "react";
+import { getFeedback } from "@/lib/firestore";
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const [pendingFeedbackCount, setPendingFeedbackCount] = useState(0);
+
+  useEffect(() => {
+    const fetchFeedbackCount = async () => {
+      const feedback = await getFeedback();
+      const pendingCount = feedback.filter(f => f.status === 'pending').length;
+      setPendingFeedbackCount(pendingCount);
+    };
+    fetchFeedbackCount();
+    
+    // Optional: Poll for new feedback periodically
+    const interval = setInterval(fetchFeedbackCount, 30000); // every 30 seconds
+    return () => clearInterval(interval);
+
+  }, [pathname]); // Refetch when path changes
+
+
+  const menuItems = [
+    { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+    {
+      label: "Content",
+      icon: FileText,
+      items: [
+        { href: "/admin/services", label: "Services" },
+        { href: "/admin/projects", label: "Projects" },
+        { href: "/admin/articles", label: "Articles" },
+        { href: "/admin/gallery", label: "Gallery" },
+        { href: "/admin/events", label: "Events" },
+      ],
+    },
+    { href: "/admin/feedback", label: "Feedback", icon: MessageSquare, badge: pendingFeedbackCount > 0 ? pendingFeedbackCount : undefined },
+  ];
 
   const isActive = (href: string) => pathname === href;
   const isSubActive = (items: { href: string }[]) => items.some(item => pathname.startsWith(item.href));
@@ -85,6 +99,7 @@ export function AdminSidebar() {
                 <SidebarMenuButton href={item.href!} isActive={isActive(item.href!)}>
                   <item.icon />
                   <span>{item.label}</span>
+                   {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
                 </SidebarMenuButton>
               </SidebarMenuItem>
             )
