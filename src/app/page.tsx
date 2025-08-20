@@ -224,8 +224,8 @@ export default async function Home() {
               src="https://placehold.co/600x400.png"
               width={600}
               height={400}
-              alt="AI Innovation"
-              data-ai-hint="abstract technology"
+              alt="Artificial Intelligence"
+              data-ai-hint="artificial intelligence"
               className="rounded-lg shadow-2xl"
             />
           </div>
