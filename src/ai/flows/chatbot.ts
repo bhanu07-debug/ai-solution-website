@@ -55,6 +55,6 @@ export const chatbot = ai.defineFlow(
   },
   async (input) => {
     const { output } = await chatbotPrompt(input);
-    return output!;
+    return output ?? '';
   }
 );
