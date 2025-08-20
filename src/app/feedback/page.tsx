@@ -141,7 +141,7 @@ export default function FeedbackPage() {
                     <CardHeader className="pt-0">
                         <div className="flex items-center gap-4">
                             <Avatar>
-                                <AvatarImage src={`https://placehold.co/40x40.png?text=${testimonial.name.charAt(0)}`} />
+                                <AvatarImage src={`https://placehold.co/40x40.png`} alt={testimonial.name} data-ai-hint="person face"/>
                                 <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div>

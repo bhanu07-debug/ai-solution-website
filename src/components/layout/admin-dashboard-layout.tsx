@@ -31,7 +31,7 @@ export function AdminDashboardLayout({ children }: { children: React.ReactNode }
                       <span className="sr-only">Notifications</span>
                   </Button>
                   <Avatar>
-                      <AvatarImage src="https://placehold.co/40x40.png" alt="Admin"/>
+                      <AvatarImage src="https://placehold.co/40x40.png" alt="Admin" data-ai-hint="person face" />
                       <AvatarFallback>A</AvatarFallback>
                   </Avatar>
                   <Button variant="ghost" size="icon" onClick={handleLogout} title="Logout">
