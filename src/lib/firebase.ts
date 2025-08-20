@@ -1,3 +1,4 @@
+
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -6,12 +7,13 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-auth-domain",
-  projectId: "your-project-id",
-  storageBucket: "your-storage-bucket",
-  messagingSenderId: "your-messaging-sender-id",
-  appId: "your-app-id"
+  "projectId": "aisolutions-hub-1urup",
+  "appId": "1:358572383621:web:078410771b337ca496f8ec",
+  "storageBucket": "aisolutions-hub-1urup.firebasestorage.app",
+  "apiKey": "AIzaSyCEIH-1bcVpmT3J7WFKQ2l22kjfMCFJLWo",
+  "authDomain": "aisolutions-hub-1urup.firebaseapp.com",
+  "measurementId": "",
+  "messagingSenderId": "358572383621"
 };
 
 // Initialize Firebase
