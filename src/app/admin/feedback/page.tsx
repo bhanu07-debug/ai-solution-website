@@ -6,6 +6,8 @@ import { FeedbackTable } from "@/components/admin/feedback-table";
 import { type Feedback } from "@/lib/types";
 import { getFeedback, updateFeedbackStatus } from '@/lib/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 
 export default function AdminFeedbackPage() {
     const [feedback, setFeedback] = useState<Feedback[]>([]);
@@ -18,12 +20,7 @@ export default function AdminFeedbackPage() {
     const fetchFeedback = async () => {
         setIsLoading(true);
         const fetchedFeedback = await getFeedback();
-        // Sort by creation date
-        const sortedFeedback = fetchedFeedback.sort((a, b) => {
-            const dateA = a.createdAt instanceof Date ? a.createdAt.getTime() : new Date(a.createdAt).getTime();
-            const dateB = b.createdAt instanceof Date ? b.createdAt.getTime() : new Date(b.createdAt).getTime();
-            return dateB - dateA;
-        });
+        const sortedFeedback = fetchedFeedback.sort((a, b) => new Date(b.createdAt as string).getTime() - new Date(a.createdAt as string).getTime());
         setFeedback(sortedFeedback);
         setIsLoading(false);
     }
@@ -32,6 +29,9 @@ export default function AdminFeedbackPage() {
         await updateFeedbackStatus(id, status);
         fetchFeedback();
     };
+
+    const pendingFeedback = feedback.filter(f => f.status === 'pending');
+    const reviewedFeedback = feedback.filter(f => f.status !== 'pending');
 
     return (
         <div className="space-y-8">
@@ -49,7 +49,33 @@ export default function AdminFeedbackPage() {
                             <Skeleton className="h-12 w-full" />
                         </div>
                     ) : (
-                        <FeedbackTable data={feedback} onUpdateStatus={handleUpdateStatus} />
+                       <Tabs defaultValue="pending">
+                            <TabsList>
+                                <TabsTrigger value="pending">
+                                    Pending 
+                                    <Badge className="ml-2">{pendingFeedback.length}</Badge>
+                                </TabsTrigger>
+                                <TabsTrigger value="reviewed">Reviewed</TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="pending" className="mt-4">
+                                {pendingFeedback.length > 0 ? (
+                                    <FeedbackTable data={pendingFeedback} onUpdateStatus={handleUpdateStatus} />
+                                ) : (
+                                    <div className="text-center text-muted-foreground py-12">
+                                        <p>No pending feedback submissions.</p>
+                                    </div>
+                                )}
+                            </TabsContent>
+                            <TabsContent value="reviewed" className="mt-4">
+                                {reviewedFeedback.length > 0 ? (
+                                     <FeedbackTable data={reviewedFeedback} onUpdateStatus={handleUpdateStatus} />
+                                ) : (
+                                     <div className="text-center text-muted-foreground py-12">
+                                        <p>No reviewed feedback submissions yet.</p>
+                                    </div>
+                                )}
+                            </TabsContent>
+                        </Tabs>
                     )}
                 </CardContent>
             </Card>
