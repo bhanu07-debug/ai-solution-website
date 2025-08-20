@@ -9,7 +9,6 @@ const feedbackSchema = z.object({
   role: z.string().optional(),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
   rating: z.number().min(1, 'Please provide a rating.').max(5),
-  createdAt: z.string().datetime(),
 });
 
 export async function POST(request: Request) {
@@ -17,7 +16,12 @@ export async function POST(request: Request) {
     const json = await request.json();
     const data = feedbackSchema.parse(json);
 
-    const newFeedback = await createFeedback(data);
+    const feedbackData = {
+        ...data,
+        createdAt: new Date(), // Set timestamp on the server
+    };
+
+    const newFeedback = await createFeedback(feedbackData);
     
     return NextResponse.json({ success: true, feedback: newFeedback }, { status: 201 });
   } catch (error) {

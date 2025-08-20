@@ -27,7 +27,7 @@ export default function FeedbackPage() {
     fetchTestimonials();
   }, []);
 
-  const handleFeedbackSubmit = async (data: Omit<Feedback, 'status' | 'id'>) => {
+  const handleFeedbackSubmit = async (data: Omit<Feedback, 'status' | 'id' | 'createdAt'>) => {
     try {
       const response = await fetch('/api/feedback', {
         method: 'POST',

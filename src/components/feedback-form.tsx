@@ -18,7 +18,6 @@ const feedbackSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
   company: z.string().optional(),
   role: z.string().optional(),
-  country: z.string().optional(),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
   rating: z.number().min(1, 'Please provide a rating.').max(5),
 });
@@ -26,7 +25,7 @@ const feedbackSchema = z.object({
 type FeedbackFormData = z.infer<typeof feedbackSchema>;
 
 interface FeedbackFormProps {
-  onSubmit: (data: Omit<Feedback, 'id' | 'status'>) => void;
+  onSubmit: (data: Omit<Feedback, 'id' | 'status' | 'createdAt'>) => void;
 }
 
 export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
@@ -38,7 +37,6 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
       name: '',
       company: '',
       role: '',
-      country: '',
       message: '',
       rating: 0,
     },
@@ -46,7 +44,7 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
 
   async function handleFormSubmit(data: FeedbackFormData) {
     setIsLoading(true);
-    await onSubmit({ ...data, createdAt: new Date() });
+    await onSubmit(data);
     setIsLoading(false);
     form.reset();
   }
