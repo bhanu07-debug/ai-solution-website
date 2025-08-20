@@ -21,12 +21,11 @@ export const getItems = async <T>(collectionPath: string): Promise<(T & { id: st
         }
         return snapshot.docs.map(doc => {
             const data = doc.data();
-            // Convert Firestore Timestamps to JS Date objects, then to ISO strings
+            // Convert Firestore Timestamps to JS Date objects.
+            // This is crucial for Next.js to avoid hydration errors, as Timestamps are not directly serializable.
             Object.keys(data).forEach(key => {
                 if (data[key] instanceof Timestamp) {
-                    data[key] = data[key].toDate().toISOString();
-                } else if (data[key] instanceof Date) { // Just in case
-                    data[key] = data[key].toISOString();
+                    data[key] = data[key].toDate();
                 }
             });
             return { ...data, id: doc.id } as T & { id: string };
