@@ -8,6 +8,7 @@ import { type Feedback } from "@/lib/types";
 import { Check, ThumbsDown, X } from "lucide-react";
 import { Star } from 'lucide-react';
 import { formatDistanceToNow } from "date-fns";
+import { useState, useEffect } from "react";
 
 interface FeedbackTableProps {
     data: Feedback[];
@@ -15,6 +16,12 @@ interface FeedbackTableProps {
 }
 
 export function FeedbackTable({ data, onUpdateStatus }: FeedbackTableProps) {
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
     const getBadgeVariant = (status: Feedback['status']) => {
         switch (status) {
             case 'approved': return 'default';
@@ -57,7 +64,7 @@ export function FeedbackTable({ data, onUpdateStatus }: FeedbackTableProps) {
                                 <StarRating rating={item.rating} />
                             </TableCell>
                             <TableCell className="hidden lg:table-cell">
-                                {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
+                                {isClient ? formatDistanceToNow(new Date(item.createdAt), { addSuffix: true }) : ''}
                             </TableCell>
                             <TableCell>
                                 <Badge variant={getBadgeVariant(item.status)} className="capitalize">{item.status}</Badge>
