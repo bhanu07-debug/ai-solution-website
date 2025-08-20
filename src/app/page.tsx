@@ -2,24 +2,10 @@
 import { AnimatedHeading } from '@/components/animated-heading';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Calendar, MapPin, Bot, Code, Rocket } from 'lucide-react';
+import { ArrowRight, Calendar, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
 import { getServices, getProjects, getArticles, getGalleryItems, getEvents } from '@/lib/firestore';
-
-const getIcon = (iconName: string): React.ReactNode => {
-    switch (iconName) {
-      case 'Bot':
-        return <Bot className="h-10 w-10 text-primary" />;
-      case 'Code':
-        return <Code className="h-10 w-10 text-primary" />;
-      case 'Rocket':
-        return <Rocket className="h-10 w-10 text-primary" />;
-      default:
-        return null;
-    }
-};
 
 export default async function Home() {
   const services = await getServices();
@@ -41,7 +27,7 @@ export default async function Home() {
               <Link href="/contact">Get Started</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="font-bold">
-              <Link href="#">Learn More</Link>
+              <Link href="/services">Learn More</Link>
             </Button>
           </div>
         </div>
@@ -54,16 +40,28 @@ export default async function Home() {
             <h2 className="font-headline text-3xl md:text-4xl font-bold">Our Services</h2>
             <p className="mt-2 text-muted-foreground">Comprehensive AI solutions for every need.</p>
           </div>
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {services.slice(0, 3).map((service, index) => (
-              <Card key={index} className="flex flex-col items-center text-center p-6 transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+              <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+                <Image
+                    src={service.imageUrl}
+                    alt={service.title}
+                    width={600}
+                    height={400}
+                    className="w-full h-48 object-cover"
+                    data-ai-hint={service.imageHint}
+                />
                 <CardHeader>
-                  {getIcon(service.icon)}
-                  <CardTitle className="font-headline mt-4">{service.title}</CardTitle>
+                  <CardTitle className="font-headline">{service.title}</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex-grow">
                   <CardDescription>{service.description}</CardDescription>
                 </CardContent>
+                 <CardFooter>
+                    <Button asChild className="w-full font-bold">
+                      <Link href="/contact">Learn More</Link>
+                    </Button>
+                </CardFooter>
               </Card>
             ))}
           </div>

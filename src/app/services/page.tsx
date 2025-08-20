@@ -1,20 +1,9 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { getServices } from "@/lib/firestore";
-import { Bot, Code, Rocket } from "lucide-react";
-
-const getIcon = (iconName: string): React.ReactNode => {
-    switch (iconName) {
-      case 'Bot':
-        return <Bot className="h-10 w-10 text-primary" />;
-      case 'Code':
-        return <Code className="h-10 w-10 text-primary" />;
-      case 'Rocket':
-        return <Rocket className="h-10 w-10 text-primary" />;
-      default:
-        return null;
-    }
-};
+import Image from "next/image";
+import Link from "next/link";
 
 export default async function ServicesPage() {
   const services = await getServices();
@@ -27,14 +16,26 @@ export default async function ServicesPage() {
       </div>
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {services.map((service, index) => (
-          <Card key={index} className="flex flex-col items-center text-center p-6 transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+          <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+            <Image
+                src={service.imageUrl}
+                alt={service.title}
+                width={600}
+                height={400}
+                className="w-full h-48 object-cover"
+                data-ai-hint={service.imageHint}
+            />
             <CardHeader>
-              {getIcon(service.icon)}
-              <CardTitle className="font-headline mt-4">{service.title}</CardTitle>
+              <CardTitle className="font-headline">{service.title}</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">{service.description}</p>
+            <CardContent className="flex-grow">
+              <CardDescription>{service.description}</CardDescription>
             </CardContent>
+            <CardFooter>
+                <Button asChild className="w-full font-bold">
+                    <Link href="/contact">Learn More</Link>
+                </Button>
+            </CardFooter>
           </Card>
         ))}
       </div>

@@ -9,18 +9,20 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
+import { Service } from '@/lib/mock-data';
 
 const serviceSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters.'),
   description: z.string().min(10, 'Description must be at least 10 characters.'),
-  icon: z.string().min(1, 'Icon name is required (e.g., Bot, Code, Rocket).'),
+  imageUrl: z.string().url('Image URL must be a valid URL.'),
+  imageHint: z.string().min(1, 'Image hint is required.'),
 });
 
 type ServiceFormData = z.infer<typeof serviceSchema>;
 
 interface ServiceFormProps {
-  onSubmit: (data: ServiceFormData) => void;
-  defaultValues?: ServiceFormData | null;
+  onSubmit: (data: Omit<Service, 'id'>) => void;
+  defaultValues?: Service | null;
 }
 
 export function ServiceForm({ onSubmit, defaultValues }: ServiceFormProps) {
@@ -31,7 +33,8 @@ export function ServiceForm({ onSubmit, defaultValues }: ServiceFormProps) {
     defaultValues: defaultValues || {
       title: '',
       description: '',
-      icon: '',
+      imageUrl: '',
+      imageHint: '',
     },
   });
 
@@ -72,15 +75,28 @@ export function ServiceForm({ onSubmit, defaultValues }: ServiceFormProps) {
         />
         <FormField
           control={form.control}
-          name="icon"
+          name="imageUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Icon Name</FormLabel>
+              <FormLabel>Image URL</FormLabel>
               <FormControl>
-                <Input placeholder="e.g., Bot, Code, Rocket" {...field} />
+                <Input placeholder="https://placehold.co/600x400.png" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="imageHint"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Image Hint</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g., abstract technology" {...field} />
               </FormControl>
                <p className="text-xs text-muted-foreground">
-                Use a valid name from lucide-react library.
+                One or two keywords for image generation.
               </p>
               <FormMessage />
             </FormItem>
