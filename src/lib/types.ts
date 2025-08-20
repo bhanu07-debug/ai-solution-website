@@ -1,3 +1,4 @@
+
 export type Feedback = {
   id: string;
   name: string;
@@ -7,5 +8,5 @@ export type Feedback = {
   rating: number;
   country?: string;
   status: 'pending' | 'approved' | 'rejected';
-  createdAt: Date;
+  createdAt: Date | string;
 };

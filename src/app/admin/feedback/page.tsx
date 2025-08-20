@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,8 +19,12 @@ export default function AdminFeedbackPage() {
         setIsLoading(true);
         const fetchedFeedback = await getFeedback();
         // Sort by creation date
-        fetchedFeedback.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-        setFeedback(fetchedFeedback);
+        const sortedFeedback = fetchedFeedback.sort((a, b) => {
+            const dateA = a.createdAt instanceof Date ? a.createdAt.getTime() : new Date(a.createdAt).getTime();
+            const dateB = b.createdAt instanceof Date ? b.createdAt.getTime() : new Date(b.createdAt).getTime();
+            return dateB - dateA;
+        });
+        setFeedback(sortedFeedback);
         setIsLoading(false);
     }
 

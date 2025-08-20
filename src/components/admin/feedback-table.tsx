@@ -39,6 +39,16 @@ export function FeedbackTable({ data, onUpdateStatus }: FeedbackTableProps) {
       </div>
     );
 
+    const formatDate = (date: Date | string) => {
+        if (!isClient) return '';
+        try {
+            const dateObj = typeof date === 'string' ? new Date(date) : date;
+            return formatDistanceToNow(dateObj, { addSuffix: true });
+        } catch (e) {
+            return '';
+        }
+    }
+
     return (
         <div className="rounded-md border">
             <Table>
@@ -64,7 +74,7 @@ export function FeedbackTable({ data, onUpdateStatus }: FeedbackTableProps) {
                                 <StarRating rating={item.rating} />
                             </TableCell>
                             <TableCell className="hidden lg:table-cell">
-                                {isClient ? formatDistanceToNow(new Date(item.createdAt), { addSuffix: true }) : ''}
+                                {formatDate(item.createdAt)}
                             </TableCell>
                             <TableCell>
                                 <Badge variant={getBadgeVariant(item.status)} className="capitalize">{item.status}</Badge>
