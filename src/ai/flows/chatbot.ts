@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A simple chatbot flow for AISolutions Hub.
@@ -5,15 +6,15 @@
  * This file defines the AI logic for a chatbot that can answer user questions
  * about the company, its services, and general AI topics.
  *
- * - chatbotFlow - The main function that handles the chat logic.
- * - ChatbotInput - The Zod schema for the chatbot input.
- * - ChatbotOutput - The Zod schema for the chatbot output.
+ * - chatbot - The main async function that handles the chat logic.
+ * - ChatbotInput - The type for the chatbot input.
+ * - ChatbotOutput - The type for the chatbot output.
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit/zod';
+import { z } from 'zod';
 
-export const ChatbotInputSchema = z.object({
+const ChatbotInputSchema = z.object({
   history: z.array(
     z.object({
       role: z.enum(['user', 'model']),

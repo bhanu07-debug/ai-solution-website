@@ -1,3 +1,4 @@
+
 import { db } from './firebase';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, Timestamp, DocumentData } from 'firebase/firestore';
 import type { Service, Project, Article, GalleryItem, Event } from './mock-data';
@@ -15,6 +16,9 @@ export const createItem = async <T extends DocumentData>(collectionPath: string,
 export const getItems = async <T>(collectionPath: string): Promise<(T & { id: string })[]> => {
     try {
         const snapshot = await getDocs(collection(db, collectionPath));
+        if (snapshot.empty) {
+            return [];
+        }
         return snapshot.docs.map(doc => {
             const data = doc.data();
             // Convert Firestore Timestamps to JS Date objects, then to ISO strings
@@ -29,9 +33,6 @@ export const getItems = async <T>(collectionPath: string): Promise<(T & { id: st
         });
     } catch (error) {
         console.error(`Error fetching items from ${collectionPath}:`, error);
-        if ((error as any).message.includes('closed')) {
-            console.error("Firestore connection was closed. This might be due to an initialization issue.");
-        }
         // In case of an error, return an empty array to prevent the app from crashing.
         return [];
     }
@@ -56,7 +57,14 @@ export const createService = (data: Omit<Service, 'id'>) => createItem<Omit<Serv
 export const updateService = (id: string, data: Partial<Service>) => updateItem<Service>('services', id, data);
 export const deleteService = (id: string) => deleteItem('services', id);
 
-export const getProjects = () => getItems<Project>('projects');
+export const getProjects = async () => {
+    try {
+        return await getItems<Project>('projects');
+    } catch (error) {
+        console.error("Failed to fetch projects, returning empty array.", error);
+        return [];
+    }
+};
 export const createProject = (data: Omit<Project, 'id'>) => createItem<Omit<Project, 'id'>>('projects', data);
 export const updateProject = (id: string, data: Partial<Project>) => updateItem<Project>('projects', id, data);
 export const deleteProject = (id: string) => deleteItem('projects', id);
