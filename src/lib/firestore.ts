@@ -1,7 +1,7 @@
 
 import { db } from './firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, Timestamp, DocumentData } from 'firebase/firestore';
-import type { Service, Project, Article, GalleryItem, Event } from './mock-data';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, Timestamp, DocumentData, writeBatch } from 'firebase/firestore';
+import { type Service, type Project, type Article, type GalleryItem, type Event, MOCK_SERVICES, MOCK_PROJECTS, MOCK_ARTICLES, MOCK_GALLERY_ITEMS, MOCK_EVENTS } from './mock-data';
 import type { Feedback } from './types';
 
 // Generic Firestore CRUD operations
@@ -13,16 +13,33 @@ export const createItem = async <T extends DocumentData>(collectionPath: string,
 };
 
 // READ all items
-export const getItems = async <T>(collectionPath: string): Promise<(T & { id: string })[]> => {
+export const getItems = async <T>(collectionPath: string, mockData?: Omit<T, 'id'>[]): Promise<(T & { id: string })[]> => {
     try {
         const snapshot = await getDocs(collection(db, collectionPath));
-        if (snapshot.empty) {
-            return [];
+        if (snapshot.empty && mockData) {
+            // If the collection is empty and mock data is provided, populate it.
+            const batch = writeBatch(db);
+            mockData.forEach(item => {
+                const docRef = doc(collection(db, collectionPath));
+                batch.set(docRef, { ...item, createdAt: serverTimestamp() });
+            });
+            await batch.commit();
+            // Fetch the newly created items
+            const newSnapshot = await getDocs(collection(db, collectionPath));
+            return newSnapshot.docs.map(doc => {
+                const data = doc.data();
+                // Convert Timestamps to Dates
+                Object.keys(data).forEach(key => {
+                    if (data[key] instanceof Timestamp) {
+                        data[key] = data[key].toDate();
+                    }
+                });
+                return { ...data, id: doc.id } as T & { id: string };
+            });
         }
         return snapshot.docs.map(doc => {
             const data = doc.data();
             // Convert Firestore Timestamps to JS Date objects.
-            // This is crucial for Next.js to avoid hydration errors, as Timestamps are not directly serializable.
             Object.keys(data).forEach(key => {
                 if (data[key] instanceof Timestamp) {
                     data[key] = data[key].toDate();
@@ -32,7 +49,6 @@ export const getItems = async <T>(collectionPath: string): Promise<(T & { id: st
         });
     } catch (error) {
         console.error(`Error fetching items from ${collectionPath}:`, error);
-        // In case of an error, return an empty array to prevent the app from crashing.
         return [];
     }
 };
@@ -51,34 +67,27 @@ export const deleteItem = async (collectionPath: string, id: string) => {
 
 
 // Specific functions for each collection
-export const getServices = () => getItems<Service>('services');
+export const getServices = () => getItems<Service>('services', MOCK_SERVICES);
 export const createService = (data: Omit<Service, 'id'>) => createItem<Omit<Service, 'id'>>('services', data);
 export const updateService = (id: string, data: Partial<Service>) => updateItem<Service>('services', id, data);
 export const deleteService = (id: string) => deleteItem('services', id);
 
-export const getProjects = async () => {
-    try {
-        return await getItems<Project>('projects');
-    } catch (error) {
-        console.error("Failed to fetch projects, returning empty array.", error);
-        return [];
-    }
-};
+export const getProjects = () => getItems<Project>('projects', MOCK_PROJECTS);
 export const createProject = (data: Omit<Project, 'id'>) => createItem<Omit<Project, 'id'>>('projects', data);
 export const updateProject = (id: string, data: Partial<Project>) => updateItem<Project>('projects', id, data);
 export const deleteProject = (id: string) => deleteItem('projects', id);
 
-export const getArticles = () => getItems<Article>('articles');
+export const getArticles = () => getItems<Article>('articles', MOCK_ARTICLES);
 export const createArticle = (data: Omit<Article, 'id'>) => createItem<Omit<Article, 'id'>>('articles', data);
 export const updateArticle = (id: string, data: Partial<Article>) => updateItem<Article>('articles', id, data);
 export const deleteArticle = (id: string) => deleteItem('articles', id);
 
-export const getGalleryItems = () => getItems<GalleryItem>('gallery');
+export const getGalleryItems = () => getItems<GalleryItem>('gallery', MOCK_GALLERY_ITEMS);
 export const createGalleryItem = (data: Omit<GalleryItem, 'id'>) => createItem<Omit<GalleryItem, 'id'>>('gallery', data);
 export const updateGalleryItem = (id: string, data: Partial<GalleryItem>) => updateItem<GalleryItem>('gallery', id, data);
 export const deleteGalleryItem = (id: string) => deleteItem('gallery', id);
 
-export const getEvents = () => getItems<Event>('events');
+export const getEvents = () => getItems<Event>('events', MOCK_EVENTS);
 export const createEvent = (data: Omit<Event, 'id'>) => createItem<Omit<Event, 'id'>>('events', data);
 export const updateEvent = (id: string, data: Partial<Event>) => updateItem<Event>('events', id, data);
 export const deleteEvent = (id: string) => deleteItem('events', id);
