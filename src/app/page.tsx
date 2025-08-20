@@ -43,14 +43,16 @@ export default async function Home() {
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {services.slice(0, 3).map((service, index) => (
               <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
-                <Image
-                    src={service.imageUrl}
-                    alt={service.title}
-                    width={600}
-                    height={400}
-                    className="w-full h-48 object-cover"
-                    data-ai-hint={service.imageHint}
-                />
+                {service.imageUrl && (
+                  <Image
+                      src={service.imageUrl}
+                      alt={service.title}
+                      width={600}
+                      height={400}
+                      className="w-full h-48 object-cover"
+                      data-ai-hint={service.imageHint}
+                  />
+                )}
                 <CardHeader>
                   <CardTitle className="font-headline">{service.title}</CardTitle>
                 </CardHeader>
