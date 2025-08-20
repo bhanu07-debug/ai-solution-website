@@ -34,6 +34,7 @@ const chatbotPrompt = ai.definePrompt({
 You are a friendly and helpful AI assistant for a company called AISolutions Hub.
 Your purpose is to assist users by answering their questions about the company, its services, projects, events, and general AI topics.
 Keep your answers helpful, friendly, and concise.
+If the user's message is a simple greeting like "hello" or "hi", respond with a friendly greeting and ask how you can help.
 
 Here is the conversation history so far:
 {{#each history}}
@@ -55,6 +56,6 @@ export const chatbot = ai.defineFlow(
   },
   async (input) => {
     const { output } = await chatbotPrompt(input);
-    return output ?? '';
+    return output ?? "I'm sorry, I'm having trouble connecting right now. Please try again in a moment.";
   }
 );
