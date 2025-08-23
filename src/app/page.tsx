@@ -1,4 +1,7 @@
 
+'use client';
+
+import { useState, useEffect } from 'react';
 import { AnimatedHeading } from '@/components/animated-heading';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,13 +9,44 @@ import { ArrowRight, Calendar, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getServices, getProjects, getArticles, getGalleryItems, getEvents } from '@/lib/firestore';
+import { type Service, type Project, type Article, type GalleryItem, type Event } from '@/lib/mock-data';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export default async function Home() {
-  const services = await getServices();
-  const projects = await getProjects();
-  const articles = await getArticles();
-  const gallery = await getGalleryItems();
-  const events = await getEvents();
+
+export default function Home() {
+  const [services, setServices] = useState<Service[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [gallery, setGallery] = useState<GalleryItem[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      setIsLoading(true);
+      const [
+        servicesData, 
+        projectsData, 
+        articlesData, 
+        galleryData, 
+        eventsData
+      ] = await Promise.all([
+        getServices(),
+        getProjects(),
+        getArticles(),
+        getGalleryItems(),
+        getEvents()
+      ]);
+      setServices(servicesData);
+      setProjects(projectsData);
+      setArticles(articlesData);
+      setGallery(galleryData);
+      setEvents(eventsData);
+      setIsLoading(false);
+    }
+    fetchData();
+  }, []);
+
 
   return (
     <div className="flex flex-col">
@@ -41,31 +75,46 @@ export default async function Home() {
             <p className="mt-2 text-muted-foreground">Comprehensive AI solutions for every need.</p>
           </div>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {services.slice(0, 3).map((service, index) => (
-              <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
-                {service.imageUrl && (
-                  <Image
-                      src={service.imageUrl}
-                      alt={service.title}
-                      width={600}
-                      height={400}
-                      className="w-full h-48 object-cover"
-                      data-ai-hint={service.imageHint}
-                  />
-                )}
-                <CardHeader>
-                  <CardTitle className="font-headline">{service.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <CardDescription>{service.description}</CardDescription>
-                </CardContent>
-                 <CardFooter>
-                    <Button asChild className="w-full font-bold">
-                      <Link href="/contact">Learn More</Link>
-                    </Button>
-                </CardFooter>
-              </Card>
-            ))}
+            {isLoading ? (
+              [...Array(3)].map((_, i) => (
+                <Card key={i} className="overflow-hidden shadow-lg flex flex-col">
+                  <Skeleton className="h-48 w-full"/>
+                  <CardHeader><Skeleton className="h-6 w-3/4"/></CardHeader>
+                  <CardContent className="flex-grow space-y-2">
+                    <Skeleton className="h-4 w-full"/>
+                    <Skeleton className="h-4 w-full"/>
+                    <Skeleton className="h-4 w-1/2"/>
+                  </CardContent>
+                  <CardFooter><Skeleton className="h-10 w-full"/></CardFooter>
+                </Card>
+              ))
+            ) : (
+              services.slice(0, 3).map((service, index) => (
+                <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+                  {service.imageUrl && (
+                    <Image
+                        src={service.imageUrl}
+                        alt={service.title}
+                        width={600}
+                        height={400}
+                        className="w-full h-48 object-cover"
+                        data-ai-hint={service.imageHint}
+                    />
+                  )}
+                  <CardHeader>
+                    <CardTitle className="font-headline">{service.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <CardDescription>{service.description}</CardDescription>
+                  </CardContent>
+                  <CardFooter>
+                      <Button asChild className="w-full font-bold">
+                        <Link href="/contact">Learn More</Link>
+                      </Button>
+                  </CardFooter>
+                </Card>
+              ))
+            )}
           </div>
           <div className="text-center mt-12">
             <Button asChild>
@@ -82,24 +131,37 @@ export default async function Home() {
             <p className="mt-2 text-muted-foreground">See how we've helped businesses like yours.</p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
-            {projects.slice(0, 3).map((project, index) => (
-              <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
-                <Image 
-                    src={project.imageUrl}
-                    alt={project.title}
-                    width={600}
-                    height={400}
-                    className="w-full h-48 object-cover"
-                    data-ai-hint={project.imageHint}
-                />
-                <CardHeader>
-                  <CardTitle className="font-headline">{project.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>{project.description}</CardDescription>
-                </CardContent>
-              </Card>
-            ))}
+             {isLoading ? (
+              [...Array(3)].map((_, i) => (
+                <Card key={i} className="overflow-hidden shadow-lg">
+                  <Skeleton className="h-48 w-full"/>
+                  <CardHeader><Skeleton className="h-6 w-3/4"/></CardHeader>
+                  <CardContent>
+                    <Skeleton className="h-4 w-full"/>
+                    <Skeleton className="h-4 w-1/2 mt-2"/>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              projects.slice(0, 3).map((project, index) => (
+                <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                  <Image 
+                      src={project.imageUrl}
+                      alt={project.title}
+                      width={600}
+                      height={400}
+                      className="w-full h-48 object-cover"
+                      data-ai-hint={project.imageHint}
+                  />
+                  <CardHeader>
+                    <CardTitle className="font-headline">{project.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription>{project.description}</CardDescription>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
           <div className="text-center mt-12">
             <Button asChild>
@@ -116,25 +178,41 @@ export default async function Home() {
             <p className="mt-2 text-muted-foreground">Insights and news from the world of AI.</p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
-            {articles.slice(0, 3).map((post, index) => (
-                <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
-                    <Image 
-                        src={post.imageUrl}
-                        alt={post.title}
-                        width={600}
-                        height={400}
-                        className="w-full h-48 object-cover"
-                        data-ai-hint={post.imageHint}
-                    />
-                    <CardHeader>
-                        <CardTitle className="font-headline">{post.title}</CardTitle>
-                        <p className="text-sm text-muted-foreground">{post.date}</p>
-                    </CardHeader>
-                    <CardContent className="flex-grow">
-                        <CardDescription>{post.excerpt}</CardDescription>
-                    </CardContent>
+            {isLoading ? (
+               [...Array(3)].map((_, i) => (
+                <Card key={i} className="overflow-hidden shadow-lg flex flex-col">
+                  <Skeleton className="h-48 w-full"/>
+                  <CardHeader>
+                    <Skeleton className="h-6 w-3/4"/>
+                    <Skeleton className="h-4 w-1/4 mt-2"/>
+                  </CardHeader>
+                  <CardContent className="flex-grow space-y-2">
+                    <Skeleton className="h-4 w-full"/>
+                    <Skeleton className="h-4 w-2/3"/>
+                  </CardContent>
                 </Card>
-            ))}
+              ))
+            ) : (
+              articles.slice(0, 3).map((post, index) => (
+                  <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+                      <Image 
+                          src={post.imageUrl}
+                          alt={post.title}
+                          width={600}
+                          height={400}
+                          className="w-full h-48 object-cover"
+                          data-ai-hint={post.imageHint}
+                      />
+                      <CardHeader>
+                          <CardTitle className="font-headline">{post.title}</CardTitle>
+                          <p className="text-sm text-muted-foreground">{post.date}</p>
+                      </CardHeader>
+                      <CardContent className="flex-grow">
+                          <CardDescription>{post.excerpt}</CardDescription>
+                      </CardContent>
+                  </Card>
+              ))
+            )}
           </div>
           <div className="text-center mt-12">
             <Button asChild>
@@ -150,20 +228,26 @@ export default async function Home() {
             <h2 className="font-headline text-3xl md:text-4xl font-bold">Gallery</h2>
             <p className="mt-2 text-muted-foreground">A showcase of AI-generated imagery and concepts.</p>
           </div>
-          <div className="columns-2 md:columns-3 gap-4 space-y-4">
-            {gallery.slice(0, 6).map((image, index) => (
-              <div key={index} className="break-inside-avoid">
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  width={600}
-                  height={600}
-                  className="w-full h-auto rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
-                  data-ai-hint={image.hint}
-                />
-              </div>
-            ))}
-          </div>
+           {isLoading ? (
+            <div className="columns-2 md:columns-3 gap-4 space-y-4">
+              {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-64 w-full" />)}
+            </div>
+           ) : (
+            <div className="columns-2 md:columns-3 gap-4 space-y-4">
+              {gallery.slice(0, 6).map((image, index) => (
+                <div key={index} className="break-inside-avoid">
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    width={600}
+                    height={600}
+                    className="w-full h-auto rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
+                    data-ai-hint={image.hint}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
           <div className="text-center mt-12">
             <Button asChild>
               <Link href="/gallery">See More Images <ArrowRight className="ml-2 h-4 w-4" /></Link>
@@ -179,26 +263,44 @@ export default async function Home() {
                 <p className="mt-2 text-lg text-muted-foreground">Connect with us at these industry events.</p>
             </div>
             <div className="space-y-8 max-w-3xl mx-auto">
-                {events.slice(0, 2).map((event, index) => (
-                    <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-                        <CardHeader>
-                            <CardTitle className="font-headline">{event.title}</CardTitle>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground pt-2">
-                                <div className="flex items-center gap-1.5">
-                                    <Calendar className="h-4 w-4" />
-                                    <span>{event.date}</span>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <MapPin className="h-4 w-4" />
-                                    <span>{event.location}</span>
-                                </div>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            <CardDescription>{event.description}</CardDescription>
-                        </CardContent>
+                {isLoading ? (
+                  [...Array(2)].map((_, i) => (
+                    <Card key={i} className="shadow-lg">
+                      <CardHeader>
+                        <Skeleton className="h-6 w-3/4"/>
+                        <div className="flex gap-4 pt-2">
+                          <Skeleton className="h-4 w-1/3"/>
+                          <Skeleton className="h-4 w-1/3"/>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <Skeleton className="h-4 w-full"/>
+                        <Skeleton className="h-4 w-full mt-2"/>
+                      </CardContent>
                     </Card>
-                ))}
+                  ))
+                ) : (
+                  events.slice(0, 2).map((event, index) => (
+                      <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+                          <CardHeader>
+                              <CardTitle className="font-headline">{event.title}</CardTitle>
+                              <div className="flex items-center gap-4 text-sm text-muted-foreground pt-2">
+                                  <div className="flex items-center gap-1.5">
+                                      <Calendar className="h-4 w-4" />
+                                      <span>{event.date}</span>
+                                  </div>
+                                  <div className="flex items-center gap-1.5">
+                                      <MapPin className="h-4 w-4" />
+                                      <span>{event.location}</span>
+                                  </div>
+                              </div>
+                          </CardHeader>
+                          <CardContent>
+                              <CardDescription>{event.description}</CardDescription>
+                          </CardContent>
+                      </Card>
+                  ))
+                )}
             </div>
             <div className="text-center mt-12">
                 <Button asChild>

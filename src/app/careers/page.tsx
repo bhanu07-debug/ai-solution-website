@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCareers } from "@/lib/firestore";
@@ -16,7 +16,7 @@ export default function CareersPage() {
     const [selectedJob, setSelectedJob] = useState<Career | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
 
-    useState(() => {
+    useEffect(() => {
         const fetchJobs = async () => {
             setIsLoading(true);
             const fetchedJobs = await getCareers();
@@ -24,7 +24,7 @@ export default function CareersPage() {
             setIsLoading(false);
         };
         fetchJobs();
-    });
+    }, []);
 
     const handleApplyClick = (job: Career) => {
         setSelectedJob(job);

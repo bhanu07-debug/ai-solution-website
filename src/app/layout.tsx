@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Inter, Space_Grotesk } from 'next/font/google';
@@ -28,13 +29,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="light" suppressHydrationWarning>
+    <html lang="en" className="light">
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
           inter.variable,
           spaceGrotesk.variable
         )}
+        suppressHydrationWarning
       >
         <div className="relative flex min-h-dvh flex-col bg-background">
           <SiteHeader />
