@@ -34,7 +34,7 @@ export default async function CareersPage() {
                             </div>
                         </div>
                         <Button asChild>
-                            <Link href="/contact">Apply Now</Link>
+                            <a href={`mailto:vanchdry07@gmail.com?subject=Application for ${job.title}`}>Apply Now</a>
                         </Button>
                     </div>
                 </CardHeader>
