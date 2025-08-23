@@ -5,12 +5,41 @@ import { useState, useEffect } from 'react';
 import { AnimatedHeading } from '@/components/animated-heading';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Calendar, MapPin } from 'lucide-react';
+import { ArrowRight, Calendar, MapPin, Check, MessageSquare, Bot, Cpu, BarChart2, BrainCircuit, Settings, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getServices, getProjects, getArticles, getGalleryItems, getEvents } from '@/lib/firestore';
 import { type Service, type Project, type Article, type GalleryItem, type Event } from '@/lib/mock-data';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Badge } from '@/components/ui/badge';
+
+const serviceIcons: { [key: string]: React.ElementType } = {
+  "AI-Powered Automation": Bot,
+  "Predictive Analytics": BarChart2,
+  "Natural Language Processing": MessageSquare,
+  "Computer Vision": Cpu,
+  "AI Consulting & Strategy": BrainCircuit,
+  "Business Process Automation": Settings,
+  "Default": BrainCircuit,
+};
+
+const serviceBenefits: { [key: string]: string[] } = {
+    "AI-Powered Automation": ["Automated decision-making", "Predictive analytics capabilities", "Custom algorithm development"],
+    "Predictive Analytics": ["Interactive dashboards", "Statistical analysis", "Predictive modeling"],
+    "Natural Language Processing": ["Intelligent chatbot development", "Sentiment analysis & monitoring", "Text classification & extraction"],
+    "Computer Vision": ["Object detection & recognition", "Quality control automation", "Real-time video analysis"],
+    "AI Consulting & Strategy": ["AI strategy development", "Technology assessment", "Implementation roadmap"],
+    "Business Process Automation": ["Workflow automation", "Document processing", "Data integration"],
+};
+
+const servicePrices: { [key: string]: string } = {
+    "AI-Powered Automation": "$5000",
+    "Predictive Analytics": "$4500",
+    "Natural Language Processing": "$4000",
+    "Computer Vision": "$6000",
+    "AI Consulting & Strategy": "$2500",
+    "Business Process Automation": "$3000",
+};
 
 
 export default function Home() {
@@ -77,43 +106,49 @@ export default function Home() {
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {isLoading ? (
               [...Array(3)].map((_, i) => (
-                <Card key={i} className="overflow-hidden shadow-lg flex flex-col">
-                  <Skeleton className="h-48 w-full"/>
-                  <CardHeader><Skeleton className="h-6 w-3/4"/></CardHeader>
-                  <CardContent className="flex-grow space-y-2">
-                    <Skeleton className="h-4 w-full"/>
-                    <Skeleton className="h-4 w-full"/>
-                    <Skeleton className="h-4 w-1/2"/>
-                  </CardContent>
-                  <CardFooter><Skeleton className="h-10 w-full"/></CardFooter>
-                </Card>
+                <Card key={i}><CardContent className="p-6"><Skeleton className="h-80 w-full" /></CardContent></Card>
               ))
             ) : (
-              services.slice(0, 3).map((service, index) => (
-                <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
-                  {service.imageUrl && (
-                    <Image
-                        src={service.imageUrl}
-                        alt={service.title}
-                        width={600}
-                        height={400}
-                        className="w-full h-48 object-cover"
-                        data-ai-hint={service.imageHint}
-                    />
-                  )}
-                  <CardHeader>
-                    <CardTitle className="font-headline">{service.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-grow">
-                    <CardDescription>{service.description}</CardDescription>
-                  </CardContent>
-                  <CardFooter>
-                      <Button asChild className="w-full font-bold">
-                        <Link href="/services">Learn More</Link>
-                      </Button>
-                  </CardFooter>
+              services.slice(0, 3).map((service, index) => {
+                const Icon = serviceIcons[service.title] || serviceIcons.Default;
+                const benefits = serviceBenefits[service.title] || [];
+                const price = servicePrices[service.title] || '$...';
+
+                return (
+                 <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+                    <CardHeader>
+                        <div className="flex items-center gap-4">
+                            <div className="p-3 bg-primary/10 rounded-lg">
+                                <Icon className="h-8 w-8 text-primary"/>
+                            </div>
+                            <CardTitle className="font-headline text-xl leading-tight">{service.title}</CardTitle>
+                        </div>
+                    </CardHeader>
+                    <CardContent className="flex-grow space-y-4">
+                        <CardDescription>{service.description}</CardDescription>
+                        <div>
+                            <h5 className="font-semibold text-sm mb-2">Key Benefits:</h5>
+                            <ul className="space-y-1.5 text-sm text-muted-foreground">
+                                {benefits.map(benefit => (
+                                    <li key={benefit} className="flex items-start gap-2">
+                                        <Check className="h-4 w-4 text-green-500 mt-0.5 shrink-0"/>
+                                        <span>{benefit}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </CardContent>
+                    <CardFooter className="flex-col items-start gap-4 bg-secondary/50 pt-4">
+                        <div className="flex justify-between items-center w-full">
+                            <span className="text-sm text-muted-foreground">Starting from</span>
+                            <span className="text-xl font-bold text-primary">{price}</span>
+                        </div>
+                        <Button asChild className="w-full font-bold">
+                            <Link href="/contact">Learn More <ChevronRight className="ml-1 h-4 w-4"/></Link>
+                        </Button>
+                    </CardFooter>
                 </Card>
-              ))
+              )})
             )}
           </div>
           <div className="text-center mt-12">
@@ -133,35 +168,31 @@ export default function Home() {
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
              {isLoading ? (
               [...Array(3)].map((_, i) => (
-                <Card key={i} className="overflow-hidden shadow-lg">
-                  <Skeleton className="h-48 w-full"/>
-                  <CardHeader><Skeleton className="h-6 w-3/4"/></CardHeader>
-                  <CardContent>
-                    <Skeleton className="h-4 w-full"/>
-                    <Skeleton className="h-4 w-1/2 mt-2"/>
-                  </CardContent>
-                </Card>
+                <Card key={i}><CardContent className="p-6"><Skeleton className="h-80 w-full" /></CardContent></Card>
               ))
             ) : (
               projects.slice(0, 3).map((project, index) => (
-                <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
-                  <Image 
-                      src={project.imageUrl}
-                      alt={project.title}
-                      width={600}
-                      height={400}
-                      className="w-full h-48 object-cover"
-                      data-ai-hint={project.imageHint}
-                  />
-                  <CardHeader>
+                 <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+                    <Image 
+                        src={project.imageUrl}
+                        alt={project.title}
+                        width={600}
+                        height={400}
+                        className="w-full h-48 object-cover"
+                        data-ai-hint={project.imageHint}
+                    />
+                    <CardHeader>
                     <CardTitle className="font-headline">{project.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-grow">
                     <CardDescription>{project.description}</CardDescription>
-                  </CardContent>
-                   <CardFooter>
+                    </CardHeader>
+                    <CardContent className="flex-grow space-y-4">
+                    <div className="flex flex-wrap gap-2">
+                        {project.technologies.map(tech => <Badge key={tech} variant="secondary">{tech}</Badge>)}
+                    </div>
+                    </CardContent>
+                     <CardFooter>
                         <Button asChild variant="outline" className="w-full">
-                            <Link href="/projects">View Case Study</Link>
+                            <Link href="/projects">View Case Study <ArrowRight className="ml-2 h-4 w-4" /></Link>
                         </Button>
                     </CardFooter>
                 </Card>
@@ -185,17 +216,7 @@ export default function Home() {
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {isLoading ? (
                [...Array(3)].map((_, i) => (
-                <Card key={i} className="overflow-hidden shadow-lg flex flex-col">
-                  <Skeleton className="h-48 w-full"/>
-                  <CardHeader>
-                    <Skeleton className="h-6 w-3/4"/>
-                    <Skeleton className="h-4 w-1/4 mt-2"/>
-                  </CardHeader>
-                  <CardContent className="flex-grow space-y-2">
-                    <Skeleton className="h-4 w-full"/>
-                    <Skeleton className="h-4 w-2/3"/>
-                  </CardContent>
-                </Card>
+                <Card key={i}><CardContent className="p-6"><Skeleton className="h-80 w-full" /></CardContent></Card>
               ))
             ) : (
               articles.slice(0, 3).map((post, index) => (
@@ -275,19 +296,7 @@ export default function Home() {
             <div className="space-y-8 max-w-3xl mx-auto">
                 {isLoading ? (
                   [...Array(2)].map((_, i) => (
-                    <Card key={i} className="shadow-lg">
-                      <CardHeader>
-                        <Skeleton className="h-6 w-3/4"/>
-                        <div className="flex gap-4 pt-2">
-                          <Skeleton className="h-4 w-1/3"/>
-                          <Skeleton className="h-4 w-1/3"/>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <Skeleton className="h-4 w-full"/>
-                        <Skeleton className="h-4 w-full mt-2"/>
-                      </CardContent>
-                    </Card>
+                    <Card key={i}><CardContent className="p-6"><Skeleton className="h-40 w-full" /></CardContent></Card>
                   ))
                 ) : (
                   events.slice(0, 2).map((event, index) => (
