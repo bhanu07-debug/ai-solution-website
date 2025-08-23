@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { getServices } from "@/lib/firestore";
 import type { Service } from '@/lib/mock-data';
 import { Input } from '@/components/ui/input';
@@ -231,5 +231,3 @@ export default function ServicesPage() {
     </div>
   );
 }
-
-    
