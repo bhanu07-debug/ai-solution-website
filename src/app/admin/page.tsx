@@ -1,94 +1,142 @@
 
 import { StatCard } from "@/components/stat-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Briefcase, MessageSquare, FileText, CheckCircle } from "lucide-react";
+import { ArrowUpRight, Check, FileText, MessageSquare, Briefcase, ThumbsDown, Edit } from "lucide-react";
+import Link from 'next/link';
 import { getProjects, getArticles, getFeedback } from "@/lib/firestore";
 import { type Feedback } from "@/lib/types";
+import { AdminLineChart } from "@/components/admin/admin-line-chart";
 
 export default async function AdminDashboardPage() {
     const projects = await getProjects();
     const articles = await getArticles();
-    const feedback = await getFeedback();
+    const allFeedback = await getFeedback();
 
-    const pendingFeedbackCount = feedback.filter(f => f.status === 'pending').length;
+    const pendingFeedback = allFeedback.filter(f => f.status === 'pending');
+    const recentFeedback = allFeedback
+        .sort((a, b) => new Date(b.createdAt as string).getTime() - new Date(a.createdAt as string).getTime())
+        .slice(0, 5);
+
 
     const stats = [
-        { title: "Pending Feedback", value: pendingFeedbackCount.toString(), icon: <MessageSquare className="h-6 w-6 text-muted-foreground" /> },
-        { title: "Total Projects", value: projects.length.toString(), icon: <Briefcase className="h-6 w-6 text-muted-foreground" /> },
-        { title: "Published Articles", value: articles.length.toString(), icon: <FileText className="h-6 w-6 text-muted-foreground" /> },
+        { title: "Pending Feedback", value: pendingFeedback.length.toString(), icon: <MessageSquare className="h-5 w-5 text-muted-foreground" />, change: "+2 from last week" },
+        { title: "Total Projects", value: projects.length.toString(), icon: <Briefcase className="h-5 w-5 text-muted-foreground" />, change: "+5 from last week" },
+        { title: "Published Articles", value: articles.length.toString(), icon: <FileText className="h-5 w-5 text-muted-foreground" />, change: "No change" },
+        { title: "Total Inquiries", value: "24", icon: <MessageSquare className="h-5 w-5 text-muted-foreground" />, change: "+10 from last week" },
     ];
-
-    const recentActivity = feedback
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        .slice(0, 5)
-        .map(f => ({
-            user: f.name,
-            action: "Submitted feedback",
-            item: f.message,
-            time: new Date(f.createdAt).toLocaleDateString(),
-            status: f.status
-        }));
-
-
-    if (!projects.length && !articles.length && !feedback.length) {
-        return (
-             <div className="flex flex-col items-center justify-center h-[50vh] text-center p-4 rounded-lg bg-card border shadow-sm">
-                <CheckCircle className="h-16 w-16 text-green-500 mb-4" />
-                <h2 className="text-2xl font-headline font-bold mb-2">You're All Set!</h2>
-                <p className="text-muted-foreground max-w-md">
-                    Your application is connected to Firestore. Go to the content sections in the sidebar to add your first project, article, or service to see them here and on your live site.
-                </p>
-            </div>
-        )
-    }
-
+    
     return (
-        <div className="space-y-8">
-            <h1 className="text-3xl font-bold font-headline">Dashboard</h1>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="space-y-6">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold font-headline">Welcome back, Admin</h1>
+                    <p className="text-muted-foreground">Here's what is happening with your AI Solutions metadata today.</p>
+                </div>
+                <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                </div>
+            </div>
+            
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {stats.map(stat => <StatCard key={stat.title} {...stat} />)}
             </div>
 
-            <Card>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 space-y-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Website Traffic</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                           <AdminLineChart />
+                        </CardContent>
+                    </Card>
+                     <Card>
+                        <CardHeader>
+                            <CardTitle>Private Content</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <AdminLineChart />
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="space-y-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Quick Actions</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="flex justify-between items-center p-3 rounded-lg border bg-secondary/50">
+                                <div>
+                                    <h4 className="font-semibold">Manage Content</h4>
+                                    <p className="text-sm text-muted-foreground">Edit existing services.</p>
+                                </div>
+                                <Button asChild size="sm">
+                                    <Link href="/admin/services"><Edit className="mr-2 h-4 w-4"/>Edit</Link>
+                                </Button>
+                            </div>
+                             <div className="flex justify-between items-center p-3 rounded-lg border bg-secondary/50">
+                                <div>
+                                    <h4 className="font-semibold">New Service</h4>
+                                    <p className="text-sm text-muted-foreground">Add a new service page.</p>
+                                </div>
+                                <Button asChild size="sm">
+                                    <Link href="/admin/services">New Service</Link>
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between">
+                            <CardTitle>Pending Feedback</CardTitle>
+                            <Button asChild variant="link" size="sm">
+                                <Link href="/admin/feedback">View All</Link>
+                            </Button>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {pendingFeedback.slice(0, 3).map(fb => (
+                                <div key={fb.id} className="text-sm">
+                                    <div className="flex justify-between">
+                                        <p className="font-semibold">{fb.name}</p>
+                                        <p className="text-xs text-muted-foreground">{new Date(fb.createdAt).toLocaleDateString()}</p>
+                                    </div>
+                                    <p className="text-muted-foreground truncate my-1">"{fb.message}"</p>
+                                    <div className="flex gap-2">
+                                        <Button size="sm" variant="outline" className="h-7 text-xs"><Check className="h-3 w-3 mr-1"/>Approve</Button>
+                                        <Button size="sm" variant="destructive" className="h-7 text-xs"><ThumbsDown className="h-3 w-3 mr-1"/>Reject</Button>
+                                    </div>
+                                </div>
+                            ))}
+                            {pendingFeedback.length === 0 && <p className="text-sm text-muted-foreground text-center py-4">No pending feedback.</p>}
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+
+             <Card>
                 <CardHeader>
-                    <CardTitle>Recent Feedback</CardTitle>
-                    <CardDescription>The latest feedback submissions from your users.</CardDescription>
+                    <CardTitle>Recent Activity</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>User</TableHead>
-                                <TableHead>Message</TableHead>
-                                <TableHead>Date</TableHead>
-                                <TableHead>Status</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {recentActivity.map((activity, index) => (
-                                <TableRow key={index}>
-                                    <TableCell className="font-medium">{activity.user}</TableCell>
-                                    <TableCell className="max-w-[250px] truncate">{activity.item}</TableCell>
-                                    <TableCell>{activity.time}</TableCell>
-                                    <TableCell>
-                                        <Badge 
-                                            variant={
-                                                activity.status === 'pending' ? 'destructive' : 
-                                                activity.status === 'approved' ? 'default' : 'secondary'
-                                            } 
-                                            className="capitalize"
-                                        >
-                                            {activity.status}
-                                        </Badge>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                   <ul className="space-y-4">
+                        {recentFeedback.map(fb => (
+                            <li key={fb.id} className="flex items-center gap-3">
+                                <div className="p-2 bg-primary/10 rounded-full">
+                                    <MessageSquare className="h-5 w-5 text-primary"/>
+                                </div>
+                                <div>
+                                    <p className="font-medium text-sm">New feedback received</p>
+                                    <p className="text-xs text-muted-foreground">From <span className="font-semibold">{fb.name}</span> regarding "{fb.message.substring(0, 20)}..."</p>
+                                </div>
+                                <p className="text-xs text-muted-foreground ml-auto">{new Date(fb.createdAt).toLocaleDateString()}</p>
+                            </li>
+                        ))}
+                    </ul>
                 </CardContent>
             </Card>
+
         </div>
     );
 }
