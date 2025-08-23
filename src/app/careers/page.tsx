@@ -1,13 +1,35 @@
 
+'use client';
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCareers } from "@/lib/firestore";
 import { Briefcase, MapPin } from "lucide-react";
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { type Career } from '@/lib/mock-data';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ApplicationForm } from '@/components/application-form';
 
-export default async function CareersPage() {
-    const jobs = await getCareers();
+export default function CareersPage() {
+    const [jobs, setJobs] = useState<Career[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [selectedJob, setSelectedJob] = useState<Career | null>(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
+
+    useState(() => {
+        const fetchJobs = async () => {
+            setIsLoading(true);
+            const fetchedJobs = await getCareers();
+            setJobs(fetchedJobs);
+            setIsLoading(false);
+        };
+        fetchJobs();
+    });
+
+    const handleApplyClick = (job: Career) => {
+        setSelectedJob(job);
+        setIsFormOpen(true);
+    };
 
   return (
     <div className="container mx-auto py-12 md:py-20 px-4 md:px-6">
@@ -33,9 +55,7 @@ export default async function CareersPage() {
                                 </div>
                             </div>
                         </div>
-                        <Button asChild>
-                            <a href={`mailto:vanchdry07@gmail.com?subject=Application for ${job.title}`}>Apply Now</a>
-                        </Button>
+                        <Button onClick={() => handleApplyClick(job)}>Apply Now</Button>
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -43,13 +63,21 @@ export default async function CareersPage() {
                 </CardContent>
             </Card>
         ))}
-        {jobs.length === 0 && (
+        {jobs.length === 0 && !isLoading && (
             <div className="text-center text-muted-foreground py-12">
                 <p className="text-lg">There are currently no open positions.</p>
                 <p>Please check back later or contact us to inquire about future opportunities.</p>
             </div>
         )}
       </div>
+       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Apply for {selectedJob?.title}</DialogTitle>
+                </DialogHeader>
+                {selectedJob && <ApplicationForm jobTitle={selectedJob.title} recipientEmail="vanuchdry07@gmail.com" />}
+            </DialogContent>
+        </Dialog>
     </div>
   );
 }
