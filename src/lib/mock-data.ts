@@ -41,6 +41,14 @@ export type Event = {
     description: string;
 };
 
+export type Career = {
+    id: string;
+    title: string;
+    location: string;
+    type: 'Full-time' | 'Part-time' | 'Contract' | 'Internship';
+    description: string;
+}
+
 
 export const MOCK_SERVICES: Omit<Service, 'id'>[] = [
     {
@@ -132,5 +140,26 @@ export const MOCK_EVENTS: Omit<Event, 'id'>[] = [
         date: "December 5, 2024",
         location: "Virtual",
         description: "A live webinar discussing how AI is transforming workplaces and what it means for your career."
+    }
+];
+
+export const MOCK_CAREERS: Omit<Career, 'id'>[] = [
+    {
+        title: "Senior AI Engineer",
+        location: "San Francisco, CA (Hybrid)",
+        type: "Full-time",
+        description: "We are seeking an experienced AI Engineer to lead the development of our next-generation machine learning models. You will be responsible for designing, building, and deploying scalable AI solutions that solve real-world problems."
+    },
+    {
+        title: "Frontend Developer (React)",
+        location: "Remote",
+        type: "Full-time",
+        description: "Join our talented frontend team to build beautiful and intuitive user interfaces for our AI-powered applications. You should have a strong command of React, Next.js, and modern web technologies."
+    },
+    {
+        title: "Data Science Intern",
+        location: "New York, NY",
+        type: "Internship",
+        description: "This is an exciting opportunity for a current student or recent graduate to gain hands-on experience in data science. You will work alongside our team of experts on challenging projects, from data analysis to model building."
     }
 ];

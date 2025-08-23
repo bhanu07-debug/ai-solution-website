@@ -14,21 +14,15 @@ const footerLinks = {
     ],
     company: [
         { label: "About Us", href: "/contact" },
-        { label: "Our Team", href: "/contact" },
-        { label: "Careers", href: "/contact" },
-        { label: "Contact", href: "/contact" },
+        { label: "Our Projects", href: "/projects" },
+        { label: "Blog", href: "/blog" },
+        { label: "Careers", href: "/careers" },
     ],
     resources: [
-        { label: "Blog", href: "/blog" },
-        { label: "Case Studies", href: "/projects" },
-        { label: "Whitepapers", href: "/blog" },
-        { label: "Documentation", href: "/contact" },
-    ],
-    support: [
-        { label: "Help Center", href: "/contact" },
-        { label: "API Documentation", href: "/contact" },
-        { label: "System Status", href: "/contact" },
-        { label: "Security", href: "/contact" },
+        { label: "Gallery", href: "/gallery" },
+        { label: "Events", href: "/events" },
+        { label: "Feedback", href: "/feedback" },
+        { label: "Contact Us", href: "/contact" },
     ],
 };
 
@@ -37,43 +31,29 @@ export function SiteFooter() {
   return (
     <footer className="w-full border-t border-border/40 bg-secondary/50 text-foreground">
       <div className="container mx-auto py-12 px-4 md:px-6">
-        <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
+        <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
             {/* Company Info */}
             <div className="flex flex-col gap-4">
                  <Link href="/" className="flex items-center gap-2 mb-2">
                     <Logo className="h-8 w-8 text-primary" />
-                    <span className="font-bold font-headline text-xl">AISolutions</span>
+                    <span className="font-bold font-headline text-xl">AISolutions Hub</span>
                 </Link>
                 <p className="text-muted-foreground text-sm max-w-xs">
-                    Transforming businesses with cutting-edge artificial intelligence solutions. We make AI accessible, practical, and impactful for organizations of all sizes.
+                    Transforming businesses with cutting-edge artificial intelligence solutions. We make AI accessible, practical, and impactful.
                 </p>
                 <div className="space-y-3 mt-2 text-sm">
                     <div className="flex items-center gap-3">
                         <Mail className="h-4 w-4 text-muted-foreground"/>
-                        <a href="mailto:contact@ai-solutions.com" className="hover:text-primary">contact@ai-solutions.com</a>
+                        <a href="mailto:contact@aisolutionshub.com" className="hover:text-primary">contact@aisolutionshub.com</a>
                     </div>
                     <div className="flex items-center gap-3">
                         <Phone className="h-4 w-4 text-muted-foreground"/>
-                        <span>+1 (555) 123-4567</span>
+                        <span>(123) 456-7890</span>
                     </div>
                     <div className="flex items-center gap-3">
                         <MapPin className="h-4 w-4 text-muted-foreground"/>
-                        <span>123 AI Street, Tech Valley, CA 94000</span>
+                        <span>123 AI Avenue, Tech City, CA 94000</span>
                     </div>
-                </div>
-                 <div className="flex items-center gap-2 mt-4">
-                    <Button variant="ghost" size="icon" asChild>
-                        <Link href="#"><Linkedin className="h-5 w-5"/></Link>
-                    </Button>
-                    <Button variant="ghost" size="icon" asChild>
-                        <Link href="#"><Twitter className="h-5 w-5"/></Link>
-                    </Button>
-                    <Button variant="ghost" size="icon" asChild>
-                        <Link href="#"><Github className="h-5 w-5"/></Link>
-                    </Button>
-                     <Button variant="ghost" size="icon" asChild>
-                        <Link href="#"><Youtube className="h-5 w-5"/></Link>
-                    </Button>
                 </div>
             </div>
 
@@ -81,8 +61,6 @@ export function SiteFooter() {
             <FooterLinkSection title="Services" links={footerLinks.services} />
             <FooterLinkSection title="Company" links={footerLinks.company} />
             <FooterLinkSection title="Resources" links={footerLinks.resources} />
-            <FooterLinkSection title="Support" links={footerLinks.support} />
-
         </div>
 
         <div className="border-t border-border/40 mt-12 pt-8">
@@ -99,12 +77,24 @@ export function SiteFooter() {
         </div>
 
         <div className="border-t border-border/40 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
-           <p className="text-muted-foreground">© {new Date().getFullYear()} AI-Solutions. All rights reserved.</p>
+           <p className="text-muted-foreground">&copy; {new Date().getFullYear()} AISolutions Hub. All rights reserved.</p>
            <div className="flex items-center gap-4 text-muted-foreground">
                 <Link href="#" className="hover:text-primary">Privacy Policy</Link>
                 <Link href="#" className="hover:text-primary">Terms of Service</Link>
-                <Link href="#" className="hover:text-primary">Cookie Policy</Link>
-                 <Link href="#" className="hover:text-primary">Accessibility</Link>
+                 <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="icon" asChild>
+                        <Link href="#"><Linkedin className="h-5 w-5"/></Link>
+                    </Button>
+                    <Button variant="ghost" size="icon" asChild>
+                        <Link href="#"><Twitter className="h-5 w-5"/></Link>
+                    </Button>
+                    <Button variant="ghost" size="icon" asChild>
+                        <Link href="#"><Github className="h-5 w-5"/></Link>
+                    </Button>
+                     <Button variant="ghost" size="icon" asChild>
+                        <Link href="#"><Youtube className="h-5 w-5"/></Link>
+                    </Button>
+                </div>
            </div>
         </div>
       </div>

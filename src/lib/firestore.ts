@@ -1,7 +1,7 @@
 
 import { db } from './firebase';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, Timestamp, DocumentData, writeBatch } from 'firebase/firestore';
-import { type Service, type Project, type Article, type GalleryItem, type Event, MOCK_SERVICES, MOCK_PROJECTS, MOCK_ARTICLES, MOCK_GALLERY_ITEMS, MOCK_EVENTS } from './mock-data';
+import { type Service, type Project, type Article, type GalleryItem, type Event, type Career, MOCK_SERVICES, MOCK_PROJECTS, MOCK_ARTICLES, MOCK_GALLERY_ITEMS, MOCK_EVENTS, MOCK_CAREERS } from './mock-data';
 import type { Feedback } from './types';
 
 // Generic Firestore CRUD operations
@@ -91,6 +91,11 @@ export const getEvents = () => getItems<Event>('events', MOCK_EVENTS);
 export const createEvent = (data: Omit<Event, 'id'>) => createItem<Omit<Event, 'id'>>('events', data);
 export const updateEvent = (id: string, data: Partial<Event>) => updateItem<Event>('events', id, data);
 export const deleteEvent = (id: string) => deleteItem('events', id);
+
+export const getCareers = () => getItems<Career>('careers', MOCK_CAREERS);
+export const createCareer = (data: Omit<Career, 'id'>) => createItem<Omit<Career, 'id'>>('careers', data);
+export const updateCareer = (id: string, data: Partial<Career>) => updateItem<Career>('careers', id, data);
+export const deleteCareer = (id: string) => deleteItem('careers', id);
 
 export const getFeedback = () => getItems<Feedback>('feedback');
 export const createFeedback = (data: Omit<Feedback, 'id' | 'status' | 'createdAt'>) => {

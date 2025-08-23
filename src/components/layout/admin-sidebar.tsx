@@ -19,6 +19,7 @@ import {
   MessageSquare,
   FileText,
   Settings,
+  Briefcase,
 } from "lucide-react";
 import { Logo } from "../icons/logo";
 import { Separator } from "../ui/separator";
@@ -57,6 +58,7 @@ export function AdminSidebar() {
         { href: "/admin/events", label: "Events" },
       ],
     },
+    { href: "/admin/careers", label: "Careers", icon: Briefcase },
     { href: "/admin/feedback", label: "Feedback", icon: MessageSquare, badge: pendingFeedbackCount > 0 ? pendingFeedbackCount : undefined },
   ];
 
@@ -95,7 +97,7 @@ export function AdminSidebar() {
                 </SidebarMenuSub>
               </SidebarMenuItem>
             ) : (
-              <SidebarMenuItem key={item.href}>
+              <SidebarMenuItem key={item.href || item.label}>
                 <SidebarMenuButton href={item.href!} isActive={isActive(item.href!)}>
                   <item.icon />
                   <span>{item.label}</span>
