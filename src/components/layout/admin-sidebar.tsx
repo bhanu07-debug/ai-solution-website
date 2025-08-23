@@ -98,10 +98,12 @@ export function AdminSidebar() {
               </SidebarMenuItem>
             ) : (
               <SidebarMenuItem key={item.href || item.label}>
-                <SidebarMenuButton href={item.href!} isActive={isActive(item.href!)}>
-                  <item.icon />
-                  <span>{item.label}</span>
-                   {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
+                <SidebarMenuButton asChild isActive={isActive(item.href!)}>
+                   <Link href={item.href!}>
+                    <item.icon />
+                    <span>{item.label}</span>
+                    {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
+                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             )
@@ -112,9 +114,11 @@ export function AdminSidebar() {
       <SidebarFooter className="p-2">
         <SidebarMenu>
             <SidebarMenuItem>
-                <SidebarMenuButton href="/admin/settings" isActive={isActive('/admin/settings')}>
-                    <Settings />
-                    <span>Settings</span>
+                <SidebarMenuButton asChild isActive={isActive('/admin/settings')}>
+                    <Link href="/admin/settings">
+                        <Settings />
+                        <span>Settings</span>
+                    </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>
         </SidebarMenu>
