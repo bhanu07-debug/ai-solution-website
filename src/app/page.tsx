@@ -109,7 +109,7 @@ export default function Home() {
                   </CardContent>
                   <CardFooter>
                       <Button asChild className="w-full font-bold">
-                        <Link href="/contact">Learn More</Link>
+                        <Link href="/services">Learn More</Link>
                       </Button>
                   </CardFooter>
                 </Card>
@@ -130,7 +130,7 @@ export default function Home() {
             <h2 className="font-headline text-3xl md:text-4xl font-bold">Our Projects</h2>
             <p className="mt-2 text-muted-foreground">See how we've helped businesses like yours.</p>
           </div>
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
              {isLoading ? (
               [...Array(3)].map((_, i) => (
                 <Card key={i} className="overflow-hidden shadow-lg">
@@ -144,7 +144,7 @@ export default function Home() {
               ))
             ) : (
               projects.slice(0, 3).map((project, index) => (
-                <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
                   <Image 
                       src={project.imageUrl}
                       alt={project.title}
@@ -156,9 +156,14 @@ export default function Home() {
                   <CardHeader>
                     <CardTitle className="font-headline">{project.title}</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="flex-grow">
                     <CardDescription>{project.description}</CardDescription>
                   </CardContent>
+                   <CardFooter>
+                        <Button asChild variant="outline" className="w-full">
+                            <Link href="/projects">View Case Study</Link>
+                        </Button>
+                    </CardFooter>
                 </Card>
               ))
             )}
@@ -177,7 +182,7 @@ export default function Home() {
             <h2 className="font-headline text-3xl md:text-4xl font-bold">From the Blog</h2>
             <p className="mt-2 text-muted-foreground">Insights and news from the world of AI.</p>
           </div>
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {isLoading ? (
                [...Array(3)].map((_, i) => (
                 <Card key={i} className="overflow-hidden shadow-lg flex flex-col">
@@ -210,6 +215,11 @@ export default function Home() {
                       <CardContent className="flex-grow">
                           <CardDescription>{post.excerpt}</CardDescription>
                       </CardContent>
+                      <CardFooter>
+                         <Button asChild variant="link" className="p-0 h-auto">
+                            <Link href="/blog">Read More <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                        </Button>
+                      </CardFooter>
                   </Card>
               ))
             )}
@@ -298,6 +308,9 @@ export default function Home() {
                           <CardContent>
                               <CardDescription>{event.description}</CardDescription>
                           </CardContent>
+                          <CardFooter>
+                              <Button>Register Now</Button>
+                          </CardFooter>
                       </Card>
                   ))
                 )}
