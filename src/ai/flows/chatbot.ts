@@ -57,14 +57,6 @@ export const chatbot = ai.defineFlow(
   },
   async (input) => {
     const { output } = await chatbotPrompt(input);
-
-    if (!output) {
-      if (input.message.toLowerCase().trim() === 'hello' || input.message.toLowerCase().trim() === 'hi') {
-        return "Hello! How can I help you today?";
-      }
-      return "I'm sorry, I'm having trouble connecting right now. Please try again in a moment.";
-    }
-    
-    return output;
+    return output || "I'm sorry, I'm having trouble connecting right now. Please try again in a moment.";
   }
 );
