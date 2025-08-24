@@ -90,7 +90,7 @@ export default function AdminServicesPage() {
                             {services.map((service) => (
                                 <TableRow key={service.id}>
                                     <TableCell>
-                                        <Image src={service.imageUrl} alt={service.title} width={80} height={45} className="rounded-md object-cover"/>
+                                        <Image src={service.imageUrl || 'https://placehold.co/80x45.png'} alt={service.title} width={80} height={45} className="rounded-md object-cover"/>
                                     </TableCell>
                                     <TableCell className="font-medium">{service.title}</TableCell>
                                     <TableCell className="max-w-xs truncate">{service.description}</TableCell>
