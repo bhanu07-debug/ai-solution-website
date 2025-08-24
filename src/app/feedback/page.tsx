@@ -6,7 +6,6 @@ import { FeedbackForm } from '@/components/feedback-form';
 import { type Feedback } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Star } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { getFeedback } from '@/lib/firestore';
@@ -21,7 +20,7 @@ export default function FeedbackPage() {
         const allFeedback = await getFeedback();
         const approved = allFeedback
             .filter(fb => fb.status === 'approved')
-            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            .sort((a, b) => new Date(b.createdAt as string).getTime() - new Date(a.createdAt as string).getTime());
         setApprovedTestimonials(approved);
     };
     fetchTestimonials();
@@ -87,51 +86,14 @@ export default function FeedbackPage() {
         </Card>
 
         <div className="space-y-8">
-          <h2 className="font-headline text-2xl font-bold text-center md:text-left">Pending Review</h2>
-          {pendingFeedback.length > 0 ? (
-            <div className="space-y-4 max-h-96 overflow-y-auto pr-4">
-              {pendingFeedback.map((feedback, index) => (
-                <Card key={index} className="bg-secondary/50">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-4">
-                      <Avatar>
-                        <AvatarFallback>{feedback.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-semibold">{feedback.name}</p>
-                        <p className="text-sm text-muted-foreground">{feedback.message}</p>
-                        <div className="mt-2">
-                          <StarRating rating={feedback.rating} />
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+            <div className="text-center md:text-left">
+                 <h2 className="font-headline text-3xl font-bold">What Our Clients Say</h2>
+                 <p className="mt-2 text-muted-foreground">Words from our happy partners.</p>
             </div>
-          ) : (
-            <p className="text-muted-foreground text-center md:text-left">Your submitted feedback will appear here for preview.</p>
-          )}
-        </div>
-      </div>
-
-      <div className="mt-24">
-        <div className="text-center mb-12">
-          <h2 className="font-headline text-4xl font-bold">What Our Clients Say</h2>
-          <p className="mt-2 text-lg text-muted-foreground">Words from our happy partners.</p>
-        </div>
-        <Carousel
-          opts={{
-            align: 'start',
-            loop: true,
-          }}
-          className="w-full max-w-4xl mx-auto"
-        >
-          <CarouselContent>
-            {approvedTestimonials.map((testimonial, index) => (
-              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                <div className="p-1 h-full">
-                  <Card className="h-full flex flex-col justify-between shadow-md">
+          {approvedTestimonials.length > 0 ? (
+            <div className="space-y-6 max-h-[500px] overflow-y-auto pr-4">
+              {approvedTestimonials.map((testimonial) => (
+                 <Card key={testimonial.id} className="shadow-md">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-2 mb-4">
                          <StarRating rating={testimonial.rating} />
@@ -151,13 +113,12 @@ export default function FeedbackPage() {
                         </div>
                     </CardHeader>
                   </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+              ))}
+            </div>
+          ) : (
+            <p className="text-muted-foreground text-center md:text-left">No testimonials have been approved yet.</p>
+          )}
+        </div>
       </div>
     </div>
   );
