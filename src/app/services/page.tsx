@@ -11,6 +11,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Check, Search, ChevronRight, MessageSquare, Bot, Cpu, BarChart2, Settings, BrainCircuit } from 'lucide-react';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
+import { type Metadata } from 'next';
+
+// export const metadata: Metadata = {
+//   title: 'Our AI Services',
+//   description: 'Discover our comprehensive range of AI solutions designed to transform your business operations and drive innovation, including automation, analytics, NLP, and more.',
+// };
+
 
 const serviceIcons: { [key: string]: React.ElementType } = {
   "AI-Powered Automation": Bot,

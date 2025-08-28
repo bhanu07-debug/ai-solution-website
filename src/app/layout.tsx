@@ -19,9 +19,69 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'AISolutions Hub',
+  title: {
+    default: 'AISolutions Hub',
+    template: `%s | AISolutions Hub`,
+  },
   description: 'Welcome to the future of AI. Discover innovative solutions tailored for your business.',
+  keywords: ['AI Solutions', 'Machine Learning', 'Predictive Analytics', 'Natural Language Processing', 'AI Consulting'],
+  authors: [{ name: 'AISolutions Hub' }],
+  creator: 'AISolutions Hub',
+  publisher: 'AISolutions Hub',
+  openGraph: {
+    title: 'AISolutions Hub',
+    description: 'Welcome to the future of AI. Discover innovative solutions tailored for your business.',
+    url: 'https://aisolutionshub.com', // Replace with your actual domain
+    siteName: 'AISolutions Hub',
+    images: [
+      {
+        url: 'https://placehold.co/1200x630.png', // Replace with a representative OG image
+        width: 1200,
+        height: 630,
+        alt: 'AISolutions Hub - Powering Tomorrow\'s Solutions',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AISolutions Hub',
+    description: 'Welcome to the future of AI. Discover innovative solutions tailored for your business.',
+    // images: ['https://aisolutionshub.com/og-image.png'], // Replace with your actual domain and image
+    // creator: '@yourtwitterhandle', // Replace with your Twitter handle
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'AISolutions Hub',
+  url: 'https://aisolutionshub.com', // Replace with your actual domain
+  logo: 'https://placehold.co/200x60.png', // Replace with your logo URL
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: '+1-123-456-7890',
+    contactType: 'customer service',
+  },
+  sameAs: [
+    // Add your social media profiles here
+    // "https://twitter.com/yourtwitterhandle",
+    // "https://www.linkedin.com/company/yourlinkedinhandle"
+  ],
+};
+
 
 export default function RootLayout({
   children,
@@ -38,6 +98,10 @@ export default function RootLayout({
         )}
         suppressHydrationWarning
       >
+         <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <div className="relative flex min-h-dvh flex-col bg-background">
           <SiteHeader />
           <main className="flex-1">{children}</main>
