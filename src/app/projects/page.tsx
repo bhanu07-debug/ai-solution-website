@@ -94,44 +94,15 @@ export default function ProjectsPage() {
                     </CardContent>
                 </Card>
             </div>
-            <div className="lg:col-span-3 grid md:grid-cols-2 gap-8">
-                 {isLoading ? (
-                    [...Array(6)].map((_, i) => (
-                        <Card key={i}><CardContent className="p-6"><Skeleton className="h-80 w-full" /></CardContent></Card>
-                    ))
-                ) : filteredProjects.length > 0 ? (
-                    filteredProjects.map((project, index) => (
-                        <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
-                            <Image 
-                                src={project.imageUrl}
-                                alt={project.title}
-                                width={600}
-                                height={400}
-                                className="w-full h-48 object-cover"
-                                data-ai-hint={project.imageHint}
-                            />
-                            <CardHeader>
-                            <CardTitle className="font-headline">{project.title}</CardTitle>
-                            <CardDescription>{project.description}</CardDescription>
-                            </CardHeader>
-                            <CardContent className="flex-grow space-y-4">
-                            <div className="flex flex-wrap gap-2">
-                                {project.technologies.map(tech => <Badge key={tech} variant="secondary">{tech}</Badge>)}
-                            </div>
-                            </CardContent>
-                             <CardFooter>
-                                <Button asChild variant="outline" className="w-full">
-                                    <Link href="#">View Case Study <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    ))
-                ) : (
-                    <div className="md:col-span-2 text-center py-16">
-                        <p className="text-lg font-semibold">No projects found</p>
-                        <p className="text-muted-foreground">Try adjusting your search or filter criteria.</p>
-                    </div>
-                )}
+            <div className="lg:col-span-3">
+                <Image
+                    src="https://picsum.photos/800/600"
+                    alt="Placeholder Image"
+                    width={800}
+                    height={600}
+                    className="w-full rounded-lg shadow-lg"
+                    data-ai-hint="placeholder image"
+                />
             </div>
         </div>
     </div>
