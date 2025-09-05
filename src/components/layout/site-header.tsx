@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, Shield } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Logo } from "@/components/icons/logo";
 import { cn } from "@/lib/utils";
 
@@ -48,12 +48,6 @@ export function SiteHeader() {
                 </nav>
 
                 <div className="flex items-center gap-4">
-                    <Button asChild variant="ghost" size="sm">
-                        <Link href="/admin/login">
-                            <Shield className="mr-2 h-4 w-4" />
-                            Admin
-                        </Link>
-                    </Button>
                     <Sheet>
                         <SheetTrigger asChild>
                             <Button variant="outline" size="icon" className="md:hidden">
