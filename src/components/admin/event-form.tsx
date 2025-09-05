@@ -66,7 +66,7 @@ export function EventForm({ onSubmit, defaultValues }: EventFormProps) {
             <FormItem>
               <FormLabel>Event Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Describe the event..." {...field} />
+                <Textarea placeholder="Describe the event..." {...field} rows={5} />
               </FormControl>
               <FormMessage />
             </FormItem>

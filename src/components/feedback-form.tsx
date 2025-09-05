@@ -18,6 +18,7 @@ const feedbackSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
   company: z.string().optional(),
   email: z.string().email('A valid email is required.'),
+  country: z.string().optional(),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
   rating: z.number().min(1, 'Please provide a rating.').max(5),
 });
@@ -37,6 +38,7 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
       name: '',
       company: '',
       email: '',
+      country: '',
       message: '',
       rating: 0,
     },
@@ -80,19 +82,34 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
             )}
             />
         </div>
-        <FormField
-            control={form.control}
-            name="company"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Company (Optional)</FormLabel>
-                <FormControl>
-                  <Input placeholder="Acme Inc." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <div className="grid md:grid-cols-2 gap-4">
+            <FormField
+                control={form.control}
+                name="company"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Company (Optional)</FormLabel>
+                    <FormControl>
+                    <Input placeholder="Acme Inc." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+             <FormField
+                control={form.control}
+                name="country"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Country (Optional)</FormLabel>
+                    <FormControl>
+                    <Input placeholder="e.g. USA" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+        </div>
         <FormField
           control={form.control}
           name="message"

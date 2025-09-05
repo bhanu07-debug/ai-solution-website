@@ -100,8 +100,8 @@ export default function BlogPage() {
                         <Card key={i}><CardContent className="p-6"><Skeleton className="h-80 w-full" /></CardContent></Card>
                     ))
                 ) : filteredPosts.length > 0 ? (
-                    filteredPosts.map((post, index) => (
-                        <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+                    filteredPosts.map((post) => (
+                        <Card key={post.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
                             <Image 
                                 src={post.imageUrl}
                                 alt={post.title}
@@ -119,7 +119,7 @@ export default function BlogPage() {
                             </CardContent>
                             <CardFooter>
                                 <Button asChild variant="link" className="p-0 h-auto">
-                                    <Link href="#">Read More <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                                    <Link href={`/blog/${post.id}`}>Read More <ArrowRight className="ml-2 h-4 w-4" /></Link>
                                 </Button>
                             </CardFooter>
                         </Card>

@@ -67,7 +67,7 @@ export function ServiceForm({ onSubmit, defaultValues }: ServiceFormProps) {
             <FormItem>
               <FormLabel>Service Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Describe the service..." {...field} />
+                <Textarea placeholder="Describe the service..." {...field} rows={5} />
               </FormControl>
               <FormMessage />
             </FormItem>

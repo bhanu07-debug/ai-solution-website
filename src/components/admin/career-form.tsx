@@ -106,7 +106,7 @@ export function CareerForm({ onSubmit, defaultValues }: CareerFormProps) {
             <FormItem>
               <FormLabel>Job Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Describe the role, responsibilities, and requirements..." {...field} rows={6}/>
+                <Textarea placeholder="Describe the role, responsibilities, and requirements..." {...field} rows={8} />
               </FormControl>
               <FormMessage />
             </FormItem>

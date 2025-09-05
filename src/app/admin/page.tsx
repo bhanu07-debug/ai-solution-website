@@ -3,7 +3,7 @@ import { StatCard } from "@/components/stat-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUpRight, Check, FileText, MessageSquare, Briefcase, ThumbsDown, Edit } from "lucide-react";
+import { ArrowUpRight, Check, FileText, MessageSquare, Briefcase, ThumbsDown, Edit, PlusCircle } from "lucide-react";
 import Link from 'next/link';
 import { getProjects, getArticles, getFeedback } from "@/lib/firestore";
 import { type Feedback } from "@/lib/types";
@@ -71,10 +71,10 @@ export default async function AdminDashboardPage() {
                             <div className="flex justify-between items-center p-3 rounded-lg border bg-secondary/50">
                                 <div>
                                     <h4 className="font-semibold">Manage Content</h4>
-                                    <p className="text-sm text-muted-foreground">Edit existing services.</p>
+                                    <p className="text-sm text-muted-foreground">Edit existing articles.</p>
                                 </div>
                                 <Button asChild size="sm">
-                                    <Link href="/admin/services"><Edit className="mr-2 h-4 w-4"/>Edit</Link>
+                                    <Link href="/admin/articles"><Edit className="mr-2 h-4 w-4"/>Edit</Link>
                                 </Button>
                             </div>
                              <div className="flex justify-between items-center p-3 rounded-lg border bg-secondary/50">
@@ -83,7 +83,7 @@ export default async function AdminDashboardPage() {
                                     <p className="text-sm text-muted-foreground">Add a new service page.</p>
                                 </div>
                                 <Button asChild size="sm">
-                                    <Link href="/admin/services">New Service</Link>
+                                    <Link href="/admin/services"><PlusCircle className="mr-2 h-4 w-4"/>New</Link>
                                 </Button>
                             </div>
                         </CardContent>
