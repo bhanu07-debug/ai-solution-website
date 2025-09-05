@@ -345,7 +345,7 @@ export default function Home() {
           </div>
           <div className="flex justify-center">
             <Image
-              src="https://placehold.co/600x400.png"
+              src="https://picsum.photos/seed/partner/600/400"
               width={600}
               height={400}
               alt="Artificial Intelligence"
