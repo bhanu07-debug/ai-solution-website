@@ -17,7 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 const feedbackSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
   company: z.string().optional(),
-  role: z.string().optional(),
+  email: z.string().email('A valid email is required.'),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
   rating: z.number().min(1, 'Please provide a rating.').max(5),
 });
@@ -25,7 +25,7 @@ const feedbackSchema = z.object({
 type FeedbackFormData = z.infer<typeof feedbackSchema>;
 
 interface FeedbackFormProps {
-  onSubmit: (data: Omit<Feedback, 'id' | 'status' | 'createdAt'>) => void;
+  onSubmit: (data: Omit<Feedback, 'id' | 'status' | 'createdAt'>) => Promise<void>;
 }
 
 export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
@@ -36,7 +36,7 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
     defaultValues: {
       name: '',
       company: '',
-      role: '',
+      email: '',
       message: '',
       rating: 0,
     },
@@ -52,21 +52,35 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Full Name</FormLabel>
-              <FormControl>
-                <Input placeholder="John Doe" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <div className="grid md:grid-cols-2 gap-4">
-          <FormField
+            <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Full Name</FormLabel>
+                <FormControl>
+                    <Input placeholder="John Doe" {...field} />
+                </FormControl>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
+            <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                    <Input placeholder="john.doe@example.com" {...field} />
+                </FormControl>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
+        </div>
+        <FormField
             control={form.control}
             name="company"
             render={({ field }) => (
@@ -79,20 +93,6 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="role"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Role (Optional)</FormLabel>
-                <FormControl>
-                  <Input placeholder="Software Engineer" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
         <FormField
           control={form.control}
           name="message"

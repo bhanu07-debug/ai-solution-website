@@ -3,7 +3,7 @@ export type Feedback = {
   id: string;
   name: string;
   company?: string;
-  role?: string;
+  email: string;
   message: string;
   rating: number;
   country?: string;

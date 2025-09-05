@@ -67,7 +67,7 @@ export function FeedbackTable({ data, onUpdateStatus }: FeedbackTableProps) {
                         <TableRow key={item.id}>
                             <TableCell>
                                 <div className="font-medium">{item.name}</div>
-                                <div className="text-sm text-muted-foreground">{item.company || item.role}</div>
+                                <div className="text-sm text-muted-foreground">{item.email}</div>
                             </TableCell>
                             <TableCell className="hidden md:table-cell max-w-xs truncate">{item.message}</TableCell>
                             <TableCell className="hidden sm:table-cell">

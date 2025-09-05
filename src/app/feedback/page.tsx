@@ -11,7 +11,6 @@ import { useToast } from '@/hooks/use-toast';
 import { getFeedback } from '@/lib/firestore';
 
 export default function FeedbackPage() {
-  const [pendingFeedback, setPendingFeedback] = useState<Omit<Feedback, 'status' | 'id'>[]>([]);
   const [approvedTestimonials, setApprovedTestimonials] = useState<Feedback[]>([]);
   const { toast } = useToast();
 
@@ -26,7 +25,7 @@ export default function FeedbackPage() {
     fetchTestimonials();
   }, []);
 
-  const handleFeedbackSubmit = async (data: Omit<Feedback, 'status' | 'id' | 'createdAt'>) => {
+  const handleFeedbackSubmit = async (data: Omit<Feedback, 'id' | 'status' | 'createdAt'>) => {
     try {
       const response = await fetch('/api/feedback', {
         method: 'POST',
@@ -36,13 +35,14 @@ export default function FeedbackPage() {
         body: JSON.stringify(data),
       });
 
+      const result = await response.json();
+      
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorMessage = result.errors ? result.errors[0].message : 'An unknown error occurred.';
+        throw new Error(errorMessage);
       }
 
-      const result = await response.json();
       if (result.success) {
-        setPendingFeedback(prev => [result.feedback, ...prev]);
         toast({
           title: "Feedback Submitted!",
           description: "Thank you for your feedback. It is now pending review.",
@@ -50,12 +50,12 @@ export default function FeedbackPage() {
       } else {
         throw new Error(result.message || 'Failed to submit feedback.');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Feedback submission error:', error);
       toast({
         variant: 'destructive',
         title: "Submission Failed",
-        description: "There was a problem submitting your feedback. Please try again.",
+        description: error.message || "There was a problem submitting your feedback. Please try again.",
       });
     }
   };
@@ -108,7 +108,7 @@ export default function FeedbackPage() {
                             </Avatar>
                             <div>
                                 <p className="font-bold">{testimonial.name}</p>
-                                <p className="text-sm text-muted-foreground">{testimonial.role}, {testimonial.company}</p>
+                                {testimonial.company && <p className="text-sm text-muted-foreground">{testimonial.company}</p>}
                             </div>
                         </div>
                     </CardHeader>
