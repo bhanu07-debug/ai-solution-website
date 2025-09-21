@@ -25,7 +25,7 @@ export default function FeedbackPage() {
     fetchTestimonials();
   }, []);
 
-  const handleFeedbackSubmit = async (data: Omit<Feedback, 'id' | 'status' | 'createdAt'>) => {
+  const handleFeedbackSubmit = async (data: Omit<Feedback, 'id' | 'status' | 'createdAt' | 'rating'>) => {
     try {
       const response = await fetch('/api/feedback', {
         method: 'POST',
@@ -95,9 +95,11 @@ export default function FeedbackPage() {
               {approvedTestimonials.map((testimonial) => (
                  <Card key={testimonial.id} className="shadow-md">
                     <CardContent className="p-6">
-                      <div className="flex items-center gap-2 mb-4">
-                         <StarRating rating={testimonial.rating} />
-                      </div>
+                      {testimonial.rating && (
+                        <div className="flex items-center gap-2 mb-4">
+                          <StarRating rating={testimonial.rating} />
+                        </div>
+                      )}
                       <p className="text-muted-foreground italic">"{testimonial.message}"</p>
                     </CardContent>
                     <CardHeader className="pt-0">

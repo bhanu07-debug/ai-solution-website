@@ -9,7 +9,6 @@ const feedbackSchema = z.object({
   email: z.string().email('Please enter a valid email address.'),
   country: z.string().optional(),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
-  rating: z.number().min(1, 'Please provide a rating.').max(5),
 });
 
 export async function POST(request: Request) {

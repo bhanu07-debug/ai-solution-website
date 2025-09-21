@@ -71,7 +71,7 @@ export function FeedbackTable({ data, onUpdateStatus }: FeedbackTableProps) {
                             </TableCell>
                             <TableCell className="hidden md:table-cell max-w-xs truncate">{item.message}</TableCell>
                             <TableCell className="hidden sm:table-cell">
-                                <StarRating rating={item.rating} />
+                                {item.rating ? <StarRating rating={item.rating} /> : 'N/A'}
                             </TableCell>
                             <TableCell className="hidden lg:table-cell">
                                 {formatDate(item.createdAt)}

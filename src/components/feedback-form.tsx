@@ -20,13 +20,12 @@ const feedbackSchema = z.object({
   email: z.string().email('A valid email is required.'),
   country: z.string().optional(),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
-  rating: z.number().min(1, 'Please provide a rating.').max(5),
 });
 
-type FeedbackFormData = z.infer<typeof feedbackSchema>;
+type FeedbackFormData = Omit<z.infer<typeof feedbackSchema>, 'rating'>;
 
 interface FeedbackFormProps {
-  onSubmit: (data: Omit<Feedback, 'id' | 'status' | 'createdAt'>) => Promise<void>;
+  onSubmit: (data: Omit<Feedback, 'id' | 'status' | 'createdAt' | 'rating'>) => Promise<void>;
 }
 
 export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
@@ -40,7 +39,6 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
       email: '',
       country: '',
       message: '',
-      rating: 0,
     },
   });
 
@@ -123,50 +121,10 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="rating"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Rating</FormLabel>
-              <FormControl>
-                <StarRatingInput value={field.value} onChange={field.onChange} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <Button type="submit" className="w-full font-bold" disabled={isLoading}>
           {isLoading ? 'Submitting...' : 'Submit Feedback'}
         </Button>
       </form>
     </Form>
-  );
-}
-
-function StarRatingInput({ value, onChange }: { value: number, onChange: (value: number) => void }) {
-  const [hoverValue, setHoverValue] = useState(0);
-  return (
-    <div className="flex gap-1" onMouseLeave={() => setHoverValue(0)}>
-      {[...Array(5)].map((_, i) => {
-        const ratingValue = i + 1;
-        return (
-          <button
-            type="button"
-            key={ratingValue}
-            onClick={() => onChange(ratingValue)}
-            onMouseEnter={() => setHoverValue(ratingValue)}
-            className="cursor-pointer"
-          >
-            <Star
-              className={cn(
-                "h-8 w-8 transition-colors",
-                ratingValue <= (hoverValue || value) ? 'text-primary fill-primary' : 'text-muted-foreground/50'
-              )}
-            />
-          </button>
-        );
-      })}
-    </div>
   );
 }

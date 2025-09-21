@@ -98,7 +98,7 @@ export const updateCareer = (id: string, data: Partial<Career>) => updateItem<Ca
 export const deleteCareer = (id: string) => deleteItem('careers', id);
 
 export const getFeedback = () => getItems<Feedback>('feedback');
-export const createFeedback = (data: Omit<Feedback, 'id' | 'status' | 'createdAt'>) => {
+export const createFeedback = (data: Omit<Feedback, 'id' | 'status' | 'createdAt' | 'rating'>) => {
     const feedbackData: Omit<Feedback, 'id' | 'createdAt'> & {createdAt: Date} = {
         ...data,
         status: 'pending',
