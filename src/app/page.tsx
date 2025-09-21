@@ -108,7 +108,7 @@ export default function Home() {
                         <div>
                             <h5 className="font-semibold text-sm mb-2">Key Benefits:</h5>
                             <ul className="space-y-1.5 text-sm text-muted-foreground">
-                                {service.benefits.map(benefit => (
+                                {Array.isArray(service.benefits) && service.benefits.map(benefit => (
                                     <li key={benefit} className="flex items-start gap-2">
                                         <Check className="h-4 w-4 text-green-500 mt-0.5 shrink-0"/>
                                         <span>{benefit}</span>
@@ -337,3 +337,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
