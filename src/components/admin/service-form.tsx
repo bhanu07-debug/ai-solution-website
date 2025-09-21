@@ -33,7 +33,7 @@ export function ServiceForm({ onSubmit, defaultValues }: ServiceFormProps) {
     defaultValues: {
       title: defaultValues?.title || '',
       description: defaultValues?.description || '',
-      benefits: defaultValues?.benefits.join(', ') || '',
+      benefits: (defaultValues?.benefits || []).join(', ') || '',
       price: defaultValues?.price || '',
     },
   });
