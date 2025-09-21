@@ -14,14 +14,14 @@ import { Service } from '@/lib/mock-data';
 const serviceSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters.'),
   description: z.string().min(10, 'Description must be at least 10 characters.'),
-  imageUrl: z.string().url('Image URL must be a valid URL.'),
-  imageHint: z.string().min(1, 'Image hint is required.'),
+  benefits: z.string().min(3, 'Please list at least one benefit.'),
+  price: z.string().min(1, 'Price is required.'),
 });
 
 type ServiceFormData = z.infer<typeof serviceSchema>;
 
 interface ServiceFormProps {
-  onSubmit: (data: Omit<Service, 'id'>) => void;
+  onSubmit: (data: Omit<Service, 'id'|'benefits'> & {benefits: string[]}) => void;
   defaultValues?: Service | null;
 }
 
@@ -30,17 +30,18 @@ export function ServiceForm({ onSubmit, defaultValues }: ServiceFormProps) {
   
   const form = useForm<ServiceFormData>({
     resolver: zodResolver(serviceSchema),
-    defaultValues: defaultValues || {
-      title: '',
-      description: '',
-      imageUrl: '',
-      imageHint: '',
+    defaultValues: {
+      title: defaultValues?.title || '',
+      description: defaultValues?.description || '',
+      benefits: defaultValues?.benefits.join(', ') || '',
+      price: defaultValues?.price || '',
     },
   });
 
   async function handleFormSubmit(data: ServiceFormData) {
     setIsLoading(true);
-    await onSubmit(data);
+    const benefits = data.benefits.split(',').map(b => b.trim());
+    await onSubmit({...data, benefits});
     setIsLoading(false);
   }
 
@@ -54,7 +55,7 @@ export function ServiceForm({ onSubmit, defaultValues }: ServiceFormProps) {
             <FormItem>
               <FormLabel>Service Title</FormLabel>
               <FormControl>
-                <Input placeholder="e.g., AI Automation" {...field} />
+                <Input placeholder="e.g., AI-Powered Automation" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -67,7 +68,7 @@ export function ServiceForm({ onSubmit, defaultValues }: ServiceFormProps) {
             <FormItem>
               <FormLabel>Service Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Describe the service..." {...field} rows={5} />
+                <Textarea placeholder="Describe the service..." {...field} rows={4} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -75,29 +76,29 @@ export function ServiceForm({ onSubmit, defaultValues }: ServiceFormProps) {
         />
         <FormField
           control={form.control}
-          name="imageUrl"
+          name="benefits"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Image URL</FormLabel>
+              <FormLabel>Key Benefits</FormLabel>
               <FormControl>
-                <Input placeholder="https://placehold.co/600x400.png" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="imageHint"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Image Hint</FormLabel>
-              <FormControl>
-                <Input placeholder="e.g., abstract technology" {...field} />
+                <Textarea placeholder="Benefit 1, Benefit 2, Benefit 3" {...field} rows={3} />
               </FormControl>
                <p className="text-xs text-muted-foreground">
-                One or two keywords for image generation.
+                Enter benefits separated by commas.
               </p>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Starting Price</FormLabel>
+              <FormControl>
+                <Input placeholder="$5000" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

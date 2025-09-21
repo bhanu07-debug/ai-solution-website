@@ -23,25 +23,6 @@ const serviceIcons: { [key: string]: React.ElementType } = {
   "Default": BrainCircuit,
 };
 
-const serviceBenefits: { [key: string]: string[] } = {
-    "AI-Powered Automation": ["Automated decision-making", "Predictive analytics capabilities", "Custom algorithm development"],
-    "Predictive Analytics": ["Interactive dashboards", "Statistical analysis", "Predictive modeling"],
-    "Natural Language Processing": ["Intelligent chatbot development", "Sentiment analysis & monitoring", "Text classification & extraction"],
-    "Computer Vision": ["Object detection & recognition", "Quality control automation", "Real-time video analysis"],
-    "AI Consulting & Strategy": ["AI strategy development", "Technology assessment", "Implementation roadmap"],
-    "Business Process Automation": ["Workflow automation", "Document processing", "Data integration"],
-};
-
-const servicePrices: { [key: string]: string } = {
-    "AI-Powered Automation": "$5000",
-    "Predictive Analytics": "$4500",
-    "Natural Language Processing": "$4000",
-    "Computer Vision": "$6000",
-    "AI Consulting & Strategy": "$2500",
-    "Business Process Automation": "$3000",
-};
-
-
 export default function Home() {
   const [services, setServices] = useState<Service[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -111,9 +92,7 @@ export default function Home() {
             ) : (
               services.slice(0, 3).map((service, index) => {
                 const Icon = serviceIcons[service.title] || serviceIcons.Default;
-                const benefits = serviceBenefits[service.title] || [];
-                const price = servicePrices[service.title] || '$...';
-
+                
                 return (
                  <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
                     <CardHeader>
@@ -129,7 +108,7 @@ export default function Home() {
                         <div>
                             <h5 className="font-semibold text-sm mb-2">Key Benefits:</h5>
                             <ul className="space-y-1.5 text-sm text-muted-foreground">
-                                {benefits.map(benefit => (
+                                {service.benefits.map(benefit => (
                                     <li key={benefit} className="flex items-start gap-2">
                                         <Check className="h-4 w-4 text-green-500 mt-0.5 shrink-0"/>
                                         <span>{benefit}</span>
@@ -141,7 +120,7 @@ export default function Home() {
                     <CardFooter className="flex-col items-start gap-4 bg-secondary/50 pt-4">
                         <div className="flex justify-between items-center w-full">
                             <span className="text-sm text-muted-foreground">Starting from</span>
-                            <span className="text-xl font-bold text-primary">{price}</span>
+                            <span className="text-xl font-bold text-primary">{service.price}</span>
                         </div>
                         <Button asChild className="w-full font-bold">
                             <Link href="/contact">Learn More <ChevronRight className="ml-1 h-4 w-4"/></Link>
@@ -238,7 +217,7 @@ export default function Home() {
                       </CardContent>
                       <CardFooter>
                          <Button asChild variant="link" className="p-0 h-auto">
-                            <Link href="/blog">Read More <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                            <Link href={`/blog/${post.id}`}>Read More <ArrowRight className="ml-2 h-4 w-4" /></Link>
                         </Button>
                       </CardFooter>
                   </Card>

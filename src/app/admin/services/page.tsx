@@ -10,7 +10,7 @@ import { ServiceForm } from '@/components/admin/service-form';
 import { type Service } from '@/lib/mock-data';
 import { getServices, createService, updateService, deleteService } from '@/lib/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
-import Image from 'next/image';
+import { Badge } from '@/components/ui/badge';
 
 
 export default function AdminServicesPage() {
@@ -80,20 +80,20 @@ export default function AdminServicesPage() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Image</TableHead>
                                 <TableHead>Title</TableHead>
                                 <TableHead>Description</TableHead>
+                                <TableHead>Price</TableHead>
                                 <TableHead className="text-right">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {services.map((service) => (
                                 <TableRow key={service.id}>
-                                    <TableCell>
-                                        <Image src={service.imageUrl || 'https://placehold.co/80x45.png'} alt={service.title} width={80} height={45} className="rounded-md object-cover"/>
-                                    </TableCell>
                                     <TableCell className="font-medium">{service.title}</TableCell>
                                     <TableCell className="max-w-xs truncate">{service.description}</TableCell>
+                                    <TableCell>
+                                        <Badge variant="secondary">{service.price}</Badge>
+                                    </TableCell>
                                     <TableCell className="text-right">
                                         <Button variant="ghost" size="icon" onClick={() => handleEditService(service)}>
                                             <Edit className="h-4 w-4" />

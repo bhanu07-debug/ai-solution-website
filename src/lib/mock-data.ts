@@ -4,8 +4,8 @@ export type Service = {
     id: string;
     title: string;
     description: string;
-    imageUrl: string;
-    imageHint: string;
+    benefits: string[];
+    price: string;
 };
 
 export type Project = {
@@ -54,20 +54,38 @@ export const MOCK_SERVICES: Omit<Service, 'id'>[] = [
     {
         title: "AI-Powered Automation",
         description: "Streamline your business processes with intelligent automation solutions that reduce costs and improve efficiency.",
-        imageUrl: "https://picsum.photos/seed/automation/600/400",
-        imageHint: "abstract robot"
+        benefits: ["Automated decision-making", "Predictive analytics capabilities", "Custom algorithm development"],
+        price: "$5000"
     },
     {
         title: "Predictive Analytics",
         description: "Leverage your data to forecast trends, understand customer behavior, and make smarter business decisions.",
-        imageUrl: "https://picsum.photos/seed/analytics/600/400",
-        imageHint: "data charts"
+        benefits: ["Interactive dashboards", "Statistical analysis", "Predictive modeling"],
+        price: "$4500"
     },
     {
         title: "Natural Language Processing",
         description: "Build powerful applications that understand and process human language, from chatbots to sentiment analysis.",
-        imageUrl: "https://picsum.photos/seed/language/600/400",
-        imageHint: "speech bubbles"
+        benefits: ["Intelligent chatbot development", "Sentiment analysis & monitoring", "Text classification & extraction"],
+        price: "$4000"
+    },
+    {
+        title: "Computer Vision",
+        description: "Enable systems to interpret and understand the visual world through images and videos.",
+        benefits: ["Object detection & recognition", "Quality control automation", "Real-time video analysis"],
+        price: "$6000"
+    },
+    {
+        title: "AI Consulting & Strategy",
+        description: "Develop a roadmap to integrate AI into your business, identifying opportunities and ensuring a smooth implementation.",
+        benefits: ["AI strategy development", "Technology assessment", "Implementation roadmap"],
+        price: "$2500"
+    },
+     {
+        title: "Business Process Automation",
+        description: "Automate repetitive tasks and workflows to increase efficiency and reduce operational costs.",
+        benefits: ["Workflow automation", "Document processing", "Data integration"],
+        price: "$3000"
     }
 ];
 

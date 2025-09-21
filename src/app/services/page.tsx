@@ -11,13 +11,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Check, Search, ChevronRight, MessageSquare, Bot, Cpu, BarChart2, Settings, BrainCircuit } from 'lucide-react';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
-import { type Metadata } from 'next';
-
-// export const metadata: Metadata = {
-//   title: 'Our AI Services',
-//   description: 'Discover our comprehensive range of AI solutions designed to transform your business operations and drive innovation, including automation, analytics, NLP, and more.',
-// };
-
 
 const serviceIcons: { [key: string]: React.ElementType } = {
   "AI-Powered Automation": Bot,
@@ -28,25 +21,6 @@ const serviceIcons: { [key: string]: React.ElementType } = {
   "Business Process Automation": Settings,
   "Default": BrainCircuit,
 };
-
-const serviceBenefits: { [key: string]: string[] } = {
-    "AI-Powered Automation": ["Automated decision-making", "Predictive analytics capabilities", "Custom algorithm development"],
-    "Predictive Analytics": ["Interactive dashboards", "Statistical analysis", "Predictive modeling"],
-    "Natural Language Processing": ["Intelligent chatbot development", "Sentiment analysis & monitoring", "Text classification & extraction"],
-    "Computer Vision": ["Object detection & recognition", "Quality control automation", "Real-time video analysis"],
-    "AI Consulting & Strategy": ["AI strategy development", "Technology assessment", "Implementation roadmap"],
-    "Business Process Automation": ["Workflow automation", "Document processing", "Data integration"],
-};
-
-const servicePrices: { [key: string]: string } = {
-    "AI-Powered Automation": "$5000",
-    "Predictive Analytics": "$4500",
-    "Natural Language Processing": "$4000",
-    "Computer Vision": "$6000",
-    "AI Consulting & Strategy": "$2500",
-    "Business Process Automation": "$3000",
-};
-
 
 export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([]);
@@ -177,9 +151,7 @@ export default function ServicesPage() {
             ) : filteredServices.length > 0 ? (
                 filteredServices.map((service, index) => {
                     const Icon = serviceIcons[service.title] || serviceIcons.Default;
-                    const benefits = serviceBenefits[service.title] || [];
-                    const price = servicePrices[service.title] || '$...';
-
+                    
                     return (
                     <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
                         <CardHeader>
@@ -195,7 +167,7 @@ export default function ServicesPage() {
                             <div>
                                 <h5 className="font-semibold text-sm mb-2">Key Benefits:</h5>
                                 <ul className="space-y-1.5 text-sm text-muted-foreground">
-                                    {benefits.map(benefit => (
+                                    {service.benefits.map(benefit => (
                                         <li key={benefit} className="flex items-start gap-2">
                                             <Check className="h-4 w-4 text-green-500 mt-0.5 shrink-0"/>
                                             <span>{benefit}</span>
@@ -207,7 +179,7 @@ export default function ServicesPage() {
                         <CardFooter className="flex-col items-start gap-4 bg-secondary/50 pt-4">
                             <div className="flex justify-between items-center w-full">
                                 <span className="text-sm text-muted-foreground">Starting from</span>
-                                <span className="text-xl font-bold text-primary">{price}</span>
+                                <span className="text-xl font-bold text-primary">{service.price}</span>
                             </div>
                             <Button asChild className="w-full font-bold">
                                 <Link href="/contact">Learn More <ChevronRight className="ml-1 h-4 w-4"/></Link>
