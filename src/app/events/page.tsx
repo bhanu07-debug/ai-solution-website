@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, MapPin, Search } from "lucide-react";
+import { Calendar, MapPin, Search, Clock } from "lucide-react";
 import { getEvents } from "@/lib/firestore";
 import type { Event } from '@/lib/mock-data';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -100,10 +100,14 @@ export default function EventsPage() {
                             <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
                                 <CardHeader>
                                     <CardTitle className="font-headline">{event.title}</CardTitle>
-                                    <div className="flex items-center gap-4 text-sm text-muted-foreground pt-2">
+                                    <div className="flex items-center flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground pt-2">
                                         <div className="flex items-center gap-1.5">
                                             <Calendar className="h-4 w-4" />
                                             <span>{event.date}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <Clock className="h-4 w-4" />
+                                            <span>{event.time}</span>
                                         </div>
                                         <div className="flex items-center gap-1.5">
                                             <MapPin className="h-4 w-4" />

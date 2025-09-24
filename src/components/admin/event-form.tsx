@@ -9,19 +9,21 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
+import { type Event } from '@/lib/mock-data';
 
 const eventSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters.'),
   description: z.string().min(10, 'Description must be at least 10 characters.'),
   date: z.string().min(1, 'Date is required.'),
+  time: z.string().min(1, 'Time is required.'),
   location: z.string().min(1, 'Location is required.'),
 });
 
 type EventFormData = z.infer<typeof eventSchema>;
 
 interface EventFormProps {
-  onSubmit: (data: EventFormData) => void;
-  defaultValues?: EventFormData | null;
+  onSubmit: (data: Omit<Event, 'id'>) => void;
+  defaultValues?: Event | null;
 }
 
 export function EventForm({ onSubmit, defaultValues }: EventFormProps) {
@@ -33,6 +35,7 @@ export function EventForm({ onSubmit, defaultValues }: EventFormProps) {
       title: '',
       description: '',
       date: '',
+      time: '',
       location: '',
     },
   });
@@ -88,6 +91,20 @@ export function EventForm({ onSubmit, defaultValues }: EventFormProps) {
             />
             <FormField
             control={form.control}
+            name="time"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Event Time</FormLabel>
+                <FormControl>
+                    <Input placeholder="e.g., 9:00 AM PST" {...field} />
+                </FormControl>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
+        </div>
+         <FormField
+            control={form.control}
             name="location"
             render={({ field }) => (
                 <FormItem>
@@ -99,7 +116,6 @@ export function EventForm({ onSubmit, defaultValues }: EventFormProps) {
                 </FormItem>
             )}
             />
-        </div>
         <Button type="submit" className="w-full font-bold" disabled={isLoading}>
           {isLoading ? 'Saving...' : 'Save Event'}
         </Button>

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
-import { PlusCircle, Edit, Trash2, Calendar, MapPin } from 'lucide-react';
+import { PlusCircle, Edit, Trash2, Calendar, MapPin, Clock } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { EventForm } from '@/components/admin/event-form';
@@ -80,6 +80,7 @@ export default function AdminEventsPage() {
                             <TableRow>
                                 <TableHead>Title</TableHead>
                                 <TableHead>Date</TableHead>
+                                <TableHead>Time</TableHead>
                                 <TableHead>Location</TableHead>
                                 <TableHead className="text-right">Actions</TableHead>
                             </TableRow>
@@ -92,6 +93,12 @@ export default function AdminEventsPage() {
                                         <div className="flex items-center gap-2">
                                             <Calendar className="h-4 w-4 text-muted-foreground"/>
                                             {event.date}
+                                        </div>
+                                    </TableCell>
+                                     <TableCell>
+                                        <div className="flex items-center gap-2">
+                                            <Clock className="h-4 w-4 text-muted-foreground"/>
+                                            {event.time}
                                         </div>
                                     </TableCell>
                                      <TableCell>

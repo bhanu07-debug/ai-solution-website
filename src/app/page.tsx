@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { AnimatedHeading } from '@/components/animated-heading';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Calendar, MapPin, Check, MessageSquare, Bot, Cpu, BarChart2, BrainCircuit, Settings, ChevronRight } from 'lucide-react';
+import { ArrowRight, Calendar, MapPin, Check, MessageSquare, Bot, Cpu, BarChart2, BrainCircuit, Settings, ChevronRight, Clock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getServices, getProjects, getArticles, getGalleryItems, getEvents } from '@/lib/firestore';
@@ -282,10 +282,14 @@ export default function Home() {
                       <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
                           <CardHeader>
                               <CardTitle className="font-headline">{event.title}</CardTitle>
-                              <div className="flex items-center gap-4 text-sm text-muted-foreground pt-2">
+                              <div className="flex items-center flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground pt-2">
                                   <div className="flex items-center gap-1.5">
                                       <Calendar className="h-4 w-4" />
                                       <span>{event.date}</span>
+                                  </div>
+                                  <div className="flex items-center gap-1.5">
+                                      <Clock className="h-4 w-4" />
+                                      <span>{event.time}</span>
                                   </div>
                                   <div className="flex items-center gap-1.5">
                                       <MapPin className="h-4 w-4" />
