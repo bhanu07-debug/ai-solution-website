@@ -10,15 +10,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { type Feedback } from '@/lib/types';
 import { useState } from 'react';
-import { Star } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useToast } from '@/hooks/use-toast';
 
 const feedbackSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
-  company: z.string().optional(),
+  company: z.string().min(1, 'Company is required.'),
   email: z.string().email('A valid email is required.'),
-  country: z.string().optional(),
+  country: z.string().min(1, 'Country is required.'),
+  phone: z.string().min(5, 'A valid phone number is required.'),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
 });
 
@@ -38,6 +36,7 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
       company: '',
       email: '',
       country: '',
+      phone: '',
       message: '',
     },
   });
@@ -86,7 +85,7 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
                 name="company"
                 render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Company (Optional)</FormLabel>
+                    <FormLabel>Company</FormLabel>
                     <FormControl>
                     <Input placeholder="Acme Inc." {...field} />
                     </FormControl>
@@ -99,7 +98,7 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
                 name="country"
                 render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Country (Optional)</FormLabel>
+                    <FormLabel>Country</FormLabel>
                     <FormControl>
                     <Input placeholder="e.g. USA" {...field} />
                     </FormControl>
@@ -108,6 +107,19 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
                 )}
             />
         </div>
+         <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+            <FormItem>
+                <FormLabel>Phone Number</FormLabel>
+                <FormControl>
+                <Input placeholder="(123) 456-7890" {...field} />
+                </FormControl>
+                <FormMessage />
+            </FormItem>
+            )}
+        />
         <FormField
           control={form.control}
           name="message"
@@ -122,7 +134,7 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
           )}
         />
         <Button type="submit" className="w-full font-bold" disabled={isLoading}>
-          {isLoading ? 'Submitting...' : 'Submit Feedback'}
+          {isLoading ? 'Submitting...' : 'Submit'}
         </Button>
       </form>
     </Form>

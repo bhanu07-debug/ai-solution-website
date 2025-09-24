@@ -5,9 +5,10 @@ import { createFeedback } from '@/lib/firestore';
 
 const feedbackSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
-  company: z.string().optional(),
+  company: z.string().min(1, 'Company is required.'),
   email: z.string().email('Please enter a valid email address.'),
-  country: z.string().optional(),
+  country: z.string().min(1, 'Country is required.'),
+  phone: z.string().min(5, 'A valid phone number is required.'),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
 });
 
