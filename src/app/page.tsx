@@ -278,8 +278,8 @@ export default function Home() {
                     <Card key={i}><CardContent className="p-6"><Skeleton className="h-40 w-full" /></CardContent></Card>
                   ))
                 ) : (
-                  events.slice(0, 2).map((event, index) => (
-                      <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+                  events.slice(0, 2).map((event) => (
+                      <Card key={event.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
                           <CardHeader>
                               <CardTitle className="font-headline">{event.title}</CardTitle>
                               <div className="flex items-center flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground pt-2">
@@ -301,7 +301,9 @@ export default function Home() {
                               <CardDescription>{event.description}</CardDescription>
                           </CardContent>
                           <CardFooter>
-                              <Button>Register Now</Button>
+                            <Button asChild>
+                                <Link href={`/events/${event.id}`}>View Details</Link>
+                            </Button>
                           </CardFooter>
                       </Card>
                   ))

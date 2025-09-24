@@ -1,6 +1,6 @@
 
 import { db } from './firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, Timestamp, DocumentData, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, Timestamp, DocumentData, writeBatch } from 'firebase/firestore';
 import { type Service, type Project, type Article, type GalleryItem, type Event, type Career, MOCK_SERVICES, MOCK_PROJECTS, MOCK_ARTICLES, MOCK_GALLERY_ITEMS, MOCK_EVENTS, MOCK_CAREERS } from './mock-data';
 import type { Feedback } from './types';
 
@@ -53,6 +53,32 @@ export const getItems = async <T>(collectionPath: string, mockData?: Omit<T, 'id
     }
 };
 
+// READ a single item by ID
+export const getItemById = async <T>(collectionPath: string, id: string): Promise<(T & { id: string }) | null> => {
+    try {
+        const docRef = doc(db, collectionPath, id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            // Convert Firestore Timestamps to JS Date objects.
+            Object.keys(data).forEach(key => {
+                if (data[key] instanceof Timestamp) {
+                    data[key] = data[key].toDate();
+                }
+            });
+            return { ...data, id: docSnap.id } as T & { id: string };
+        } else {
+            console.log(`No document found with id ${id} in ${collectionPath}`);
+            return null;
+        }
+    } catch (error) {
+        console.error(`Error fetching item with id ${id} from ${collectionPath}:`, error);
+        return null;
+    }
+};
+
+
 // UPDATE
 export const updateItem = async <T>(collectionPath: string, id: string, data: Partial<T>) => {
     const docRef = doc(db, collectionPath, id);
@@ -88,6 +114,7 @@ export const updateGalleryItem = (id: string, data: Partial<GalleryItem>) => upd
 export const deleteGalleryItem = (id: string) => deleteItem('gallery', id);
 
 export const getEvents = () => getItems<Event>('events', MOCK_EVENTS);
+export const getEvent = (id: string) => getItemById<Event>('events', id);
 export const createEvent = (data: Omit<Event, 'id'>) => createItem<Omit<Event, 'id'>>('events', data);
 export const updateEvent = (id: string, data: Partial<Event>) => updateItem<Event>('events', id, data);
 export const deleteEvent = (id: string) => deleteItem('events', id);
