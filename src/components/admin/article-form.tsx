@@ -14,6 +14,7 @@ import { Article } from '@/lib/mock-data';
 const articleSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters.'),
   excerpt: z.string().min(10, 'Excerpt must be at least 10 characters.'),
+  content: z.string().min(50, 'Full content must be at least 50 characters.'),
   date: z.string().min(1, 'Date is required.'),
   imageUrl: z.string().url('Image URL must be a valid URL.'),
   imageHint: z.string().min(1, 'Image hint is required.'),
@@ -34,6 +35,7 @@ export function ArticleForm({ onSubmit, defaultValues }: ArticleFormProps) {
     defaultValues: defaultValues || {
       title: '',
       excerpt: '',
+      content: '',
       date: new Date().toISOString().split('T')[0], // Today's date
       imageUrl: '',
       imageHint: '',
@@ -69,7 +71,20 @@ export function ArticleForm({ onSubmit, defaultValues }: ArticleFormProps) {
             <FormItem>
               <FormLabel>Excerpt</FormLabel>
               <FormControl>
-                <Textarea placeholder="A short summary of the article..." {...field} />
+                <Textarea placeholder="A short summary of the article..." {...field} rows={3} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Full Content (HTML supported)</FormLabel>
+              <FormControl>
+                <Textarea placeholder="Write the full article content here. You can use HTML tags like <h2> and <p> for formatting." {...field} rows={10}/>
               </FormControl>
               <FormMessage />
             </FormItem>
