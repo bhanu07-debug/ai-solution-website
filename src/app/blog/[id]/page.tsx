@@ -61,5 +61,3 @@ export default async function ArticlePage({ params }: { params: { id: string } }
     </div>
   );
 }
-
-    
