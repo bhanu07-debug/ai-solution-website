@@ -61,11 +61,3 @@ export default async function ArticlePage({ params }: { params: { id: string } }
     </div>
   );
 }
-
-// Add this function to get static paths if you want to pre-render blog posts at build time
-// export async function generateStaticParams() {
-//   const articles = await getArticles();
-//   return articles.map((article) => ({
-//     id: article.id,
-//   }));
-// }
