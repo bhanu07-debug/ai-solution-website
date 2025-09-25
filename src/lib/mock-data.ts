@@ -194,3 +194,5 @@ export const MOCK_CAREERS: Omit<Career, 'id'>[] = [
         description: "This is an exciting opportunity for a current student or recent graduate to gain hands-on experience in data science. You will work alongside our team of experts on challenging projects, from data analysis to model building."
     }
 ];
+
+    
