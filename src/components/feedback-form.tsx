@@ -55,32 +55,6 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="rating"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Your Rating</FormLabel>
-              <FormControl>
-                <div className="flex items-center gap-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className={cn(
-                        'h-8 w-8 cursor-pointer transition-colors',
-                        field.value >= star
-                          ? 'text-primary fill-primary'
-                          : 'text-muted-foreground/50'
-                      )}
-                      onClick={() => field.onChange(star)}
-                    />
-                  ))}
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <div className="grid md:grid-cols-2 gap-4">
             <FormField
             control={form.control}
@@ -149,6 +123,32 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
                 <FormMessage />
             </FormItem>
             )}
+        />
+        <FormField
+          control={form.control}
+          name="rating"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Your Rating</FormLabel>
+              <FormControl>
+                <div className="flex items-center gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={cn(
+                        'h-8 w-8 cursor-pointer transition-colors',
+                        field.value >= star
+                          ? 'text-primary fill-primary'
+                          : 'text-muted-foreground/50'
+                      )}
+                      onClick={() => field.onChange(star)}
+                    />
+                  ))}
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
         <FormField
           control={form.control}
