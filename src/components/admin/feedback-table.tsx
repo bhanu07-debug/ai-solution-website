@@ -5,8 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { type Feedback } from "@/lib/types";
-import { Check, ThumbsDown, X } from "lucide-react";
-import { Star } from 'lucide-react';
+import { Check, X } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { useState, useEffect } from "react";
 
@@ -31,14 +30,6 @@ export function FeedbackTable({ data, onUpdateStatus }: FeedbackTableProps) {
         }
     };
 
-    const StarRating = ({ rating }: { rating: number }) => (
-      <div className="flex gap-0.5">
-        {[...Array(5)].map((_, i) => (
-          <Star key={i} className={`h-4 w-4 ${i < rating ? 'text-primary fill-primary' : 'text-muted-foreground/30'}`} />
-        ))}
-      </div>
-    );
-
     const formatDate = (date: Date | string) => {
         if (!isClient) return '';
         try {
@@ -56,7 +47,7 @@ export function FeedbackTable({ data, onUpdateStatus }: FeedbackTableProps) {
                     <TableRow>
                         <TableHead>Author</TableHead>
                         <TableHead className="hidden md:table-cell">Message</TableHead>
-                        <TableHead className="hidden sm:table-cell">Rating</TableHead>
+                        <TableHead className="hidden sm:table-cell">Department</TableHead>
                         <TableHead className="hidden lg:table-cell">Submitted</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead className="text-right">Actions</TableHead>
@@ -71,7 +62,7 @@ export function FeedbackTable({ data, onUpdateStatus }: FeedbackTableProps) {
                             </TableCell>
                             <TableCell className="hidden md:table-cell max-w-xs truncate">{item.message}</TableCell>
                             <TableCell className="hidden sm:table-cell">
-                                {item.rating ? <StarRating rating={item.rating} /> : 'N/A'}
+                                {item.inquireDepartment}
                             </TableCell>
                             <TableCell className="hidden lg:table-cell">
                                 {formatDate(item.createdAt)}

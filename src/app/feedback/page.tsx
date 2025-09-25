@@ -44,8 +44,8 @@ export default function FeedbackPage() {
 
       if (result.success) {
         toast({
-          title: "Feedback Submitted!",
-          description: "Thank you for your feedback. It is now pending review.",
+          title: "Inquiry Submitted!",
+          description: "Thank you for your message. It is now pending review.",
         });
       } else {
         throw new Error(result.message || 'Failed to submit feedback.');
@@ -78,7 +78,7 @@ export default function FeedbackPage() {
       <div className="grid md:grid-cols-2 gap-16 items-start">
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="font-headline text-2xl">Submit Your Feedback</CardTitle>
+            <CardTitle className="font-headline text-2xl">Submit Your Inquiry</CardTitle>
           </CardHeader>
           <CardContent>
             <FeedbackForm onSubmit={handleFeedbackSubmit} />
@@ -95,11 +95,6 @@ export default function FeedbackPage() {
               {approvedTestimonials.map((testimonial) => (
                  <Card key={testimonial.id} className="shadow-md">
                     <CardContent className="p-6">
-                      {testimonial.rating && (
-                        <div className="flex items-center gap-2 mb-4">
-                          <StarRating rating={testimonial.rating} />
-                        </div>
-                      )}
                       <p className="text-muted-foreground italic">"{testimonial.message}"</p>
                     </CardContent>
                     <CardHeader className="pt-0">

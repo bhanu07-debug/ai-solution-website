@@ -10,8 +10,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { type Feedback } from '@/lib/types';
 import { useState } from 'react';
-import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 const feedbackSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -20,7 +20,9 @@ const feedbackSchema = z.object({
   country: z.string().min(1, 'Country is required.'),
   phone: z.string().min(5, 'A valid phone number is required.'),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
-  rating: z.number().min(1, "Please select a rating.").max(5),
+  inquireDepartment: z.string().min(1, 'Please select a department.'),
+  localAddress: z.string().min(5, 'Local address is required.'),
+  pinCode: z.string().min(4, 'PIN code is required.'),
 });
 
 type FeedbackFormData = z.infer<typeof feedbackSchema>;
@@ -41,7 +43,9 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
       country: '',
       phone: '',
       message: '',
-      rating: 0,
+      inquireDepartment: '',
+      localAddress: '',
+      pinCode: '',
     },
   });
 
@@ -125,31 +129,56 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
             )}
         />
         <FormField
-          control={form.control}
-          name="rating"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Your Rating</FormLabel>
-              <FormControl>
-                <div className="flex items-center gap-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className={cn(
-                        'h-8 w-8 cursor-pointer transition-colors',
-                        field.value >= star
-                          ? 'text-primary fill-primary'
-                          : 'text-muted-foreground/50'
-                      )}
-                      onClick={() => field.onChange(star)}
-                    />
-                  ))}
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            control={form.control}
+            name="inquireDepartment"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Inquiry Department</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a department" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Sales">Sales</SelectItem>
+                    <SelectItem value="Support">Support</SelectItem>
+                    <SelectItem value="Consulting">AI Consulting</SelectItem>
+                    <SelectItem value="General">General</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        <div className="grid md:grid-cols-2 gap-4">
+            <FormField
+                control={form.control}
+                name="localAddress"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Local Address</FormLabel>
+                    <FormControl>
+                    <Input placeholder="123 Main St" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+             <FormField
+                control={form.control}
+                name="pinCode"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>PIN Code</FormLabel>
+                    <FormControl>
+                    <Input placeholder="e.g. 12345" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+        </div>
         <FormField
           control={form.control}
           name="message"

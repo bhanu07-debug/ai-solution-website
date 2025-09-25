@@ -10,7 +10,9 @@ const feedbackSchema = z.object({
   country: z.string().min(1, 'Country is required.'),
   phone: z.string().min(5, 'A valid phone number is required.'),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
-  rating: z.number().min(1).max(5),
+  inquireDepartment: z.string().min(1, 'Please select a department.'),
+  localAddress: z.string().min(5, 'Local address is required.'),
+  pinCode: z.string().min(4, 'PIN code is required.'),
 });
 
 export async function POST(request: Request) {
@@ -30,6 +32,7 @@ export async function POST(request: Request) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ success: false, errors: error.errors }, { status: 400 });
     }
+    console.error('Feedback API Error:', error);
     return NextResponse.json({ success: false, message: 'An internal error occurred.' }, { status: 500 });
   }
 }
