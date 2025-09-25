@@ -10,6 +10,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { type Feedback } from '@/lib/types';
 import { useState } from 'react';
+import { Star } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const feedbackSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -18,12 +20,13 @@ const feedbackSchema = z.object({
   country: z.string().min(1, 'Country is required.'),
   phone: z.string().min(5, 'A valid phone number is required.'),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
+  rating: z.number().min(1, "Please select a rating.").max(5),
 });
 
-type FeedbackFormData = Omit<z.infer<typeof feedbackSchema>, 'rating'>;
+type FeedbackFormData = z.infer<typeof feedbackSchema>;
 
 interface FeedbackFormProps {
-  onSubmit: (data: Omit<Feedback, 'id' | 'status' | 'createdAt' | 'rating'>) => Promise<void>;
+  onSubmit: (data: Omit<Feedback, 'id' | 'status' | 'createdAt'>) => Promise<void>;
 }
 
 export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
@@ -38,6 +41,7 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
       country: '',
       phone: '',
       message: '',
+      rating: 0,
     },
   });
 
@@ -51,6 +55,32 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="rating"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Your Rating</FormLabel>
+              <FormControl>
+                <div className="flex items-center gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={cn(
+                        'h-8 w-8 cursor-pointer transition-colors',
+                        field.value >= star
+                          ? 'text-primary fill-primary'
+                          : 'text-muted-foreground/50'
+                      )}
+                      onClick={() => field.onChange(star)}
+                    />
+                  ))}
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="grid md:grid-cols-2 gap-4">
             <FormField
             control={form.control}

@@ -5,7 +5,7 @@ export type Feedback = {
   company: string;
   email: string;
   message: string;
-  rating?: number;
+  rating: number;
   country: string;
   phone: string;
   status: 'pending' | 'approved' | 'rejected';

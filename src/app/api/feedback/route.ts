@@ -10,6 +10,7 @@ const feedbackSchema = z.object({
   country: z.string().min(1, 'Country is required.'),
   phone: z.string().min(5, 'A valid phone number is required.'),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
+  rating: z.number().min(1).max(5),
 });
 
 export async function POST(request: Request) {
