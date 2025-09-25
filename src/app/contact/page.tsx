@@ -2,16 +2,49 @@
 "use client";
 
 import { useState } from 'react';
-import { FeedbackForm } from '@/components/feedback-form';
+import { ContactForm } from '@/components/contact-form';
 import { type Feedback } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function ContactPage() {
-  const [pendingFeedback, setPendingFeedback] = useState<Omit<Feedback, 'status' | 'id'>[]>([]);
+  const { toast } = useToast();
 
-  const handleFeedbackSubmit = (data: Omit<Feedback, 'status' | 'id'>) => {
-    setPendingFeedback(prev => [data, ...prev]);
+  const handleContactSubmit = async (data: Omit<Feedback, 'id' | 'status' | 'createdAt' | 'rating'>) => {
+     try {
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // We add a default rating as the API expects it for feedback submissions
+        body: JSON.stringify({...data, rating: 0}),
+      });
+
+      const result = await response.json();
+      
+      if (!response.ok) {
+        const errorMessage = result.errors ? result.errors[0].message : 'An unknown error occurred.';
+        throw new Error(errorMessage);
+      }
+
+      if (result.success) {
+        toast({
+          title: "Inquiry Submitted!",
+          description: "Thank you for your message. We will get back to you shortly.",
+        });
+      } else {
+        throw new Error(result.message || 'Failed to submit your message.');
+      }
+    } catch (error: any) {
+      console.error('Contact form submission error:', error);
+      toast({
+        variant: 'destructive',
+        title: "Submission Failed",
+        description: error.message || "There was a problem submitting your message. Please try again.",
+      });
+    }
   };
 
   return (
@@ -48,7 +81,7 @@ export default function ContactPage() {
             <CardTitle className="font-headline text-2xl">Send a Message</CardTitle>
           </CardHeader>
           <CardContent>
-            <FeedbackForm onSubmit={handleFeedbackSubmit} />
+            <ContactForm onSubmit={handleContactSubmit} />
           </CardContent>
         </Card>
       </div>

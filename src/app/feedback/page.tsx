@@ -44,8 +44,8 @@ export default function FeedbackPage() {
 
       if (result.success) {
         toast({
-          title: "Inquiry Submitted!",
-          description: "Thank you for your message. It is now pending review.",
+          title: "Feedback Submitted!",
+          description: "Thank you for your feedback. It is now pending review.",
         });
       } else {
         throw new Error(result.message || 'Failed to submit feedback.');
@@ -78,7 +78,7 @@ export default function FeedbackPage() {
       <div className="grid md:grid-cols-2 gap-16 items-start">
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="font-headline text-2xl">Submit Your Inquiry</CardTitle>
+            <CardTitle className="font-headline text-2xl">Submit Your Feedback</CardTitle>
           </CardHeader>
           <CardContent>
             <FeedbackForm onSubmit={handleFeedbackSubmit} />
@@ -94,11 +94,8 @@ export default function FeedbackPage() {
             <div className="space-y-6 max-h-[500px] overflow-y-auto pr-4">
               {approvedTestimonials.map((testimonial) => (
                  <Card key={testimonial.id} className="shadow-md">
-                    <CardContent className="p-6">
-                      <p className="text-muted-foreground italic">"{testimonial.message}"</p>
-                    </CardContent>
-                    <CardHeader className="pt-0">
-                        <div className="flex items-center gap-4">
+                    <CardHeader className="flex flex-row justify-between items-start">
+                         <div className="flex items-center gap-4">
                             <Avatar>
                                 <AvatarImage src={`https://placehold.co/40x40.png`} alt={testimonial.name} data-ai-hint="person face"/>
                                 <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
@@ -108,7 +105,11 @@ export default function FeedbackPage() {
                                 {testimonial.company && <p className="text-sm text-muted-foreground">{testimonial.company}</p>}
                             </div>
                         </div>
+                        {testimonial.rating > 0 && <StarRating rating={testimonial.rating} />}
                     </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground italic">"{testimonial.message}"</p>
+                    </CardContent>
                   </Card>
               ))}
             </div>

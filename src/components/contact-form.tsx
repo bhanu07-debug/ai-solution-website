@@ -8,33 +8,32 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { type Feedback } from '@/lib/types';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
-import { Star } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
-const feedbackSchema = z.object({
+const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
   company: z.string().min(1, 'Company is required.'),
   email: z.string().email('A valid email is required.'),
   country: z.string().min(1, 'Country is required.'),
   phone: z.string().min(5, 'A valid phone number is required.'),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
-  rating: z.number().min(1, "Please provide a rating.").max(5),
+  inquireDepartment: z.string().min(1, 'Please select a department.'),
+  localAddress: z.string().min(5, 'Local address is required.'),
+  pinCode: z.string().min(4, 'PIN code is required.'),
 });
 
-type FeedbackFormData = z.infer<typeof feedbackSchema>;
+type ContactFormData = z.infer<typeof contactSchema>;
 
-interface FeedbackFormProps {
-  onSubmit: (data: Omit<Feedback, 'id' | 'status' | 'createdAt'>) => Promise<void>;
+interface ContactFormProps {
+  onSubmit: (data: ContactFormData) => Promise<void>;
 }
 
-export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
+export function ContactForm({ onSubmit }: ContactFormProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [hoverRating, setHoverRating] = useState(0);
   
-  const form = useForm<FeedbackFormData>({
-    resolver: zodResolver(feedbackSchema),
+  const form = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
     defaultValues: {
       name: '',
       company: '',
@@ -42,20 +41,15 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
       country: '',
       phone: '',
       message: '',
-      rating: 0,
+      inquireDepartment: '',
+      localAddress: '',
+      pinCode: '',
     },
   });
 
-  async function handleFormSubmit(data: FeedbackFormData) {
+  async function handleFormSubmit(data: ContactFormData) {
     setIsLoading(true);
-    // The API expects all fields, so we add the non-form fields here.
-    const completeData = {
-      ...data,
-      inquireDepartment: 'General', // Default value
-      localAddress: 'N/A', // Default value
-      pinCode: 'N/A', // Default value
-    };
-    await onSubmit(completeData);
+    await onSubmit(data);
     setIsLoading(false);
     form.reset();
   }
@@ -134,32 +128,55 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
         />
         <FormField
             control={form.control}
-            name="rating"
+            name="inquireDepartment"
             render={({ field }) => (
-            <FormItem>
-                <FormLabel>Your Rating</FormLabel>
-                <FormControl>
-                    <div className="flex items-center gap-1">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                            <Star
-                            key={star}
-                            className={cn(
-                                'h-8 w-8 cursor-pointer transition-colors',
-                                (hoverRating || field.value) >= star
-                                ? 'text-primary fill-primary'
-                                : 'text-muted-foreground/50'
-                            )}
-                            onClick={() => field.onChange(star)}
-                            onMouseEnter={() => setHoverRating(star)}
-                            onMouseLeave={() => setHoverRating(0)}
-                            />
-                        ))}
-                    </div>
-                </FormControl>
+              <FormItem>
+                <FormLabel>Inquiry Department</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a department" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Sales">Sales</SelectItem>
+                    <SelectItem value="Support">Support</SelectItem>
+                    <SelectItem value="Consulting">AI Consulting</SelectItem>
+                    <SelectItem value="General">General</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
-            </FormItem>
+              </FormItem>
             )}
-        />
+          />
+        <div className="grid md:grid-cols-2 gap-4">
+            <FormField
+                control={form.control}
+                name="localAddress"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Local Address</FormLabel>
+                    <FormControl>
+                    <Input placeholder="123 Main St" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+             <FormField
+                control={form.control}
+                name="pinCode"
+                render={({ field }) => (
+                <FormItem>
+                    <FormLabel>PIN Code</FormLabel>
+                    <FormControl>
+                    <Input placeholder="e.g. 12345" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+                )}
+            />
+        </div>
         <FormField
           control={form.control}
           name="message"
@@ -167,14 +184,14 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
             <FormItem>
               <FormLabel>Your Message</FormLabel>
               <FormControl>
-                <Textarea placeholder="Tell us about your experience..." {...field} />
+                <Textarea placeholder="Tell us about your project or inquiry..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button type="submit" className="w-full font-bold" disabled={isLoading}>
-          {isLoading ? 'Submitting...' : 'Submit Feedback'}
+          {isLoading ? 'Submitting...' : 'Submit Inquiry'}
         </Button>
       </form>
     </Form>
