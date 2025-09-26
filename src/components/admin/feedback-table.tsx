@@ -71,20 +71,20 @@ export function FeedbackTable({ data, onUpdateStatus }: FeedbackTableProps) {
                                 <Badge variant={getBadgeVariant(item.status)} className="capitalize">{item.status}</Badge>
                             </TableCell>
                             <TableCell className="text-right">
-                                {item.status === 'pending' ? (
-                                    <div className="flex gap-2 justify-end">
+                                <div className="flex gap-2 justify-end">
+                                    {item.status !== 'approved' && (
                                         <Button variant="outline" size="icon" onClick={() => onUpdateStatus(item.id, 'approved')}>
                                             <Check className="h-4 w-4" />
                                             <span className="sr-only">Approve</span>
                                         </Button>
+                                    )}
+                                    {item.status !== 'rejected' && (
                                         <Button variant="destructive" size="icon" onClick={() => onUpdateStatus(item.id, 'rejected')}>
                                             <X className="h-4 w-4" />
                                             <span className="sr-only">Reject</span>
                                         </Button>
-                                    </div>
-                                ) : (
-                                    <div className="flex gap-2 justify-end h-9"></div>
-                                )}
+                                    )}
+                                </div>
                             </TableCell>
                         </TableRow>
                     ))}
