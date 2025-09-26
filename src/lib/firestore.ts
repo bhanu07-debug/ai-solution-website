@@ -9,7 +9,15 @@ import type { Feedback } from './types';
 // CREATE
 export const createItem = async <T extends DocumentData>(collectionPath: string, data: T) => {
     const docRef = await addDoc(collection(db, collectionPath), { ...data, createdAt: serverTimestamp() });
-    return { ...data, id: docRef.id };
+    const docSnap = await getDoc(docRef); // Fetch the document we just created
+    const createdData = docSnap.data();
+    // Convert timestamp to a serializable format (string)
+    const serializableData = {
+        ...createdData,
+        id: docRef.id,
+        createdAt: createdData?.createdAt instanceof Timestamp ? createdData.createdAt.toDate().toISOString() : new Date().toISOString(),
+    };
+    return serializableData as T & { id: string; createdAt: string };
 };
 
 // READ all items
@@ -28,10 +36,10 @@ export const getItems = async <T>(collectionPath: string, mockData?: Omit<T, 'id
             const newSnapshot = await getDocs(collection(db, collectionPath));
             return newSnapshot.docs.map(doc => {
                 const data = doc.data();
-                // Convert Timestamps to Dates
+                // Convert Timestamps to ISO strings for serializability
                 Object.keys(data).forEach(key => {
                     if (data[key] instanceof Timestamp) {
-                        data[key] = data[key].toDate();
+                        data[key] = data[key].toDate().toISOString();
                     }
                 });
                 return { ...data, id: doc.id } as T & { id: string };
@@ -39,10 +47,10 @@ export const getItems = async <T>(collectionPath: string, mockData?: Omit<T, 'id
         }
         return snapshot.docs.map(doc => {
             const data = doc.data();
-            // Convert Firestore Timestamps to JS Date objects.
+            // Convert Firestore Timestamps to ISO strings for serializability.
             Object.keys(data).forEach(key => {
                 if (data[key] instanceof Timestamp) {
-                    data[key] = data[key].toDate();
+                   data[key] = data[key].toDate().toISOString();
                 }
             });
             return { ...data, id: doc.id } as T & { id: string };
@@ -61,10 +69,10 @@ export const getItemById = async <T>(collectionPath: string, id: string): Promis
 
         if (docSnap.exists()) {
             const data = docSnap.data();
-            // Convert Firestore Timestamps to JS Date objects.
+            // Convert Firestore Timestamps to ISO strings.
             Object.keys(data).forEach(key => {
                 if (data[key] instanceof Timestamp) {
-                    data[key] = data[key].toDate();
+                    data[key] = data[key].toDate().toISOString();
                 }
             });
             return { ...data, id: docSnap.id } as T & { id: string };
@@ -126,11 +134,11 @@ export const updateCareer = (id: string, data: Partial<Career>) => updateItem<Ca
 export const deleteCareer = (id: string) => deleteItem('careers', id);
 
 export const getFeedback = () => getItems<Feedback>('feedback');
-export const createFeedback = (data: Omit<Feedback, 'id' | 'status' | 'createdAt'>) => {
-    const feedbackData: Omit<Feedback, 'id' | 'createdAt'> & {createdAt: Date} = {
+export const createFeedback = (data: Omit<Feedback, 'id' | 'status'>) => {
+    const feedbackData: Omit<Feedback, 'id'|'createdAt'> = {
         ...data,
         status: 'pending',
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
     };
     return createItem('feedback', feedbackData);
 };

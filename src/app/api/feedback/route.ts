@@ -22,12 +22,7 @@ export async function POST(request: Request) {
     const json = await request.json();
     const data = feedbackSchema.parse(json);
 
-    const feedbackData = {
-        ...data,
-        createdAt: new Date(), // Set timestamp on the server
-    };
-
-    const newFeedback = await createFeedback(feedbackData);
+    const newFeedback = await createFeedback(data);
     
     return NextResponse.json({ success: true, feedback: newFeedback }, { status: 201 });
   } catch (error) {
