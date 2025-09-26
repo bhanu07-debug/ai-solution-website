@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { ContactForm } from '@/components/contact-form';
-import { type Feedback } from '@/lib/types';
+import { type Inquiry } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -11,15 +11,14 @@ import { useToast } from '@/hooks/use-toast';
 export default function ContactPage() {
   const { toast } = useToast();
 
-  const handleContactSubmit = async (data: Omit<Feedback, 'id' | 'status' | 'createdAt' | 'rating'>) => {
+  const handleContactSubmit = async (data: Omit<Inquiry, 'id' | 'createdAt'>) => {
      try {
-      const response = await fetch('/api/feedback', {
+      const response = await fetch('/api/inquiry', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        // We add a default rating as the API expects it for feedback submissions
-        body: JSON.stringify({...data, rating: 0}),
+        body: JSON.stringify(data),
       });
 
       const result = await response.json();

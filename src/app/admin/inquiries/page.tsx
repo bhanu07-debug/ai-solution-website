@@ -2,14 +2,14 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getFeedback } from '@/lib/firestore';
+import { getInquiries } from '@/lib/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { type Feedback } from '@/lib/types';
+import { type Inquiry } from '@/lib/types';
 import { formatDistanceToNow } from "date-fns";
 
 export default function AdminInquiriesPage() {
-    const [inquiries, setInquiries] = useState<Feedback[]>([]);
+    const [inquiries, setInquiries] = useState<Inquiry[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isClient, setIsClient] = useState(false);
 
@@ -20,9 +20,7 @@ export default function AdminInquiriesPage() {
 
     const fetchInquiries = async () => {
         setIsLoading(true);
-        const allSubmissions = await getFeedback();
-        // Inquiries are submissions from the contact form, which don't have a rating > 0
-        const inquirySubmissions = allSubmissions.filter(s => !s.rating || s.rating === 0);
+        const inquirySubmissions = await getInquiries();
         const sortedInquiries = inquirySubmissions.sort((a, b) => new Date(b.createdAt as string).getTime() - new Date(a.createdAt as string).getTime());
         setInquiries(sortedInquiries);
         setIsLoading(false);

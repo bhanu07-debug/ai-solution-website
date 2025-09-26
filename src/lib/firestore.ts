@@ -2,7 +2,7 @@
 import { db } from './firebase';
 import { collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, Timestamp, DocumentData, writeBatch } from 'firebase/firestore';
 import { type Service, type Project, type Article, type GalleryItem, type Event, type Career, MOCK_SERVICES, MOCK_PROJECTS, MOCK_ARTICLES, MOCK_GALLERY_ITEMS, MOCK_EVENTS, MOCK_CAREERS } from './mock-data';
-import type { Feedback } from './types';
+import type { Feedback, Inquiry } from './types';
 
 // Generic Firestore CRUD operations
 
@@ -10,6 +10,10 @@ import type { Feedback } from './types';
 export const createItem = async <T extends DocumentData>(collectionPath: string, data: T) => {
     const docRef = await addDoc(collection(db, collectionPath), { ...data, createdAt: serverTimestamp() });
     const docSnap = await getDoc(docRef); // Fetch the document we just created
+    if (!docSnap.exists()) {
+        // This case is unlikely but good to handle.
+        throw new Error("Failed to create and retrieve the document.");
+    }
     const createdData = docSnap.data();
     // Convert timestamp to a serializable format (string)
     const serializableData = {
@@ -19,6 +23,7 @@ export const createItem = async <T extends DocumentData>(collectionPath: string,
     };
     return serializableData as T & { id: string; createdAt: string };
 };
+
 
 // READ all items
 export const getItems = async <T>(collectionPath: string, mockData?: Omit<T, 'id'>[]): Promise<(T & { id: string })[]> => {
@@ -133,6 +138,7 @@ export const createCareer = (data: Omit<Career, 'id'>) => createItem<Omit<Career
 export const updateCareer = (id: string, data: Partial<Career>) => updateItem<Career>('careers', id, data);
 export const deleteCareer = (id: string) => deleteItem('careers', id);
 
+// Feedback Functions
 export const getFeedback = () => getItems<Feedback>('feedback');
 export const createFeedback = (data: Omit<Feedback, 'id' | 'status'>) => {
     const feedbackData: Omit<Feedback, 'id'|'createdAt'> = {
@@ -143,3 +149,7 @@ export const createFeedback = (data: Omit<Feedback, 'id' | 'status'>) => {
     return createItem('feedback', feedbackData);
 };
 export const updateFeedbackStatus = (id: string, status: 'approved' | 'rejected') => updateItem('feedback', id, { status });
+
+// Inquiry Functions
+export const getInquiries = () => getItems<Inquiry>('inquiries');
+export const createInquiry = (data: Omit<Inquiry, 'id'>) => createItem('inquiries', data);

@@ -105,7 +105,7 @@ export default function FeedbackPage() {
                                 {testimonial.company && <p className="text-sm text-muted-foreground">{testimonial.company}</p>}
                             </div>
                         </div>
-                        {testimonial.rating > 0 && <StarRating rating={testimonial.rating} />}
+                        {testimonial.rating && testimonial.rating > 0 && <StarRating rating={testimonial.rating} />}
                     </CardHeader>
                     <CardContent>
                       <p className="text-muted-foreground italic">"{testimonial.message}"</p>

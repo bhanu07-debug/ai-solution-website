@@ -46,14 +46,7 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
 
   async function handleFormSubmit(data: FeedbackFormData) {
     setIsLoading(true);
-    await onSubmit({
-        ...data,
-        // Provide default empty values for fields not in this form
-        phone: '',
-        inquireDepartment: 'General',
-        localAddress: '',
-        pinCode: ''
-    });
+    await onSubmit(data);
     setIsLoading(false);
     form.reset();
   }
