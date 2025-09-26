@@ -21,13 +21,17 @@ export default function AdminInquiriesPage() {
     const fetchInquiries = async () => {
         setIsLoading(true);
         const inquirySubmissions = await getInquiries();
-        const sortedInquiries = inquirySubmissions.sort((a, b) => new Date(b.createdAt as string).getTime() - new Date(a.createdAt as string).getTime());
+        const sortedInquiries = inquirySubmissions.sort((a, b) => {
+            const dateA = a.createdAt ? new Date(a.createdAt as string).getTime() : 0;
+            const dateB = b.createdAt ? new Date(b.createdAt as string).getTime() : 0;
+            return dateB - dateA;
+        });
         setInquiries(sortedInquiries);
         setIsLoading(false);
     }
     
-    const formatDate = (date: Date | string) => {
-        if (!isClient) return '';
+    const formatDate = (date: Date | string | undefined) => {
+        if (!isClient || !date) return '';
         try {
             const dateObj = typeof date === 'string' ? new Date(date) : date;
             return formatDistanceToNow(dateObj, { addSuffix: true });
