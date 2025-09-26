@@ -21,6 +21,7 @@ import {
   FileText,
   Settings,
   Briefcase,
+  HelpCircle,
 } from "lucide-react";
 import { Logo } from "../icons/logo";
 import { Separator } from "../ui/separator";
@@ -61,6 +62,7 @@ export function AdminSidebar() {
     },
     { href: "/admin/careers", label: "Careers", icon: Briefcase },
     { href: "/admin/feedback", label: "Feedback", icon: MessageSquare, badge: pendingFeedbackCount > 0 ? pendingFeedbackCount : undefined },
+    { href: "/admin/inquiries", label: "Inquiries", icon: HelpCircle },
   ];
 
   const isActive = (href: string) => pathname === href;
