@@ -20,7 +20,9 @@ export default function AdminFeedbackPage() {
     const fetchFeedback = async () => {
         setIsLoading(true);
         const fetchedFeedback = await getFeedback();
-        const sortedFeedback = fetchedFeedback.sort((a, b) => new Date(b.createdAt as string).getTime() - new Date(a.createdAt as string).getTime());
+        // Filter to only include actual feedback (submissions with a rating)
+        const actualFeedback = fetchedFeedback.filter(f => f.rating && f.rating > 0);
+        const sortedFeedback = actualFeedback.sort((a, b) => new Date(b.createdAt as string).getTime() - new Date(a.createdAt as string).getTime());
         setFeedback(sortedFeedback);
         setIsLoading(false);
     }
@@ -39,7 +41,7 @@ export default function AdminFeedbackPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Feedback Submissions</CardTitle>
-                    <CardDescription>Review, approve, or reject user feedback.</CardDescription>
+                    <CardDescription>Review, approve, or reject user feedback with star ratings.</CardDescription>
                 </CardHeader>
                 <CardContent>
                      {isLoading ? (
