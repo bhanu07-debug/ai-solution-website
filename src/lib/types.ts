@@ -5,12 +5,12 @@ export type Feedback = {
   company: string;
   email: string;
   message: string;
-  country: string;
-  phone: string;
-  inquireDepartment: string;
-  localAddress: string;
-  pinCode: string;
+  country?: string;
+  phone?: string;
+  inquireDepartment?: string;
+  localAddress?: string;
+  pinCode?: string;
+  rating?: number;
   status: 'pending' | 'approved' | 'rejected';
   createdAt: Date | string;
 };
-

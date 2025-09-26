@@ -7,12 +7,14 @@ const feedbackSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
   company: z.string().min(1, 'Company is required.'),
   email: z.string().email('Please enter a valid email address.'),
-  country: z.string().min(1, 'Country is required.'),
-  phone: z.string().min(5, 'A valid phone number is required.'),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
-  inquireDepartment: z.string().min(1, 'Please select a department.'),
-  localAddress: z.string().min(5, 'Local address is required.'),
-  pinCode: z.string().min(4, 'PIN code is required.'),
+  // Make these fields optional to accommodate both forms
+  country: z.string().optional(),
+  phone: z.string().optional(),
+  inquireDepartment: z.string().optional(),
+  localAddress: z.string().optional(),
+  pinCode: z.string().optional(),
+  rating: z.number().optional(),
 });
 
 export async function POST(request: Request) {

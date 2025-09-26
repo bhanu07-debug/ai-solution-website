@@ -12,19 +12,14 @@ import { type Feedback } from '@/lib/types';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Star } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 const feedbackSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
   company: z.string().min(1, 'Company is required.'),
   email: z.string().email('A valid email is required.'),
   country: z.string().min(1, 'Country is required.'),
-  phone: z.string().min(5, 'A valid phone number is required.'),
   message: z.string().min(10, 'Message must be at least 10 characters.'),
   rating: z.number().min(1, "Please provide a rating.").max(5),
-  inquireDepartment: z.string().min(1, 'Please select a department.'),
-  localAddress: z.string().min(5, 'Local address is required.'),
-  pinCode: z.string().min(4, 'PIN code is required.'),
 });
 
 type FeedbackFormData = z.infer<typeof feedbackSchema>;
@@ -44,18 +39,21 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
       company: '',
       email: '',
       country: '',
-      phone: '',
       message: '',
       rating: 0,
-      inquireDepartment: 'General',
-      localAddress: '',
-      pinCode: '',
     },
   });
 
   async function handleFormSubmit(data: FeedbackFormData) {
     setIsLoading(true);
-    await onSubmit(data);
+    await onSubmit({
+        ...data,
+        // Provide default empty values for fields not in this form
+        phone: '',
+        inquireDepartment: 'General',
+        localAddress: '',
+        pinCode: ''
+    });
     setIsLoading(false);
     form.reset();
   }
@@ -113,70 +111,6 @@ export function FeedbackForm({ onSubmit }: FeedbackFormProps) {
                     <FormLabel>Country</FormLabel>
                     <FormControl>
                     <Input placeholder="e.g. USA" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                </FormItem>
-                )}
-            />
-        </div>
-         <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-            <FormItem>
-                <FormLabel>Phone Number</FormLabel>
-                <FormControl>
-                <Input placeholder="(123) 456-7890" {...field} />
-                </FormControl>
-                <FormMessage />
-            </FormItem>
-            )}
-        />
-         <FormField
-            control={form.control}
-            name="inquireDepartment"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Inquiry Department</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a department" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="Sales">Sales</SelectItem>
-                    <SelectItem value="Support">Support</SelectItem>
-                    <SelectItem value="Consulting">AI Consulting</SelectItem>
-                    <SelectItem value="General">General</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        <div className="grid md:grid-cols-2 gap-4">
-            <FormField
-                control={form.control}
-                name="localAddress"
-                render={({ field }) => (
-                <FormItem>
-                    <FormLabel>Local Address</FormLabel>
-                    <FormControl>
-                    <Input placeholder="123 Main St" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                </FormItem>
-                )}
-            />
-             <FormField
-                control={form.control}
-                name="pinCode"
-                render={({ field }) => (
-                <FormItem>
-                    <FormLabel>PIN Code</FormLabel>
-                    <FormControl>
-                    <Input placeholder="e.g. 12345" {...field} />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
