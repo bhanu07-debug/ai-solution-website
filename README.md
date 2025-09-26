@@ -37,7 +37,44 @@ This project will be built using a modern, integrated technology stack:
 - **Generative AI**: **Genkit** for the AI Chatbot functionality
 - **Version Control**: **Git** and **GitHub**
 
-## 4. Client Meeting Decisions (Summary)
+## 4. Deployment Guide: Making Your Website Live
+
+To deploy your website globally and make it accessible to anyone, you will use Firebase App Hosting. Follow these steps in your local development environment's terminal.
+
+### Step 1: Install the Firebase CLI
+If you don't have it installed already, you need to install the Firebase Command Line Interface (CLI) globally on your machine.
+
+```bash
+npm install -g firebase-tools
+```
+
+### Step 2: Log in to Firebase
+Log in to your Google account that is associated with your Firebase project.
+
+```bash
+firebase login
+```
+This will open a browser window for you to authenticate.
+
+### Step 3: Initialize App Hosting
+Navigate to your project's root directory in the terminal. If this is your first time deploying, you may need to associate your local project with your Firebase project.
+
+Run the initialization command:
+```bash
+firebase init apphosting
+```
+When prompted, select the Firebase project you've been using (`aisolutions-hub-1urup`). This will confirm the `apphosting.yaml` file and prepare your project for deployment.
+
+### Step 4: Deploy Your Website
+Now, you can deploy your application. This command will build your Next.js application for production and upload it to Firebase App Hosting.
+
+```bash
+firebase deploy
+```
+
+After the deployment is complete, the Firebase CLI will provide you with a URL (e.g., `https://[your-project-id].web.app`). This is the live URL where anyone can visit your website!
+
+## 5. Client Meeting Decisions (Summary)
 
 - **User Accounts**: No public user accounts are required. Access is open to all visitors.
 - **Admin Access**: The admin panel will be a single-user system with its own credentials.
@@ -45,7 +82,7 @@ This project will be built using a modern, integrated technology stack:
 - **Contact Form**: All submissions from the contact form will be stored securely in the Firestore database for review in the admin panel. No email forwarding is necessary.
 - **Deployment**: A live deployment is optional. A local demonstration or video submission is sufficient for client review.
 
-## 5. Areas for Skill Development
+## 6. Areas for Skill Development
 
 This project provides an excellent opportunity to strengthen skills in:
 - **Component-Based Design**: Building reusable and efficient components in React.
