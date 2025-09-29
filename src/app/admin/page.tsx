@@ -53,14 +53,6 @@ export default async function AdminDashboardPage() {
                            <AdminLineChart />
                         </CardContent>
                     </Card>
-                     <Card>
-                        <CardHeader>
-                            <CardTitle>Private Content</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <AdminLineChart />
-                        </CardContent>
-                    </Card>
                 </div>
                 <div className="md:col-span-1 lg:col-span-1 space-y-6">
                     <Card>
