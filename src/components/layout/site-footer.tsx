@@ -66,8 +66,6 @@ export function SiteFooter() {
         <div className="border-t border-border/40 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
            <p className="text-muted-foreground">&copy; {new Date().getFullYear()} AISolutions Hub. All rights reserved.</p>
            <div className="flex items-center gap-4 text-muted-foreground">
-                <Link href="#" className="hover:text-primary">Privacy Policy</Link>
-                <Link href="#" className="hover:text-primary">Terms of Service</Link>
                  <div className="flex items-center gap-2">
                     <Button variant="ghost" size="icon" asChild>
                         <Link href="#"><Linkedin className="h-5 w-5"/></Link>
