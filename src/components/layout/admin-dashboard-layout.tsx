@@ -3,7 +3,6 @@
 
 import { SidebarProvider, Sidebar, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AdminSidebar } from "./admin-sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { Bell, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -30,10 +29,6 @@ export function AdminDashboardLayout({ children }: { children: React.ReactNode }
                       <Bell className="h-5 w-5"/>
                       <span className="sr-only">Notifications</span>
                   </Button>
-                  <Avatar>
-                      <AvatarImage src="https://placehold.co/40x40.png" alt="Admin" data-ai-hint="person face" />
-                      <AvatarFallback>A</AvatarFallback>
-                  </Avatar>
                   <Button variant="ghost" size="icon" onClick={handleLogout} title="Logout">
                       <LogOut className="h-5 w-5"/>
                       <span className="sr-only">Logout</span>
