@@ -34,6 +34,12 @@ const nextConfig: NextConfig = {
         hostname: 'cdn.mos.cms.futurecdn.net',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.licdn.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
