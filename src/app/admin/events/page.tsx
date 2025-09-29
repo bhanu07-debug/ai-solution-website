@@ -7,16 +7,18 @@ import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { EventForm } from '@/components/admin/event-form';
-import { type Event } from '@/lib/mock-data';
-import { getEvents, createEvent, updateEvent, deleteEvent } from '@/lib/firestore';
+import { type Event, type GalleryItem } from '@/lib/mock-data';
+import { getEvents, createEvent, updateEvent, deleteEvent, createGalleryItem } from '@/lib/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
+import { useToast } from '@/hooks/use-toast';
 
 export default function AdminEventsPage() {
     const [events, setEvents] = useState<Event[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+    const { toast } = useToast();
 
      useEffect(() => {
         fetchEvents();
@@ -52,6 +54,23 @@ export default function AdminEventsPage() {
         }
         fetchEvents();
         setIsDialogOpen(false);
+    };
+
+    const handleAddToGallery = async () => {
+        if (!editingEvent) return;
+
+        const galleryItemData: Omit<GalleryItem, 'id'> = {
+            src: editingEvent.imageUrl,
+            alt: editingEvent.title,
+            hint: editingEvent.imageHint || 'event photo',
+        };
+
+        await createGalleryItem(galleryItemData);
+        
+        toast({
+            title: "Image Added to Gallery",
+            description: `"${editingEvent.title}" image is now live in the gallery.`,
+        });
     };
 
     return (
@@ -116,7 +135,11 @@ export default function AdminEventsPage() {
                     <DialogHeader>
                         <DialogTitle>{editingEvent ? 'Edit Event' : 'Add New Event'}</DialogTitle>
                     </DialogHeader>
-                    <EventForm onSubmit={handleFormSubmit} defaultValues={editingEvent} />
+                    <EventForm 
+                        onSubmit={handleFormSubmit} 
+                        defaultValues={editingEvent}
+                        onAddToGallery={handleAddToGallery} 
+                    />
                 </DialogContent>
             </Dialog>
         </div>

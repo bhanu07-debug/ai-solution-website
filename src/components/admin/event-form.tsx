@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
 import { type Event } from '@/lib/mock-data';
+import { ImagePlus } from 'lucide-react';
 
 const eventSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters.'),
@@ -26,9 +27,10 @@ type EventFormData = z.infer<typeof eventSchema>;
 interface EventFormProps {
   onSubmit: (data: Omit<Event, 'id'>) => void;
   defaultValues?: Event | null;
+  onAddToGallery?: () => void;
 }
 
-export function EventForm({ onSubmit, defaultValues }: EventFormProps) {
+export function EventForm({ onSubmit, defaultValues, onAddToGallery }: EventFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   
   const form = useForm<EventFormData>({
@@ -148,9 +150,17 @@ export function EventForm({ onSubmit, defaultValues }: EventFormProps) {
             )}
             />
         </div>
-        <Button type="submit" className="w-full font-bold" disabled={isLoading}>
-          {isLoading ? 'Saving...' : 'Save Event'}
-        </Button>
+        <div className="flex gap-2">
+            <Button type="submit" className="w-full font-bold" disabled={isLoading}>
+              {isLoading ? 'Saving...' : 'Save Event'}
+            </Button>
+            {defaultValues && onAddToGallery && (
+                 <Button type="button" variant="outline" className="w-full" onClick={onAddToGallery}>
+                    <ImagePlus className="mr-2 h-4 w-4" />
+                    Add to Gallery
+                </Button>
+            )}
+        </div>
       </form>
     </Form>
   );
