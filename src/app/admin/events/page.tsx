@@ -90,7 +90,7 @@ export default function AdminEventsPage() {
                             {events.map((event) => (
                                 <TableRow key={event.id}>
                                     <TableCell>
-                                        <Image src={event.imageUrl} alt={event.title} width={80} height={45} className="rounded-md object-cover"/>
+                                        <Image src={event.imageUrl || 'https://placehold.co/80x45.png'} alt={event.title} width={80} height={45} className="rounded-md object-cover"/>
                                     </TableCell>
                                     <TableCell className="font-medium">{event.title}</TableCell>
                                     <TableCell>{event.date}</TableCell>
