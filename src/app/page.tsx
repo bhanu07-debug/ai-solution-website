@@ -272,40 +272,48 @@ export default function Home() {
                 <h2 className="font-headline text-4xl md:text-5xl font-bold">Upcoming Events</h2>
                 <p className="mt-2 text-lg text-muted-foreground">Connect with us at these industry events.</p>
             </div>
-            <div className="space-y-8 max-w-3xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 {isLoading ? (
                   [...Array(2)].map((_, i) => (
-                    <Card key={i}><CardContent className="p-6"><Skeleton className="h-40 w-full" /></CardContent></Card>
+                    <Card key={i}><CardContent className="p-6"><Skeleton className="h-80 w-full" /></CardContent></Card>
                   ))
                 ) : (
                   events.slice(0, 2).map((event) => (
-                      <Card key={event.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-                          <CardHeader>
-                              <CardTitle className="font-headline">{event.title}</CardTitle>
-                              <div className="flex items-center flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground pt-2">
-                                  <div className="flex items-center gap-1.5">
-                                      <Calendar className="h-4 w-4" />
-                                      <span>{event.date}</span>
-                                  </div>
-                                  <div className="flex items-center gap-1.5">
-                                      <Clock className="h-4 w-4" />
-                                      <span>{event.time}</span>
-                                  </div>
-                                  <div className="flex items-center gap-1.5">
-                                      <MapPin className="h-4 w-4" />
-                                      <span>{event.location}</span>
-                                  </div>
-                              </div>
-                          </CardHeader>
-                          <CardContent>
-                              <CardDescription>{event.description}</CardDescription>
-                          </CardContent>
-                          <CardFooter>
-                            <Button asChild>
-                                <Link href={`/events/${event.id}`}>View Details</Link>
-                            </Button>
-                          </CardFooter>
-                      </Card>
+                       <Card key={event.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+                           <Image 
+                                src={event.imageUrl || "https://placehold.co/600x400.png"}
+                                alt={event.title}
+                                width={600}
+                                height={400}
+                                className="w-full h-48 object-cover"
+                                data-ai-hint={event.imageHint}
+                            />
+                            <CardHeader>
+                                <CardTitle className="font-headline">{event.title}</CardTitle>
+                                <div className="flex items-center flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground pt-2">
+                                    <div className="flex items-center gap-1.5">
+                                        <Calendar className="h-4 w-4" />
+                                        <span>{event.date}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <Clock className="h-4 w-4" />
+                                        <span>{event.time}</span>
+                                    </div>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="flex-grow space-y-4">
+                                <CardDescription>{event.description}</CardDescription>
+                                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                                    <MapPin className="h-4 w-4" />
+                                    <span>{event.location}</span>
+                                </div>
+                            </CardContent>
+                            <CardFooter>
+                                <Button asChild variant="outline" className="w-full">
+                                    <Link href={`/events/${event.id}`}>View Details <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
                   ))
                 )}
             </div>
@@ -343,5 +351,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
