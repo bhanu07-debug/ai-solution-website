@@ -101,7 +101,7 @@ export default function EventsPage() {
                         filteredEvents.map((event) => (
                             <Card key={event.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
                                 <Image 
-                                    src={event.imageUrl}
+                                    src={event.imageUrl || "https://placehold.co/600x400.png"}
                                     alt={event.title}
                                     width={600}
                                     height={400}
