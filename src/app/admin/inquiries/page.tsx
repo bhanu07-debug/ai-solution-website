@@ -10,6 +10,7 @@ import { formatDistanceToNow } from "date-fns";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Eye } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export default function AdminInquiriesPage() {
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);
