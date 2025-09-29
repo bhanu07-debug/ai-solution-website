@@ -3,13 +3,14 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
-import { PlusCircle, Edit, Trash2, Calendar, MapPin, Clock } from 'lucide-react';
+import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { EventForm } from '@/components/admin/event-form';
 import { type Event } from '@/lib/mock-data';
 import { getEvents, createEvent, updateEvent, deleteEvent } from '@/lib/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
+import Image from 'next/image';
 
 export default function AdminEventsPage() {
     const [events, setEvents] = useState<Event[]>([]);
@@ -78,9 +79,9 @@ export default function AdminEventsPage() {
                    <Table>
                         <TableHeader>
                             <TableRow>
+                                <TableHead>Image</TableHead>
                                 <TableHead>Title</TableHead>
                                 <TableHead>Date</TableHead>
-                                <TableHead>Time</TableHead>
                                 <TableHead>Location</TableHead>
                                 <TableHead className="text-right">Actions</TableHead>
                             </TableRow>
@@ -88,25 +89,12 @@ export default function AdminEventsPage() {
                         <TableBody>
                             {events.map((event) => (
                                 <TableRow key={event.id}>
-                                    <TableCell className="font-medium">{event.title}</TableCell>
                                     <TableCell>
-                                        <div className="flex items-center gap-2">
-                                            <Calendar className="h-4 w-4 text-muted-foreground"/>
-                                            {event.date}
-                                        </div>
+                                        <Image src={event.imageUrl} alt={event.title} width={80} height={45} className="rounded-md object-cover"/>
                                     </TableCell>
-                                     <TableCell>
-                                        <div className="flex items-center gap-2">
-                                            <Clock className="h-4 w-4 text-muted-foreground"/>
-                                            {event.time}
-                                        </div>
-                                    </TableCell>
-                                     <TableCell>
-                                        <div className="flex items-center gap-2">
-                                            <MapPin className="h-4 w-4 text-muted-foreground"/>
-                                            {event.location}
-                                        </div>
-                                    </TableCell>
+                                    <TableCell className="font-medium">{event.title}</TableCell>
+                                    <TableCell>{event.date}</TableCell>
+                                     <TableCell>{event.location}</TableCell>
                                     <TableCell className="text-right">
                                         <Button variant="ghost" size="icon" onClick={() => handleEditEvent(event)}>
                                             <Edit className="h-4 w-4" />

@@ -4,12 +4,13 @@
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, MapPin, Search, Clock } from "lucide-react";
+import { Calendar, MapPin, Search, Clock, ArrowRight } from "lucide-react";
 import { getEvents } from "@/lib/firestore";
 import type { Event } from '@/lib/mock-data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function EventsPage() {
     const [events, setEvents] = useState<Event[]>([]);
@@ -91,17 +92,25 @@ export default function EventsPage() {
                         </CardContent>
                     </Card>
                 </div>
-                <div className="lg:col-span-3 space-y-8">
+                <div className="lg:col-span-3 grid md:grid-cols-2 gap-8">
                      {isLoading ? (
                         [...Array(2)].map((_, i) => (
-                            <Card key={i}><CardContent className="p-6"><Skeleton className="h-40 w-full" /></CardContent></Card>
+                            <Card key={i}><CardContent className="p-6"><Skeleton className="h-80 w-full" /></CardContent></Card>
                         ))
                     ) : filteredEvents.length > 0 ? (
                         filteredEvents.map((event) => (
-                            <Card key={event.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+                            <Card key={event.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+                                <Image 
+                                    src={event.imageUrl}
+                                    alt={event.title}
+                                    width={600}
+                                    height={400}
+                                    className="w-full h-48 object-cover"
+                                    data-ai-hint={event.imageHint}
+                                />
                                 <CardHeader>
                                     <CardTitle className="font-headline">{event.title}</CardTitle>
-                                    <div className="flex items-center flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground pt-2">
+                                     <div className="flex items-center flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground pt-2">
                                         <div className="flex items-center gap-1.5">
                                             <Calendar className="h-4 w-4" />
                                             <span>{event.date}</span>
@@ -110,24 +119,24 @@ export default function EventsPage() {
                                             <Clock className="h-4 w-4" />
                                             <span>{event.time}</span>
                                         </div>
-                                        <div className="flex items-center gap-1.5">
-                                            <MapPin className="h-4 w-4" />
-                                            <span>{event.location}</span>
-                                        </div>
                                     </div>
                                 </CardHeader>
-                                <CardContent>
-                                    <CardDescription>{event.description}</CardDescription>
+                                <CardContent className="flex-grow space-y-4">
+                                   <CardDescription>{event.description}</CardDescription>
+                                   <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                                        <MapPin className="h-4 w-4" />
+                                        <span>{event.location}</span>
+                                    </div>
                                 </CardContent>
                                 <CardFooter>
-                                    <Button asChild>
-                                        <Link href={`/events/${event.id}`}>View Details</Link>
+                                    <Button asChild variant="outline" className="w-full">
+                                        <Link href={`/events/${event.id}`}>View Details <ArrowRight className="ml-2 h-4 w-4" /></Link>
                                     </Button>
                                 </CardFooter>
                             </Card>
                         ))
                     ) : (
-                        <div className="text-center py-16">
+                        <div className="md:col-span-2 text-center py-16">
                             <p className="text-lg font-semibold">No events found</p>
                             <p className="text-muted-foreground">Try adjusting your search or filter criteria.</p>
                         </div>

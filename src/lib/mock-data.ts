@@ -41,6 +41,8 @@ export type Event = {
     time: string;
     location: string;
     description: string;
+    imageUrl: string;
+    imageHint: string;
 };
 
 export type Career = {
@@ -163,14 +165,18 @@ export const MOCK_EVENTS: Omit<Event, 'id'>[] = [
         date: "November 12-14, 2024",
         time: "9:00 AM - 5:00 PM PST",
         location: "San Francisco, CA",
-        description: "Join us at the world's leading AI conference to explore the latest trends and network with industry experts."
+        description: "Join us at the world's leading AI conference to explore the latest trends and network with industry experts.",
+        imageUrl: "https://picsum.photos/seed/summit/600/400",
+        imageHint: "conference stage"
     },
     {
         title: "Webinar: The Future of Work with AI",
         date: "December 5, 2024",
         time: "10:00 AM PST",
         location: "Virtual",
-        description: "A live webinar discussing how AI is transforming workplaces and what it means for your career."
+        description: "A live webinar discussing how AI is transforming workplaces and what it means for your career.",
+        imageUrl: "https://picsum.photos/seed/webinar/600/400",
+        imageHint: "person laptop"
     }
 ];
 

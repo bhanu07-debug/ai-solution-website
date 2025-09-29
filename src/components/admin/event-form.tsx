@@ -17,6 +17,8 @@ const eventSchema = z.object({
   date: z.string().min(1, 'Date is required.'),
   time: z.string().min(1, 'Time is required.'),
   location: z.string().min(1, 'Location is required.'),
+  imageUrl: z.string().url('Image URL must be a valid URL.'),
+  imageHint: z.string().min(1, 'Image hint is required.'),
 });
 
 type EventFormData = z.infer<typeof eventSchema>;
@@ -37,6 +39,8 @@ export function EventForm({ onSubmit, defaultValues }: EventFormProps) {
       date: defaultValues?.date || '',
       time: defaultValues?.time || '',
       location: defaultValues?.location || '',
+      imageUrl: defaultValues?.imageUrl || '',
+      imageHint: defaultValues?.imageHint || '',
     },
   });
 
@@ -116,6 +120,34 @@ export function EventForm({ onSubmit, defaultValues }: EventFormProps) {
                 </FormItem>
             )}
             />
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Image URL</FormLabel>
+                <FormControl>
+                    <Input placeholder="https://placehold.co/600x400.png" {...field} />
+                </FormControl>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
+            <FormField
+            control={form.control}
+            name="imageHint"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Image Hint</FormLabel>
+                <FormControl>
+                    <Input placeholder="e.g., conference stage" {...field} />
+                </FormControl>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
+        </div>
         <Button type="submit" className="w-full font-bold" disabled={isLoading}>
           {isLoading ? 'Saving...' : 'Save Event'}
         </Button>
