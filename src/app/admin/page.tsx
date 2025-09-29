@@ -3,9 +3,9 @@ import { StatCard } from "@/components/stat-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUpRight, Check, FileText, MessageSquare, Briefcase, ThumbsDown, Edit, PlusCircle } from "lucide-react";
+import { ArrowUpRight, Check, FileText, MessageSquare, Briefcase, ThumbsDown, Edit, PlusCircle, HelpCircle } from "lucide-react";
 import Link from 'next/link';
-import { getProjects, getArticles, getFeedback } from "@/lib/firestore";
+import { getProjects, getArticles, getFeedback, getInquiries } from "@/lib/firestore";
 import { type Feedback } from "@/lib/types";
 import { AdminLineChart } from "@/components/admin/admin-line-chart";
 
@@ -13,6 +13,7 @@ export default async function AdminDashboardPage() {
     const projects = await getProjects();
     const articles = await getArticles();
     const allFeedback = await getFeedback();
+    const inquiries = await getInquiries();
 
     const pendingFeedback = allFeedback.filter(f => f.status === 'pending');
     const recentFeedback = allFeedback
@@ -24,7 +25,7 @@ export default async function AdminDashboardPage() {
         { title: "Pending Feedback", value: pendingFeedback.length.toString(), icon: <MessageSquare className="h-5 w-5 text-muted-foreground" />, change: "+2 from last week" },
         { title: "Total Projects", value: projects.length.toString(), icon: <Briefcase className="h-5 w-5 text-muted-foreground" />, change: "+5 from last week" },
         { title: "Published Articles", value: articles.length.toString(), icon: <FileText className="h-5 w-5 text-muted-foreground" />, change: "No change" },
-        { title: "Total Inquiries", value: "24", icon: <MessageSquare className="h-5 w-5 text-muted-foreground" />, change: "+10 from last week" },
+        { title: "Total Inquiries", value: inquiries.length.toString(), icon: <HelpCircle className="h-5 w-5 text-muted-foreground" />, change: "+10 from last week" },
     ];
     
     return (
@@ -92,7 +93,7 @@ export default async function AdminDashboardPage() {
                                 <div key={fb.id} className="text-sm">
                                     <div className="flex justify-between">
                                         <p className="font-semibold">{fb.name}</p>
-                                        <p className="text-xs text-muted-foreground">{new Date(fb.createdAt).toLocaleDateString()}</p>
+                                        <p className="text-xs text-muted-foreground">{new Date(fb.createdAt as string).toLocaleDateString()}</p>
                                     </div>
                                     <p className="text-muted-foreground truncate my-1">"{fb.message}"</p>
                                     <div className="flex gap-2">
@@ -122,7 +123,7 @@ export default async function AdminDashboardPage() {
                                     <p className="font-medium text-sm">New feedback received</p>
                                     <p className="text-xs text-muted-foreground">From <span className="font-semibold">{fb.name}</span> regarding "{fb.message.substring(0, 20)}..."</p>
                                 </div>
-                                <p className="text-xs text-muted-foreground ml-auto">{new Date(fb.createdAt).toLocaleDateString()}</p>
+                                <p className="text-xs text-muted-foreground ml-auto">{new Date(fb.createdAt as string).toLocaleDateString()}</p>
                             </li>
                         ))}
                     </ul>
