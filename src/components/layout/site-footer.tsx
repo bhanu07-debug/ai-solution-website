@@ -63,19 +63,6 @@ export function SiteFooter() {
             <FooterLinkSection title="Resources" links={footerLinks.resources} />
         </div>
 
-        <div className="border-t border-border/40 mt-12 pt-8">
-            <div className="grid gap-8 md:grid-cols-2">
-                <div>
-                    <h3 className="font-headline font-semibold text-lg">Stay Updated with AI Insights</h3>
-                    <p className="text-muted-foreground text-sm mt-1">Get the latest AI trends, case studies, and industry insights delivered to your inbox.</p>
-                </div>
-                <form className="flex items-center gap-2">
-                    <Input type="email" placeholder="Enter your email" className="bg-background"/>
-                    <Button type="submit">Subscribe</Button>
-                </form>
-            </div>
-        </div>
-
         <div className="border-t border-border/40 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
            <p className="text-muted-foreground">&copy; {new Date().getFullYear()} AISolutions Hub. All rights reserved.</p>
            <div className="flex items-center gap-4 text-muted-foreground">
