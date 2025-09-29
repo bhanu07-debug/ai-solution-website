@@ -36,7 +36,7 @@ export function SiteFooter() {
             <div className="flex flex-col gap-4">
                  <Link href="/" className="flex items-center gap-2 mb-2">
                     <Logo className="h-8 w-8 text-primary" />
-                    <span className="font-bold font-headline text-xl">AISolutions Hub</span>
+                    <span className="font-bold font-headline text-xl">AI Solution</span>
                 </Link>
                 <p className="text-muted-foreground text-sm max-w-xs">
                     Transforming businesses with cutting-edge artificial intelligence solutions. We make AI accessible, practical, and impactful.
@@ -44,7 +44,7 @@ export function SiteFooter() {
                 <div className="space-y-3 mt-2 text-sm">
                     <div className="flex items-center gap-3">
                         <Mail className="h-4 w-4 text-muted-foreground"/>
-                        <a href="mailto:contact@aisolutionshub.com" className="hover:text-primary">contact@aisolutionshub.com</a>
+                        <a href="mailto:contact@aisolution.com" className="hover:text-primary">contact@aisolution.com</a>
                     </div>
                     <div className="flex items-center gap-3">
                         <Phone className="h-4 w-4 text-muted-foreground"/>
@@ -64,7 +64,7 @@ export function SiteFooter() {
         </div>
 
         <div className="border-t border-border/40 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
-           <p className="text-muted-foreground">&copy; {new Date().getFullYear()} AISolutions Hub. All rights reserved.</p>
+           <p className="text-muted-foreground">&copy; {new Date().getFullYear()} AI Solution. All rights reserved.</p>
            <div className="flex items-center gap-4 text-muted-foreground">
                  <div className="flex items-center gap-2">
                     <Button variant="ghost" size="icon" asChild>

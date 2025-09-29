@@ -62,7 +62,7 @@ export default function ContactPage() {
                 <CardContent className="space-y-6">
                     <div className="flex items-center gap-4">
                         <Mail className="h-6 w-6 text-primary" />
-                        <a href="mailto:contact@aisolutionshub.com" className="text-lg hover:underline">contact@aisolutionshub.com</a>
+                        <a href="mailto:contact@aisolution.com" className="text-lg hover:underline">contact@aisolution.com</a>
                     </div>
                     <div className="flex items-center gap-4">
                         <Phone className="h-6 w-6 text-primary" />

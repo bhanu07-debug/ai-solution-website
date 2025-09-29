@@ -1,9 +1,9 @@
 
-# AI-Solutions Hub: Comprehensive Test Plan
+# AI Solution: Comprehensive Test Plan
 
 ## 1. Introduction
 
-This document outlines the test plan for the AI-Solutions Hub website. The purpose of this plan is to define the scope, approach, resources, and schedule of all testing activities. The goal is to ensure the application is fully functional, reliable, performant, and secure before and after deployment.
+This document outlines the test plan for the AI Solution website. The purpose of this plan is to define the scope, approach, resources, and schedule of all testing activities. The goal is to ensure the application is fully functional, reliable, performant, and secure before and after deployment.
 
 ## 2. Test Case Matrix
 
@@ -42,4 +42,3 @@ This document outlines the test plan for the AI-Solutions Hub website. The purpo
 | **TC-NEG-004** | Negative | Missing image handling on blog post page. | 1. Manually edit an article in the database to have an empty or invalid `imageUrl`. <br> 2. View that article on the blog. | The page should render without crashing, ideally showing a placeholder image instead of a broken image icon. | | |
 | **TC-NEG-005** | Negative | Handle no internet connection. | 1. Load the homepage. <br> 2. Disconnect from the internet. <br> 3. Try to navigate to the 'Projects' page. | The browser should display its default offline error message gracefully. The app should not crash. | | |
 | **TC-NEG-006** | Negative | Chatbot behavior with empty input. | 1. Open the chatbot. <br> 2. Click the "Send" button without typing anything. | The chatbot should not send a message and should not show an error. The "Send" button should be disabled. | | |
-

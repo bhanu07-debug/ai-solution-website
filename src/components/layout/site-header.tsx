@@ -40,7 +40,7 @@ export function SiteHeader() {
             <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
                 <Link href="/" className="flex items-center gap-2">
                     <Logo className="h-8 w-8 text-primary" />
-                    <span className="font-bold font-headline text-lg">AISolutions Hub</span>
+                    <span className="font-bold font-headline text-lg">AI Solution</span>
                 </Link>
 
                 <nav className="hidden md:flex gap-6 items-center text-sm font-medium">
@@ -59,7 +59,7 @@ export function SiteHeader() {
                             <nav className="grid gap-6 text-lg font-medium mt-10">
                                 <Link href="/" className="flex items-center gap-2 text-lg font-semibold">
                                     <Logo className="h-6 w-6 text-primary" />
-                                    <span>AISolutions Hub</span>
+                                    <span>AI Solution</span>
                                 </Link>
                                 {navLinks.map(link => (
                                     <Link key={link.href} href={link.href} className="text-muted-foreground hover:text-primary">

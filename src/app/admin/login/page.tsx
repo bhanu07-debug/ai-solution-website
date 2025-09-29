@@ -1,3 +1,4 @@
+
 import { LoginForm } from "@/components/admin/login-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Logo } from "@/components/icons/logo";
@@ -11,7 +12,7 @@ export default function AdminLoginPage() {
                         <Logo className="h-12 w-12 text-primary" />
                     </div>
                     <CardTitle className="font-headline text-2xl">Admin Dashboard</CardTitle>
-                    <CardDescription>Enter your credentials to access the hub.</CardDescription>
+                    <CardDescription>Enter your credentials to access the dashboard.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <LoginForm />

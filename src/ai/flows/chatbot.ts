@@ -1,7 +1,7 @@
 
 'use server';
 /**
- * @fileOverview A simple chatbot flow for AISolutions Hub.
+ * @fileOverview A simple chatbot flow for AI Solution.
  *
  * This file defines the AI logic for a chatbot that can answer user questions
  * about the company, its services, and general AI topics.
@@ -31,7 +31,7 @@ const chatbotPrompt = ai.definePrompt({
     name: 'chatbotPrompt',
     input: { schema: ChatbotInputSchema },
     prompt: `
-You are a friendly and helpful AI assistant for a company called AISolutions Hub.
+You are a friendly and helpful AI assistant for a company called AI Solution.
 Your purpose is to assist users by answering their questions about the company, its services, projects, events, and general AI topics.
 Keep your answers helpful, friendly, and concise.
 If the user's message is a simple greeting like "hello" or "hi", respond with a friendly greeting and ask how you can help.

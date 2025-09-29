@@ -330,7 +330,7 @@ export default function Home() {
           <div className="space-y-4">
             <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tight">Your Trusted Partner in AI Innovation</h2>
             <p className="text-muted-foreground">
-              At AISolutions Hub, we are committed to pushing the boundaries of artificial intelligence. Our team of experts works closely with you to understand your goals and deliver solutions that create lasting value. From startups to enterprises, we provide the tools and insights to navigate the complexities of the AI landscape.
+              At AI Solution, we are committed to pushing the boundaries of artificial intelligence. Our team of experts works closely with you to understand your goals and deliver solutions that create lasting value. From startups to enterprises, we provide the tools and insights to navigate the complexities of the AI landscape.
             </p>
             <Button asChild className="font-bold">
               <Link href="/contact">Get in Touch <ArrowRight className="ml-2 h-4 w-4" /></Link>

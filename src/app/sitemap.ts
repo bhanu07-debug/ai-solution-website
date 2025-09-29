@@ -2,7 +2,7 @@
 import { MetadataRoute } from 'next';
  
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://aisolutionshub.com'; // Replace with your actual domain
+  const baseUrl = 'https://aisolution.com'; // Replace with your actual domain
   
   const staticRoutes = [
     '',

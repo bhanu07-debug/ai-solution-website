@@ -20,25 +20,25 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: {
-    default: 'AISolutions Hub',
-    template: `%s | AISolutions Hub`,
+    default: 'AI Solution',
+    template: `%s | AI Solution`,
   },
   description: 'Welcome to the future of AI. Discover innovative solutions tailored for your business.',
   keywords: ['AI Solutions', 'Machine Learning', 'Predictive Analytics', 'Natural Language Processing', 'AI Consulting'],
-  authors: [{ name: 'AISolutions Hub' }],
-  creator: 'AISolutions Hub',
-  publisher: 'AISolutions Hub',
+  authors: [{ name: 'AI Solution' }],
+  creator: 'AI Solution',
+  publisher: 'AI Solution',
   openGraph: {
-    title: 'AISolutions Hub',
+    title: 'AI Solution',
     description: 'Welcome to the future of AI. Discover innovative solutions tailored for your business.',
     url: 'https://aisolutionshub.com', // Replace with your actual domain
-    siteName: 'AISolutions Hub',
+    siteName: 'AI Solution',
     images: [
       {
         url: 'https://placehold.co/1200x630.png', // Replace with a representative OG image
         width: 1200,
         height: 630,
-        alt: 'AISolutions Hub - Powering Tomorrow\'s Solutions',
+        alt: 'AI Solution - Powering Tomorrow\'s Solutions',
       },
     ],
     locale: 'en_US',
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AISolutions Hub',
+    title: 'AI Solution',
     description: 'Welcome to the future of AI. Discover innovative solutions tailored for your business.',
     // images: ['https://aisolutionshub.com/og-image.png'], // Replace with your actual domain and image
     // creator: '@yourtwitterhandle', // Replace with your Twitter handle
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'AISolutions Hub',
+  name: 'AI Solution',
   url: 'https://aisolutionshub.com', // Replace with your actual domain
   logo: 'https://placehold.co/200x60.png', // Replace with your logo URL
   contactPoint: {
