@@ -142,6 +142,7 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                     <SelectItem value="Sales">Sales</SelectItem>
                     <SelectItem value="Support">Support</SelectItem>
                     <SelectItem value="Consulting">AI Consulting</SelectItem>
+                    <SelectItem value="Careers">Careers</SelectItem>
                     <SelectItem value="General">General</SelectItem>
                   </SelectContent>
                 </Select>
