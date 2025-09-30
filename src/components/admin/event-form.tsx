@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
 import { type Event } from '@/lib/mock-data';
 import { ImagePlus } from 'lucide-react';
+import { Switch } from '../ui/switch';
 
 const eventSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters.'),
@@ -20,6 +21,7 @@ const eventSchema = z.object({
   location: z.string().min(1, 'Location is required.'),
   imageUrl: z.string().url('Image URL must be a valid URL.'),
   imageHint: z.string().min(1, 'Image hint is required.'),
+  isPromotional: z.boolean().default(false),
 });
 
 type EventFormData = z.infer<typeof eventSchema>;
@@ -43,6 +45,7 @@ export function EventForm({ onSubmit, defaultValues, onAddToGallery }: EventForm
       location: defaultValues?.location || '',
       imageUrl: defaultValues?.imageUrl || '',
       imageHint: defaultValues?.imageHint || '',
+      isPromotional: defaultValues?.isPromotional || false,
     },
   });
 
@@ -150,6 +153,26 @@ export function EventForm({ onSubmit, defaultValues, onAddToGallery }: EventForm
             )}
             />
         </div>
+        <FormField
+            control={form.control}
+            name="isPromotional"
+            render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                        <FormLabel>Promotional Event</FormLabel>
+                        <p className="text-xs text-muted-foreground">
+                            Feature this event at the top of the events page.
+                        </p>
+                    </div>
+                    <FormControl>
+                        <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        />
+                    </FormControl>
+                </FormItem>
+            )}
+        />
         <div className="flex gap-2">
             <Button type="submit" className="w-full font-bold" disabled={isLoading}>
               {isLoading ? 'Saving...' : 'Save Event'}

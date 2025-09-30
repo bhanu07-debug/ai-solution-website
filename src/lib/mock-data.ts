@@ -43,6 +43,7 @@ export type Event = {
     description: string;
     imageUrl: string;
     imageHint: string;
+    isPromotional?: boolean;
 };
 
 export type Career = {
@@ -167,16 +168,28 @@ export const MOCK_EVENTS: Omit<Event, 'id'>[] = [
         location: "San Francisco, CA",
         description: "Join us at the world's leading AI conference to explore the latest trends and network with industry experts.",
         imageUrl: "https://picsum.photos/seed/summit/600/400",
-        imageHint: "conference stage"
+        imageHint: "conference stage",
+        isPromotional: true,
     },
     {
         title: "Webinar: The Future of Work with AI",
-        date: "December 5, 2024",
+        date: "December 05, 2024",
         time: "10:00 AM PST",
         location: "Virtual",
         description: "A live webinar discussing how AI is transforming workplaces and what it means for your career.",
         imageUrl: "https://picsum.photos/seed/webinar/600/400",
-        imageHint: "person laptop"
+        imageHint: "person laptop",
+        isPromotional: false,
+    },
+     {
+        title: "Past Event: AI in Healthcare",
+        date: "May 20, 2024",
+        time: "1:00 PM PST",
+        location: "Virtual",
+        description: "An look back at our successful webinar on AI's impact on the healthcare industry.",
+        imageUrl: "https://picsum.photos/seed/past-event/600/400",
+        imageHint: "doctor computer",
+        isPromotional: false,
     }
 ];
 
