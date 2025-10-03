@@ -178,7 +178,12 @@ export default function EventsPage() {
             
             {/* Main Content Area */}
             <div className="grid lg:grid-cols-4 gap-12 items-start">
-                {/* Left Column: Featured Event or Filters */}
+                {/* Left Column: Filters */}
+                <div className="lg:col-span-1">
+                   {<FilterSidebar />}
+                </div>
+                
+                {/* Right Column: Featured Event */}
                 <div className="lg:col-span-3">
                     {promotionalEvent && (
                         <section className="mb-12">
@@ -191,11 +196,6 @@ export default function EventsPage() {
                             </div>
                         </section>
                     )}
-                </div>
-
-                {/* Right Column: Filters */}
-                <div className="lg:col-span-1">
-                   {!promotionalEvent ? null : <FilterSidebar />}
                 </div>
             </div>
 
