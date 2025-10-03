@@ -122,7 +122,7 @@ export default function EventsPage() {
                <CardDescription>{event.description}</CardDescription>
                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                     <MapPin className="h-4 w-4" />
-                    <span>{event.location}</span>
+                    <span className="truncate">{event.location}</span>
                 </div>
             </CardContent>
             <CardFooter>
@@ -181,10 +181,10 @@ export default function EventsPage() {
                                             <Button 
                                                 key={loc} 
                                                 variant={activeLocation === loc ? 'secondary' : 'ghost'}
-                                                className="w-full justify-start"
+                                                className="w-full justify-start text-left h-auto py-2"
                                                 onClick={() => setActiveLocation(loc)}
                                             >
-                                                {loc}
+                                                <span className="truncate">{loc}</span>
                                             </Button>
                                         ))}
                                     </div>
