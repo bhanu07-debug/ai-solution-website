@@ -1,7 +1,4 @@
 
-'use client';
-
-import { useState, useEffect } from 'react';
 import { AnimatedHeading } from '@/components/animated-heading';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,8 +6,6 @@ import { ArrowRight, Calendar, MapPin, Check, MessageSquare, Bot, Cpu, BarChart2
 import Image from 'next/image';
 import Link from 'next/link';
 import { getServices, getProjects, getArticles, getGalleryItems, getEvents } from '@/lib/firestore';
-import { type Service, type Project, type Article, type GalleryItem, type Event } from '@/lib/mock-data';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 
 const serviceIcons: { [key: string]: React.ElementType } = {
@@ -23,40 +18,26 @@ const serviceIcons: { [key: string]: React.ElementType } = {
   "Default": BrainCircuit,
 };
 
-export default function Home() {
-  const [services, setServices] = useState<Service[]>([]);
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [gallery, setGallery] = useState<GalleryItem[]>([]);
-  const [events, setEvents] = useState<Event[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+export default async function Home() {
+  const [
+    servicesData, 
+    projectsData, 
+    articlesData, 
+    galleryData, 
+    eventsData
+  ] = await Promise.all([
+    getServices(),
+    getProjects(),
+    getArticles(),
+    getGalleryItems(),
+    getEvents()
+  ]);
 
-  useEffect(() => {
-    async function fetchData() {
-      setIsLoading(true);
-      const [
-        servicesData, 
-        projectsData, 
-        articlesData, 
-        galleryData, 
-        eventsData
-      ] = await Promise.all([
-        getServices(),
-        getProjects(),
-        getArticles(),
-        getGalleryItems(),
-        getEvents()
-      ]);
-      setServices(servicesData);
-      setProjects(projectsData);
-      setArticles(articlesData);
-      setGallery(galleryData);
-      setEvents(eventsData);
-      setIsLoading(false);
-    }
-    fetchData();
-  }, []);
-
+  const services = servicesData.slice(0, 3);
+  const projects = projectsData.slice(0, 3);
+  const articles = articlesData.slice(0, 3);
+  const gallery = galleryData.slice(0, 6);
+  const events = eventsData.slice(0, 2);
 
   return (
     <div className="flex flex-col">
@@ -85,12 +66,7 @@ export default function Home() {
             <p className="mt-2 text-muted-foreground">Comprehensive AI solutions for every need.</p>
           </div>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {isLoading ? (
-              [...Array(3)].map((_, i) => (
-                <Card key={i}><CardContent className="p-6"><Skeleton className="h-80 w-full" /></CardContent></Card>
-              ))
-            ) : (
-              services.slice(0, 3).map((service, index) => {
+              {services.map((service, index) => {
                 const Icon = serviceIcons[service.title] || serviceIcons.Default;
                 
                 return (
@@ -127,8 +103,7 @@ export default function Home() {
                         </Button>
                     </CardFooter>
                 </Card>
-              )})
-            )}
+              )})}
           </div>
           <div className="text-center mt-12">
             <Button asChild>
@@ -145,12 +120,7 @@ export default function Home() {
             <p className="mt-2 text-muted-foreground">See how we've helped businesses like yours.</p>
           </div>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-             {isLoading ? (
-              [...Array(3)].map((_, i) => (
-                <Card key={i}><CardContent className="p-6"><Skeleton className="h-80 w-full" /></CardContent></Card>
-              ))
-            ) : (
-              projects.slice(0, 3).map((project, index) => (
+              {projects.map((project, index) => (
                  <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
                     <Image 
                         src={project.imageUrl}
@@ -175,8 +145,7 @@ export default function Home() {
                         </Button>
                     </CardFooter>
                 </Card>
-              ))
-            )}
+              ))}
           </div>
           <div className="text-center mt-12">
             <Button asChild>
@@ -193,12 +162,7 @@ export default function Home() {
             <p className="mt-2 text-muted-foreground">Insights and news from the world of AI.</p>
           </div>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {isLoading ? (
-               [...Array(3)].map((_, i) => (
-                <Card key={i}><CardContent className="p-6"><Skeleton className="h-80 w-full" /></CardContent></Card>
-              ))
-            ) : (
-              articles.slice(0, 3).map((post, index) => (
+              {articles.map((post, index) => (
                   <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
                       <Image 
                           src={post.imageUrl}
@@ -221,8 +185,7 @@ export default function Home() {
                         </Button>
                       </CardFooter>
                   </Card>
-              ))
-            )}
+              ))}
           </div>
           <div className="text-center mt-12">
             <Button asChild>
@@ -238,13 +201,8 @@ export default function Home() {
             <h2 className="font-headline text-3xl md:text-4xl font-bold">Gallery</h2>
             <p className="mt-2 text-muted-foreground">A showcase of AI-generated imagery and concepts.</p>
           </div>
-           {isLoading ? (
             <div className="columns-2 md:columns-3 gap-4 space-y-4">
-              {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-64 w-full" />)}
-            </div>
-           ) : (
-            <div className="columns-2 md:columns-3 gap-4 space-y-4">
-              {gallery.slice(0, 6).map((image, index) => (
+              {gallery.map((image, index) => (
                 <div key={index} className="break-inside-avoid">
                   <Image
                     src={image.src}
@@ -257,7 +215,6 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          )}
           <div className="text-center mt-12">
             <Button asChild>
               <Link href="/gallery">See More Images <ArrowRight className="ml-2 h-4 w-4" /></Link>
@@ -273,12 +230,7 @@ export default function Home() {
                 <p className="mt-2 text-lg text-muted-foreground">Connect with us at these industry events.</p>
             </div>
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                {isLoading ? (
-                  [...Array(2)].map((_, i) => (
-                    <Card key={i}><CardContent className="p-6"><Skeleton className="h-80 w-full" /></CardContent></Card>
-                  ))
-                ) : (
-                  events.slice(0, 2).map((event) => (
+                {events.map((event) => (
                        <Card key={event.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
                            <Image 
                                 src={event.imageUrl || "https://placehold.co/600x400.png"}
@@ -314,8 +266,7 @@ export default function Home() {
                                 </Button>
                             </CardFooter>
                         </Card>
-                  ))
-                )}
+                  ))}
             </div>
             <div className="text-center mt-12">
                 <Button asChild>
@@ -351,7 +302,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
-
-    
