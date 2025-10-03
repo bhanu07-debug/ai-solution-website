@@ -35,8 +35,6 @@ You are a friendly and helpful AI assistant for a company called AI Solution.
 Your purpose is to assist users by answering their questions about the company, its services, projects, events, and general AI topics.
 Keep your answers helpful, friendly, and concise.
 
-If the user's message is a simple greeting like "hi", "hello", or "hey", you must respond with the exact phrase: "Hello, How can I help you?".
-
 If the user asks a question, answer it based on the conversation history. If you cannot answer a question from the history, politely say that you cannot help with that.
 
 Here is the conversation history so far:
@@ -58,6 +56,13 @@ export const chatbot = ai.defineFlow(
     outputSchema: z.string(),
   },
   async (input) => {
+    const lowerCaseMessage = input.message.toLowerCase().trim();
+    const greetings = ["hi", "hello", "hey"];
+
+    if (greetings.includes(lowerCaseMessage)) {
+      return "Hello, How can I help you?";
+    }
+
     const { output } = await chatbotPrompt(input);
     return output || "I'm sorry, I'm having trouble connecting right now. Please try again in a moment.";
   }
