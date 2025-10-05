@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { SiteHeader } from '@/components/layout/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { Toaster } from '@/components/ui/toaster';
+import Chatbot from '@/components/chatbot';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -106,6 +107,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <SiteFooter />
         </div>
+        <Chatbot />
         <Toaster />
       </body>
     </html>
