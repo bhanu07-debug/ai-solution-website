@@ -49,13 +49,13 @@ const chatFlow = ai.defineFlow(
       })
     );
 
-    const { text } = await ai.generate({
+    const result = await ai.generate({
       system: `You are a friendly and helpful assistant for a new website.`, // <-- Customize personality here
       prompt: message,
       history: geminiHistory,
     });
 
-    return { response: text() };
+    return { response: result.text };
   }
 );
 
