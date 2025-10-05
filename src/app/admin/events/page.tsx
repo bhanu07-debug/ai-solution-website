@@ -50,43 +50,40 @@ export default function AdminEventsPage() {
         if (editingEvent) {
             await updateEvent(editingEvent.id, data);
         } else {
+            // Only add to gallery automatically on CREATION
             await createEvent(data);
+            await addEventImageToGallery(data);
         }
-
-        // Automatically add to gallery
-        const galleryItemData: Omit<GalleryItem, 'id'> = {
-            src: data.imageUrl,
-            alt: data.title,
-            hint: data.imageHint || 'event photo',
-        };
-        await createGalleryItem(galleryItemData);
-        toast({
-            title: "Image Added to Gallery",
-            description: `"${data.title}" image is now live in the gallery.`,
-        });
-
-
+        
         fetchEvents();
         setIsDialogOpen(false);
     };
 
-    const handleAddToGallery = async () => {
-        if (!editingEvent) return;
+    const addEventImageToGallery = async (eventData: Omit<Event, 'id'> | Event) => {
+        if (!eventData.imageUrl) return;
 
         const galleryItemData: Omit<GalleryItem, 'id'> = {
-            src: editingEvent.imageUrl,
-            alt: editingEvent.title,
-            hint: editingEvent.imageHint || 'event photo',
+            src: eventData.imageUrl,
+            alt: eventData.title,
+            hint: eventData.imageHint || 'event photo',
         };
 
-        await createGalleryItem(galleryItemData);
-        
-        toast({
-            title: "Image Added to Gallery",
-            description: `"${editingEvent.title}" image is now live in the gallery.`,
-        });
+        try {
+            await createGalleryItem(galleryItemData);
+            toast({
+                title: "Image Added to Gallery",
+                description: `"${eventData.title}" image is now live in the gallery.`,
+            });
+        } catch (error) {
+            console.error("Failed to add image to gallery:", error);
+            toast({
+                variant: 'destructive',
+                title: "Failed to Add Image",
+                description: "There was an error adding the image to the gallery.",
+            });
+        }
     };
-
+    
     return (
         <div className="space-y-8">
             <div className="flex items-center justify-between">
@@ -152,7 +149,7 @@ export default function AdminEventsPage() {
                     <EventForm 
                         onSubmit={handleFormSubmit} 
                         defaultValues={editingEvent}
-                        onAddToGallery={handleAddToGallery} 
+                        onAddToGallery={() => editingEvent && addEventImageToGallery(editingEvent)} 
                     />
                 </DialogContent>
             </Dialog>
