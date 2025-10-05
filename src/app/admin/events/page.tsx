@@ -46,20 +46,24 @@ export default function AdminEventsPage() {
         fetchEvents();
     };
 
-    const handleFormSubmit = async (data: Omit<Event, 'id'>) => {
+    const handleFormSubmit = async (data: Omit<Event, 'id'> & { sendToGallery?: boolean }) => {
+        const { sendToGallery, ...eventData } = data;
+
         if (editingEvent) {
-            await updateEvent(editingEvent.id, data);
+            await updateEvent(editingEvent.id, eventData);
         } else {
-            // Only add to gallery automatically on CREATION
-            await createEvent(data);
-            await addEventImageToGallery(data);
+            await createEvent(eventData);
+        }
+
+        if (sendToGallery) {
+             await addEventImageToGallery(eventData);
         }
         
         fetchEvents();
         setIsDialogOpen(false);
     };
 
-    const addEventImageToGallery = async (eventData: Omit<Event, 'id'> | Event) => {
+    const addEventImageToGallery = async (eventData: Omit<Event, 'id'>) => {
         if (!eventData.imageUrl) return;
 
         const galleryItemData: Omit<GalleryItem, 'id'> = {
@@ -149,7 +153,6 @@ export default function AdminEventsPage() {
                     <EventForm 
                         onSubmit={handleFormSubmit} 
                         defaultValues={editingEvent}
-                        onAddToGallery={() => editingEvent && addEventImageToGallery(editingEvent)} 
                     />
                 </DialogContent>
             </Dialog>

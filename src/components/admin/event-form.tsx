@@ -10,7 +10,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
 import { type Event } from '@/lib/mock-data';
-import { ImagePlus } from 'lucide-react';
 import { Switch } from '../ui/switch';
 
 const eventSchema = z.object({
@@ -22,17 +21,17 @@ const eventSchema = z.object({
   imageUrl: z.string().url('Image URL must be a valid URL.'),
   imageHint: z.string().min(1, 'Image hint is required.'),
   isPromotional: z.boolean().default(false),
+  sendToGallery: z.boolean().default(false),
 });
 
 type EventFormData = z.infer<typeof eventSchema>;
 
 interface EventFormProps {
-  onSubmit: (data: Omit<Event, 'id'>) => void;
+  onSubmit: (data: EventFormData) => void;
   defaultValues?: Event | null;
-  onAddToGallery?: () => void;
 }
 
-export function EventForm({ onSubmit, defaultValues, onAddToGallery }: EventFormProps) {
+export function EventForm({ onSubmit, defaultValues }: EventFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   
   const form = useForm<EventFormData>({
@@ -46,6 +45,7 @@ export function EventForm({ onSubmit, defaultValues, onAddToGallery }: EventForm
       imageUrl: defaultValues?.imageUrl || '',
       imageHint: defaultValues?.imageHint || '',
       isPromotional: defaultValues?.isPromotional || false,
+      sendToGallery: false, // Always default to false
     },
   });
 
@@ -78,7 +78,7 @@ export function EventForm({ onSubmit, defaultValues, onAddToGallery }: EventForm
             <FormItem>
               <FormLabel>Event Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Describe the event..." {...field} rows={5} />
+                <Textarea placeholder="Describe the event..." {...field} rows={4} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -153,37 +153,51 @@ export function EventForm({ onSubmit, defaultValues, onAddToGallery }: EventForm
             )}
             />
         </div>
-        <FormField
-            control={form.control}
-            name="isPromotional"
-            render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                    <div className="space-y-0.5">
-                        <FormLabel>Promotional Event</FormLabel>
-                        <p className="text-xs text-muted-foreground">
-                            Feature this event at the top of the events page.
-                        </p>
-                    </div>
-                    <FormControl>
-                        <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        />
-                    </FormControl>
-                </FormItem>
-            )}
-        />
-        <div className="flex gap-2">
-            <Button type="submit" className="w-full font-bold" disabled={isLoading}>
-              {isLoading ? 'Saving...' : 'Save Event'}
-            </Button>
-            {defaultValues && onAddToGallery && (
-                 <Button type="button" variant="outline" className="w-full" onClick={onAddToGallery}>
-                    <ImagePlus className="mr-2 h-4 w-4" />
-                    Add to Gallery
-                </Button>
-            )}
+         <div className="space-y-4">
+            <FormField
+                control={form.control}
+                name="sendToGallery"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                        <div className="space-y-0.5">
+                            <FormLabel>Send Image to Gallery</FormLabel>
+                            <p className="text-xs text-muted-foreground">
+                                Turn this on to add the event image to the public gallery.
+                            </p>
+                        </div>
+                        <FormControl>
+                            <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            />
+                        </FormControl>
+                    </FormItem>
+                )}
+            />
+            <FormField
+                control={form.control}
+                name="isPromotional"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                        <div className="space-y-0.5">
+                            <FormLabel>Promotional Event</FormLabel>
+                            <p className="text-xs text-muted-foreground">
+                                Feature this event at the top of the events page.
+                            </p>
+                        </div>
+                        <FormControl>
+                            <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            />
+                        </FormControl>
+                    </FormItem>
+                )}
+            />
         </div>
+        <Button type="submit" className="w-full font-bold" disabled={isLoading}>
+            {isLoading ? 'Saving...' : 'Save Event'}
+        </Button>
       </form>
     </Form>
   );
