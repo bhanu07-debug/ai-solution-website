@@ -52,6 +52,20 @@ export default function AdminEventsPage() {
         } else {
             await createEvent(data);
         }
+
+        // Automatically add to gallery
+        const galleryItemData: Omit<GalleryItem, 'id'> = {
+            src: data.imageUrl,
+            alt: data.title,
+            hint: data.imageHint || 'event photo',
+        };
+        await createGalleryItem(galleryItemData);
+        toast({
+            title: "Image Added to Gallery",
+            description: `"${data.title}" image is now live in the gallery.`,
+        });
+
+
         fetchEvents();
         setIsDialogOpen(false);
     };
