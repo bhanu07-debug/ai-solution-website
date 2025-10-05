@@ -141,7 +141,7 @@ export default async function Home() {
                     </CardContent>
                      <CardFooter>
                         <Button asChild variant="outline" className="w-full">
-                            <Link href="/projects">View Case Study <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                            <Link href={`/projects/${project.id}`}>View Case Study <ArrowRight className="ml-2 h-4 w-4" /></Link>
                         </Button>
                     </CardFooter>
                 </Card>

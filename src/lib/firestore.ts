@@ -112,6 +112,7 @@ export const updateService = (id: string, data: Partial<Service>) => updateItem<
 export const deleteService = (id: string) => deleteItem('services', id);
 
 export const getProjects = () => getItems<Project>('projects', MOCK_PROJECTS);
+export const getProject = (id: string) => getItemById<Project>('projects', id);
 export const createProject = (data: Omit<Project, 'id'>) => createItem<Omit<Project, 'id'>>('projects', data);
 export const updateProject = (id: string, data: Partial<Project>) => updateItem<Project>('projects', id, data);
 export const deleteProject = (id: string) => deleteItem('projects', id);

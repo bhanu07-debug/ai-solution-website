@@ -100,8 +100,8 @@ export default function ProjectsPage() {
                          <Card key={i}><CardContent className="p-6"><Skeleton className="h-80 w-full" /></CardContent></Card>
                     ))
                 ) : filteredProjects.length > 0 ? (
-                    filteredProjects.map((project, index) => (
-                        <Card key={index} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+                    filteredProjects.map((project) => (
+                        <Card key={project.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
                             <Image 
                                 src={project.imageUrl}
                                 alt={project.title}
@@ -121,7 +121,7 @@ export default function ProjectsPage() {
                             </CardContent>
                              <CardFooter>
                                 <Button asChild variant="outline" className="w-full">
-                                    <Link href="#">View Case Study <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                                    <Link href={`/projects/${project.id}`}>View Case Study <ArrowRight className="ml-2 h-4 w-4" /></Link>
                                 </Button>
                             </CardFooter>
                         </Card>
