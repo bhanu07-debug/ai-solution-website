@@ -98,14 +98,6 @@ firebase deploy
 
 After the deployment is complete, the Firebase CLI will provide you with a URL (e.g., `https://[your-project-id].web.app`). This is the live URL where anyone can visit your website!
 
-## 5. Client Meeting Decisions (Summary)
-
-- **User Accounts**: No public user accounts are required. Access is open to all visitors.
-- **Admin Access**: The admin panel will be a single-user system with its own credentials.
-- **Branding**: The aesthetic will be modern and professional, using a primary color palette of dark blue and white. (Note: The current theme uses a yellow/orange palette, which can be updated to match these new branding guidelines).
-- **Contact Form**: All submissions from the contact form will be stored securely in the Firestore database for review in the admin panel. No email forwarding is necessary.
-- **Deployment**: A live deployment is optional. A local demonstration or video submission is sufficient for client review.
-
 ## 6. Areas for Skill Development
 
 This project provides an excellent opportunity to strengthen skills in:
